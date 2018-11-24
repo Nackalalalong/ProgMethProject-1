@@ -15,7 +15,7 @@ public class ContentContainer extends Pane {
 		super();
 		
 		this.setPrefWidth(1200);
-		this.setPrefHeight(720);
+		//this.setPrefHeight(720);
 		
 		this.setBackground(new Background(new BackgroundFill(Color.web("#" + ContentContainer.APPLICATION_BACKGROUND_COLOR), CornerRadii.EMPTY, Insets.EMPTY)));
 	}

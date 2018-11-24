@@ -21,7 +21,7 @@ public class NavigationBar extends VBox {
 		super();
 		
 		this.setPrefWidth( 2 * NAVIGATION_BAR_PADDING + NavigationButton.NAVIGATION_BUTTON_WIDTH);
-		this.setPrefHeight(720);
+		//this.setPrefHeight(720);
 		this.setPadding(new Insets(NAVIGATION_BAR_PADDING));
 		this.setSpacing(NAVIGATION_BAR_SPACING);
 		this.setBackground(new Background(new BackgroundFill(Color.web("#" + NAVIGATION_BAR_BACKGROUND_COLOR), CornerRadii.EMPTY, Insets.EMPTY)));
