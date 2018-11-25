@@ -3,6 +3,8 @@ package application;
 import java.util.ArrayList;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -21,17 +23,25 @@ public class Main extends Application {
 		NavigationButton listBtn = new NavigationButton("Customer", "icons/list.png");
 		NavigationButton helpBtn = new NavigationButton("Customer", "icons/question.png");
 		
-		ArrayList<NavigationButton> btns = new ArrayList<NavigationButton>() {{
-			add(warehouseBtn);
-			add(itemInBtn);
-			add(itemOutBtn);
-			add(statBtn);
-			add(customerBtn);
-			add(listBtn);
-			add(helpBtn);
+		NavigationButtonPane warehouseBtnPane = new NavigationButtonPane(warehouseBtn);
+		NavigationButtonPane itemInBtnPane = new NavigationButtonPane(itemInBtn);
+		NavigationButtonPane itemOutBtnPane = new NavigationButtonPane(itemOutBtn);
+		NavigationButtonPane statBtnPane = new NavigationButtonPane(statBtn);
+		NavigationButtonPane customerBtnPane = new NavigationButtonPane(customerBtn);
+		NavigationButtonPane listBtnPane = new NavigationButtonPane(listBtn);
+		NavigationButtonPane helpBtnPane = new NavigationButtonPane(helpBtn);
+		
+		ArrayList<NavigationButtonPane> navBtnPanes = new ArrayList<NavigationButtonPane>() {{
+			add(warehouseBtnPane);
+			add(itemInBtnPane);
+			add(itemOutBtnPane);
+			add(statBtnPane);
+			add(customerBtnPane);
+			add(listBtnPane);
+			add(helpBtnPane);
 		}};
 		
-		NavigationBar navBar = new NavigationBar(btns);
+		NavigationBar navBar = new NavigationBar(navBtnPanes);
 		ContentContainer contentCont = new ContentContainer();
 		
 		root.setLeft(navBar);
