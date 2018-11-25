@@ -1,9 +1,12 @@
 package application;
 
+import java.util.ArrayList;
+
 import javafx.geometry.Insets;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
@@ -12,7 +15,7 @@ public class ContentContainer extends StackPane {
 	public static final String APPLICATION_BACKGROUND_COLOR = "f4e7e7";
 	public static final int CONTENT_CONTAINER_PADDING = 10;
 	
-	public ContentContainer() {
+	public ContentContainer(ArrayList<Pane> panes) {
 		super();
 		
 		this.setPrefWidth(1200);

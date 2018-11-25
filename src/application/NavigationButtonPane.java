@@ -11,7 +11,10 @@ import javafx.scene.paint.Color;
 
 public class NavigationButtonPane extends StackPane {
 	
-	public static final int NAVIGATION_BUTTON_PANE_PADDING = 10;
+	public static final int NAVIGATION_BUTTON_PANE_PADDING_TOP = 5;
+	public static final int NAVIGATION_BUTTON_PANE_PADDING_RIGHT = 10;
+	public static final int NAVIGATION_BUTTON_PANE_PADDING_BOTTOM = 5;
+	public static final int NAVIGATION_BUTTON_PANE_PADDING_LEFT = 10;
 	public static final Background NAVIGATION_BUTTON_PANE_HIGHLIGHT_BACKGROUND = new  Background(new BackgroundFill(Color.web("#" + ContentContainer.APPLICATION_BACKGROUND_COLOR), CornerRadii.EMPTY, Insets.EMPTY));
 
 	
@@ -21,8 +24,9 @@ public class NavigationButtonPane extends StackPane {
 		super();
 		
 		navBtn = button;
+		navBtn.setNavigationButtonPane(this);
 		
-		this.setPadding(new Insets(5, 10, 5, 10));
+		this.setPadding(new Insets(NAVIGATION_BUTTON_PANE_PADDING_TOP, NAVIGATION_BUTTON_PANE_PADDING_RIGHT, NAVIGATION_BUTTON_PANE_PADDING_BOTTOM, NAVIGATION_BUTTON_PANE_PADDING_LEFT));
 		
 		this.getChildren().add(navBtn);
 		

@@ -32,14 +32,17 @@ public class NavigationBar extends VBox {
 		
 		for( NavigationButtonPane navBtnPane : navBtnPanes) {
 			this.getChildren().add(navBtnPane);
+			navBtnPane.getNavigationButton().setNavigationBar(this);
 		}
 		
 		this.navBtnPanes = navBtnPanes;
 	
 	}
-	
-	public void setBackgroundAtButtonIndex(int index) {
-		//set background effect to button at index index.
+
+	public ArrayList<NavigationButtonPane> getNavigationButtonPanes() {
+		return navBtnPanes;
 	}
+	
+	
 	
 }
