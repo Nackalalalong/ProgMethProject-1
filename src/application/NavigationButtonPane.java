@@ -15,8 +15,6 @@ public class NavigationButtonPane extends StackPane {
 	public static final int NAVIGATION_BUTTON_PANE_PADDING_RIGHT = 10;
 	public static final int NAVIGATION_BUTTON_PANE_PADDING_BOTTOM = 5;
 	public static final int NAVIGATION_BUTTON_PANE_PADDING_LEFT = 10;
-	public static final Background NAVIGATION_BUTTON_PANE_HIGHLIGHT_BACKGROUND = new  Background(new BackgroundFill(Color.web("#" + ContentContainer.APPLICATION_BACKGROUND_COLOR), CornerRadii.EMPTY, Insets.EMPTY));
-
 	
 	private NavigationButton navBtn;
 
@@ -34,7 +32,7 @@ public class NavigationButtonPane extends StackPane {
 	}
 	
 	public void highlightBackground() {
-		this.setBackground(NAVIGATION_BUTTON_PANE_HIGHLIGHT_BACKGROUND);
+		this.setBackground(ContentContainer.CONTENT_BACKGROUND);
 	}
 	
 	public void unHighlightBackground() {

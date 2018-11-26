@@ -14,6 +14,7 @@ public class ContentContainer extends StackPane {
 	
 	public static final String APPLICATION_BACKGROUND_COLOR = "f4e7e7";
 	public static final int CONTENT_CONTAINER_PADDING = 10;
+	public static final Background CONTENT_BACKGROUND = new Background(new BackgroundFill(Color.web("#" + ContentContainer.APPLICATION_BACKGROUND_COLOR), CornerRadii.EMPTY, Insets.EMPTY));
 	
 	public ContentContainer(ArrayList<Pane> panes) {
 		super();
@@ -22,7 +23,7 @@ public class ContentContainer extends StackPane {
 		//this.setPrefHeight(720);
 		
 		this.setPadding(new Insets(CONTENT_CONTAINER_PADDING));
-		this.setBackground(new Background(new BackgroundFill(Color.web("#" + ContentContainer.APPLICATION_BACKGROUND_COLOR), CornerRadii.EMPTY, Insets.EMPTY)));
+		this.setBackground(CONTENT_BACKGROUND);
 	}
 	
 }

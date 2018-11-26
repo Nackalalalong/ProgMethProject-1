@@ -25,8 +25,8 @@ public class ApplicationController {
 		NavigationButton itemOutBtn = new NavigationButton("Out", "icons/item_out.png");
 		NavigationButton statBtn = new NavigationButton("Statistic", "icons/graph.png");
 		NavigationButton customerBtn = new NavigationButton("Customer", "icons/feedback.png");
-		NavigationButton listBtn = new NavigationButton("Customer", "icons/list.png");
-		NavigationButton helpBtn = new NavigationButton("Customer", "icons/question.png");
+		NavigationButton listBtn = new NavigationButton("bills", "icons/list.png");
+		NavigationButton helpBtn = new NavigationButton("help", "icons/question.png");
 		
 		warehouseBtnPane = new NavigationButtonPane(warehouseBtn);
 		itemInBtnPane = new NavigationButtonPane(itemInBtn);
@@ -67,6 +67,46 @@ public class ApplicationController {
 			@Override
 			public void showContentPane() {
 				System.out.println("item in");
+			}
+		});
+		
+		itemOutBtnPane.getNavigationButton().setOnAction(new NavigationButtonEventHandler(){
+			
+			@Override
+			public void showContentPane() {
+				System.out.println("item out");
+			}
+		});
+		
+		statBtnPane.getNavigationButton().setOnAction(new NavigationButtonEventHandler() {
+			
+			@Override
+			public void showContentPane() {
+				System.out.println("statistics");
+			}
+		});
+		
+		customerBtnPane.getNavigationButton().setOnAction(new NavigationButtonEventHandler() {
+			
+			@Override
+			public void showContentPane() {
+				System.out.println("customers");
+			}
+		});
+		
+		listBtnPane.getNavigationButton().setOnAction(new NavigationButtonEventHandler() {
+			
+			@Override
+			public void showContentPane() {
+				System.out.println("bills");
+			}
+		});
+		
+		helpBtnPane.getNavigationButton().setOnAction(new NavigationButtonEventHandler() {
+			
+			@Override
+			public void showContentPane() {
+				System.out.println("help");
 			}
 		});
 	}
