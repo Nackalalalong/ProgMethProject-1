@@ -1,8 +1,10 @@
 package application;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
-import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.Pane;
 
 public class ApplicationController {
 	
@@ -18,6 +20,9 @@ public class ApplicationController {
 	private NavigationButtonPane customerBtnPane;
 	private NavigationButtonPane listBtnPane;
 	private NavigationButtonPane helpBtnPane;
+	
+	private Pane warehousePane;
+	private Pane itemOutPane;
 	
 	private ApplicationController() {
 		NavigationButton warehouseBtn = new NavigationButton("คลัง", "icons/warehouse.png");
@@ -47,7 +52,22 @@ public class ApplicationController {
 		}};
 		
 		navBar = new NavigationBar(navBtnPanes);
-		contentCont = new ContentContainer(null);
+		
+		ArrayList<Pane> contentPanes = new ArrayList<Pane>();
+		try {
+			warehousePane = FXMLLoader.load(ClassLoader.getSystemResource("warehouse.fxml"));
+			itemOutPane = FXMLLoader.load(ClassLoader.getSystemResource("itemOut.fxml"));
+			
+			contentPanes.add(warehousePane);
+			contentPanes.add(itemOutPane);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		contentCont = new ContentContainer(contentPanes);
+
 		
 		InitializeNavigationButton();
 		warehouseBtn.fire();
@@ -59,6 +79,7 @@ public class ApplicationController {
 			@Override
 			public void showContentPane() {
 				System.out.println("warehouse");
+				warehousePane.toFront();
 			}
 		});
 		
@@ -75,6 +96,7 @@ public class ApplicationController {
 			@Override
 			public void showContentPane() {
 				System.out.println("item out");
+				itemOutPane.toFront();
 			}
 		});
 		
