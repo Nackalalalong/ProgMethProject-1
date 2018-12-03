@@ -9,7 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
-public class ItemOutController implements Initializable {
+public class ItemOutController  {
 	
 	@FXML
 	private TextField customerNameTf, noteTf, billDestDirTf, discountByAmountBathTf, discountByPercentTf, vatTf;
@@ -19,9 +19,19 @@ public class ItemOutController implements Initializable {
 		
 	@FXML
 	private TableView itemOutTv;
+	
+	public ItemOutController() {
+		
+	}
 
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
+	@FXML
+	private URL location;
+	     
+	@FXML
+	private ResourceBundle resources;
+	
+	@FXML
+	public void initialize() {
 		// TODO Auto-generated method stub
 		
 		if ( customerNameTf == null ) {
