@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<VBox  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1200.0" style="-fx-background-color: f4e7e7;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane prefWidth="200.0">
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+         <children>
+            <Label layoutX="10.0" layoutY="10.0" text="ชื่อลูกค้า/บริษัท">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <TextField id="customerNameTf" layoutX="143.0" layoutY="10.0" prefWidth="400.0" />
+            <Text layoutX="14.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="เลขที่ออกเอกสาร">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+            <Text id="billIDLabel" layoutX="170.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="เลขที่เอกสาร">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+            <Text layoutX="459.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="วันที่ออกเอกสาร">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+            <Text id="billDateLabel" layoutX="600.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="วันที่">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+      <ScrollPane prefHeight="400.0" prefWidth="1200.0">
+         <content>
+            <TableView maxHeight="1.7976931348623157E308" minWidth="-Infinity" prefHeight="149.0" prefWidth="1198.0">
+              <columns>
+                <TableColumn prefWidth="167.0" text="รหัสสินค้า" />
+                <TableColumn prefWidth="178.0" text="ชื่อสินค้า" />
+                  <TableColumn prefWidth="208.0" text="ราคาซื้อ / หน่วย" />
+                  <TableColumn prefWidth="241.0" text="ราคาขาย / หน่วย" />
+                  <TableColumn prefWidth="168.0" text="จำนวน" />
+                  <TableColumn prefWidth="235.0" text="รวม ( บาท )" />
+              </columns>
+            </TableView>
+         </content>
+      </ScrollPane>
+      <Pane prefHeight="233.0" prefWidth="1200.0">
+         <children>
+            <Label layoutX="14.0" layoutY="14.0" text="หมายเหตุ">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <TextField id="noteTf" layoutX="102.0" layoutY="14.0" prefHeight="31.0" prefWidth="433.0" />
+            <Button layoutX="14.0" layoutY="61.0" mnemonicParsing="false" prefWidth="200.0" text="ดูตัวอย่างใบเสร็จ" />
+            <Label layoutX="14.0" layoutY="102.0" text="บันทึกใบเสร็จไปที่">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <TextField id="billDestDirTf" layoutX="161.0" layoutY="101.0" prefHeight="31.0" prefWidth="246.0" />
+            <Button layoutX="433.0" layoutY="101.0" mnemonicParsing="false" text="เลือกปลายทาง" />
+            <Label layoutX="628.0" layoutY="15.0" text="ราคา">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="747.0" layoutY="14.0" text="ราคา">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="628.0" layoutY="46.0" text="ส่วนลด">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <RadioButton id="discountByAmountRb" layoutX="697.0" layoutY="46.0" mnemonicParsing="false" style="-fx-padding: 0;" text="หน่วยบาท">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <toggleGroup>
+                  <ToggleGroup fx:id="discountRG" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton id="discountByPercentRb" layoutX="697.0" layoutY="86.0" mnemonicParsing="false" style="-fx-padding: 0;" text="ร้อยละ" toggleGroup="$discountRG">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </RadioButton>
+            <TextField id="discountByAmountBahtTf" layoutX="834.0" layoutY="50.0" prefHeight="31.0" prefWidth="128.0" />
+            <Text layoutX="1016.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="บาท">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+            <TextField id="discountByPercentAmountTf" layoutX="834.0" layoutY="87.0" prefHeight="31.0" prefWidth="83.0" />
+            <Label layoutX="935.0" layoutY="86.0" text="เป็นเงิน">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Text layoutX="1132.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" text="บาท">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+            <Label layoutX="620.0" layoutY="134.0" text="ภาษี ร้อยละ ">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <TextField id="vatTf" layoutX="726.0" layoutY="133.0" prefHeight="31.0" prefWidth="83.0" text="7" />
+            <Label layoutX="849.0" layoutY="134.0" text="เป็นเงิน">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Text layoutX="1067.0" layoutY="156.0" strokeType="OUTSIDE" strokeWidth="0.0" text="บาท">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+            <Label layoutX="620.0" layoutY="177.0" text="รวมทั้งหมด">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label id="netPriceLabel" layoutX="739.0" layoutY="177.0" text="รวมทั้งหมด">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="849.0" layoutY="177.0" text="บาท   กำไร">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label id="profitBathLabel" layoutX="961.0" layoutY="177.0" text="กำไร">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Text layoutX="1067.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" text="บาท">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+            <Button layoutX="14.0" layoutY="177.0" mnemonicParsing="false" prefWidth="150.0" text="ตกลง" />
+            <Button layoutX="189.0" layoutY="176.0" mnemonicParsing="false" prefWidth="150.0" text="ยกเลิก" />
+            <Text id="discountByPercentBathLabel" layoutX="1032.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" text="บาท">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+            <Text id="vatBathLabel" layoutX="957.0" layoutY="153.0" strokeType="OUTSIDE" strokeWidth="0.0" text="บาท">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+   </children>
+</VBox>

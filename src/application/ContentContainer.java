@@ -24,6 +24,10 @@ public class ContentContainer extends StackPane {
 		
 		this.setPadding(new Insets(CONTENT_CONTAINER_PADDING));
 		this.setBackground(CONTENT_BACKGROUND);
+		
+		for( Pane pane : panes ) {
+			this.getChildren().add(pane);
+		}
 	}
 	
 }
