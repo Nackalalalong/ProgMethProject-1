@@ -1,8 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
-</AnchorPane>
 
+<Pane prefHeight="720.0" prefWidth="1200.0" style="-fx-background-color: f4e7e7;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+   <children>
+      <HBox prefHeight="210.0" prefWidth="1200.0">
+         <children>
+            <VBox prefHeight="210.0" prefWidth="123.0" spacing="20.0">
+               <children>
+                  <Label text="แกนตั้ง">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label text="แกนนอน">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label text="สินค้า">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets left="20.0" top="30.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </VBox>
+            <VBox prefHeight="203.0" prefWidth="369.0" spacing="20.0">
+               <children>
+                  <ComboBox id="vCombo" minHeight="30.0" prefHeight="30.0" prefWidth="150.0" />
+                  <ComboBox id="hCombo" minHeight="30.0" prefHeight="30.0" prefWidth="150.0" />
+                  <TextField id="objectToChart" maxWidth="200.0" minHeight="30.0" prefHeight="30.0" />
+               </children>
+               <HBox.margin>
+                  <Insets top="30.0" />
+               </HBox.margin>
+            </VBox>
+         </children>
+      </HBox>
+      <ScatterChart layoutX="59.0" layoutY="210.0" prefHeight="500.0" prefWidth="500.0">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </ScatterChart>
+      <PieChart layoutX="642.0" layoutY="210.0" prefHeight="500.0" prefWidth="500.0" />
+   </children>
+</Pane>
