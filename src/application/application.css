@@ -1,1 +1,9 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.header-pane {
+	-fx-background-color : #f4e7e7;
+}
+
+.root {
+	-fx-font-family : sans-serif;
+}

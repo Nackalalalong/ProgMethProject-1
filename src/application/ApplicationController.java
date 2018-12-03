@@ -20,13 +20,13 @@ public class ApplicationController {
 	private NavigationButtonPane helpBtnPane;
 	
 	private ApplicationController() {
-		NavigationButton warehouseBtn = new NavigationButton("Warehouse", "icons/warehouse.png");
-		NavigationButton itemInBtn = new NavigationButton("In", "icons/item_in.png");
-		NavigationButton itemOutBtn = new NavigationButton("Out", "icons/item_out.png");
-		NavigationButton statBtn = new NavigationButton("Statistic", "icons/graph.png");
-		NavigationButton customerBtn = new NavigationButton("Customer", "icons/feedback.png");
-		NavigationButton listBtn = new NavigationButton("bills", "icons/list.png");
-		NavigationButton helpBtn = new NavigationButton("help", "icons/question.png");
+		NavigationButton warehouseBtn = new NavigationButton("คลัง", "icons/warehouse.png");
+		NavigationButton itemInBtn = new NavigationButton("เข้า", "icons/item_in.png");
+		NavigationButton itemOutBtn = new NavigationButton("ออก", "icons/item_out.png");
+		NavigationButton statBtn = new NavigationButton("สถิติ", "icons/graph.png");
+		NavigationButton customerBtn = new NavigationButton("ลูกค้า", "icons/feedback.png");
+		NavigationButton listBtn = new NavigationButton("รายการบิล", "icons/list.png");
+		NavigationButton helpBtn = new NavigationButton("ช่วยเหลือ", "icons/question.png");
 		
 		warehouseBtnPane = new NavigationButtonPane(warehouseBtn);
 		itemInBtnPane = new NavigationButtonPane(itemInBtn);
