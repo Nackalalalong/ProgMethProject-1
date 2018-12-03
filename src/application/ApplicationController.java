@@ -22,6 +22,7 @@ public class ApplicationController {
 	private NavigationButtonPane helpBtnPane;
 	
 	private Pane warehousePane;
+	private Pane itemInPane;
 	private Pane itemOutPane;
 	
 	private ApplicationController() {
@@ -56,9 +57,12 @@ public class ApplicationController {
 		ArrayList<Pane> contentPanes = new ArrayList<Pane>();
 		try {
 			warehousePane = FXMLLoader.load(ClassLoader.getSystemResource("warehouse.fxml"));
+			itemInPane = FXMLLoader.load(ClassLoader.getSystemResource("itemIn.fxml"));
 			itemOutPane = FXMLLoader.load(ClassLoader.getSystemResource("itemOut.fxml"));
 			
+			
 			contentPanes.add(warehousePane);
+			contentPanes.add(itemInPane);
 			contentPanes.add(itemOutPane);
 			
 		} catch (IOException e) {
@@ -88,6 +92,7 @@ public class ApplicationController {
 			@Override
 			public void showContentPane() {
 				System.out.println("item in");
+				itemInPane.toFront();
 			}
 		});
 		
