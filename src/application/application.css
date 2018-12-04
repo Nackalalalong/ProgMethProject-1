@@ -4,6 +4,18 @@
 	-fx-background-color : #f4e7e7;
 }
 
-.root {
-	-fx-font-family : sans-serif;
+.button {
+	-fx-font-family: supermarket;
+	-fx-font-size: 14px;
 }
+
+.table {
+	-fx-font-family: supermarket;
+	-fx-font-size: 14px;
+}
+
+.label {
+	-fx-font-family: supermarket;
+	-fx-font-size: 20px;
+}
+

@@ -21,6 +21,7 @@ public class Main extends Application {
 		Scene scene = new Scene(root);
 		
 		//Font.loadFont(getClass().getResource("ekkamai-standard-Light.ttf").toExternalForm(), 10);
+		Font.loadFont(ClassLoader.getSystemResource("fonts/supermarket.ttf").toExternalForm(), 10);
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 		
