@@ -19,7 +19,7 @@ public class ContentContainer extends StackPane {
 	public ContentContainer(ArrayList<Pane> panes) {
 		super();
 		
-		this.setPrefWidth(1200);
+		//this.setPrefWidth(1200);
 		//this.setPrefHeight(720);
 		
 		this.setPadding(new Insets(CONTENT_CONTAINER_PADDING));

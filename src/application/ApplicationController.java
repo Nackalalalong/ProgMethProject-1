@@ -25,6 +25,9 @@ public class ApplicationController {
 	private Pane warehousePane;
 	private Pane itemInPane;
 	private Pane itemOutPane;
+	private Pane customerPane;
+	private Pane statPane;
+	private Pane alBillPane;
 		
 	private ApplicationController() {
 		NavigationButton warehouseBtn = new NavigationButton("คลัง", "icons/warehouse.png");
@@ -60,10 +63,16 @@ public class ApplicationController {
 			warehousePane = FXMLLoader.load(ClassLoader.getSystemResource("warehouse.fxml"));
 			itemInPane = FXMLLoader.load(ClassLoader.getSystemResource("itemIn.fxml"));
 			itemOutPane = FXMLLoader.load(ClassLoader.getSystemResource("itemOut.fxml"));
+			statPane = FXMLLoader.load(ClassLoader.getSystemResource("stat.fxml"));
+			customerPane = FXMLLoader.load(ClassLoader.getSystemResource("customer.fxml"));
+			alBillPane = FXMLLoader.load(ClassLoader.getSystemResource("alBill.fxml"));
 						
 			contentPanes.add(warehousePane);
 			contentPanes.add(itemInPane);
 			contentPanes.add(itemOutPane);
+			contentPanes.add(statPane);
+			contentPanes.add(customerPane);
+			contentPanes.add(alBillPane);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -82,7 +91,6 @@ public class ApplicationController {
 			
 			@Override
 			public void showContentPane() {
-				System.out.println("warehouse");
 				warehousePane.toFront();
 			}
 		});
@@ -91,7 +99,6 @@ public class ApplicationController {
 			
 			@Override
 			public void showContentPane() {
-				System.out.println("item in");
 				itemInPane.toFront();
 			}
 		});
@@ -100,7 +107,6 @@ public class ApplicationController {
 			
 			@Override
 			public void showContentPane() {
-				System.out.println("item out");
 				itemOutPane.toFront();
 			}
 		});
@@ -109,7 +115,7 @@ public class ApplicationController {
 			
 			@Override
 			public void showContentPane() {
-				System.out.println("statistics");
+				statPane.toFront();
 			}
 		});
 		
@@ -117,7 +123,7 @@ public class ApplicationController {
 			
 			@Override
 			public void showContentPane() {
-				System.out.println("customers");
+				customerPane.toFront();
 			}
 		});
 		
@@ -125,7 +131,7 @@ public class ApplicationController {
 			
 			@Override
 			public void showContentPane() {
-				System.out.println("bills");
+				alBillPane.toFront();
 			}
 		});
 		
@@ -133,7 +139,7 @@ public class ApplicationController {
 			
 			@Override
 			public void showContentPane() {
-				System.out.println("help");
+				//System.out.println("help");
 			}
 		});
 	}
