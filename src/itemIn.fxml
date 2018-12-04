@@ -92,7 +92,7 @@
             <Insets left="10.0" top="30.0" />
          </padding>
          <children>
-            <TextField fx:id="itemNameTf" prefHeight="30.0" />
+            <TextField fx:id="itemNameTf" minHeight="30.0" prefHeight="30.0" />
             <TextField fx:id="itemIdTf" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" VBox.vgrow="ALWAYS" />
             <TextField fx:id="snTf" minHeight="30.0" prefHeight="30.0" />
             <TextField fx:id="unitTf" minHeight="30.0" prefHeight="30.0" />
@@ -121,9 +121,9 @@
          </font>
       </Button>
       <Button fx:id="deniedBtn" layoutX="909.0" layoutY="614.0" mnemonicParsing="false" onAction="#clearInput" prefHeight="42.0" prefWidth="248.0" text="ยกเลิก" />
-      <StackPane layoutX="704.0" layoutY="53.0" prefHeight="255.0" prefWidth="410.0" style="-fx-alignment: CENTER;">
+      <StackPane layoutX="704.0" layoutY="53.0" maxHeight="255.0" maxWidth="410.0" prefHeight="255.0" prefWidth="410.0" style="-fx-alignment: CENTER;">
          <children>
-            <ImageView fx:id="showImageIv" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="showImageIv" fitHeight="255.0" fitWidth="410.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </StackPane>
    </children>

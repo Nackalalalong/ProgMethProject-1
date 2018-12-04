@@ -17,5 +17,10 @@ public final class ApplicationFactory {
 	public static final String MAIN_DATABASE_ITEM_NOTE = "note";
 	
 	public static final String MAIN_DATABASE_IMAGE_DIRECTORY = "images";
+	
+	public static final String CATEGORY_DATABASE_NAME = "categories";
+	public static final String CATEGORY_DATABASE_COLUMN_NAME = "category";
+	
+	public static final String SUB_CATEGORY_COLUMN_NAME = "subcategory";
 
 }

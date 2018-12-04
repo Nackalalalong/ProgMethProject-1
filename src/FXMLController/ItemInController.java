@@ -1,14 +1,20 @@
 package FXMLController;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ResourceBundle;
 
+import javax.imageio.ImageIO;
+
 import factory.ApplicationFactory;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -18,8 +24,11 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 
 public class ItemInController implements Initializable {
+	
+	public static final int ITEM_IN_IMAGE_FIT_WIDTH = 250;
 	
 	@FXML
 	private TextField itemNameTf, itemIdTf, snTf, unitTf, buyPriceTf, sellPriceTf, amountTf, categoryTf, subCategoryTf;
@@ -33,41 +42,124 @@ public class ItemInController implements Initializable {
 	@FXML
 	private TextArea noteTa;
 	
-	private Image pickedImage;
+	private BufferedImage pickedImage;
 	
 	private Statement statement;
+	
+	private WarehouseController warehouseController;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
 		pickedImage = null;
 		showImageIv.setImage(new Image(ClassLoader.getSystemResource("icons/box.png").toString()));
+		showImageIv.setFitWidth(ITEM_IN_IMAGE_FIT_WIDTH);
 		
+	}
+	
+	public void setWarehouseController(WarehouseController wc) {
+		warehouseController = wc;
+	}
+	
+	public WarehouseController getWarehouseController() {
+		return warehouseController;
 	}
 	
 	public void pickImage() {
+		FileChooser chooser = new FileChooser();
+		chooser.setTitle("เลือกรูปภาพ");
+		chooser.getExtensionFilters().addAll(
+		        new FileChooser.ExtensionFilter("Image Files",
+		            "*.png", "*.jpg", "*.jpeg"));
 		
+		addImageBtn.setDisable(true);
+		File file = chooser.showOpenDialog(null);
+		
+		if ( file != null ) {
+			try {
+				pickedImage = ImageIO.read(file);
+				showImageIv.setImage(SwingFXUtils.toFXImage(pickedImage, null));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		addImageBtn.setDisable(false);
 	}
 	
-	public void initilizeDatabaseConnection() {
-		String path = "jdbc:sqlite:" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + ApplicationFactory.MAIN_DATABASE_FILE_NAME + ".db";
+	public void initilizeDatabaseConnection() throws SQLException {
+		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.MAIN_DATABASE_FILE_NAME + ".db";
 		
-		try {
-			String dbPath = "./database/";
+			String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
 			File dir = new File(dbPath);
 			if ( !dir.exists() ) {
 				dir.mkdirs();
 			}
 			Connection connection = DriverManager.getConnection(path);
 			statement = connection.createStatement();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 	}
 	
-	private void createMainDatabase() {
+	private void manipulateCategoryDatabase(String category) throws SQLException {
+		String catePath = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.CATEGORY_DATABASE_NAME + ".db";
+		String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
+		File dir = new File(dbPath);
+		if ( !dir.exists() ) {
+			dir.mkdirs();
+		}
+		
+		Connection connection = DriverManager.getConnection(catePath);
+		Statement stm = connection.createStatement();
+		
+		String cmd = "CREATE TABLE IF NOT EXISTS " + ApplicationFactory.CATEGORY_DATABASE_NAME + "(" +
+				"id INTEGER PRIMARY KEY AUTOINCREMENT, " + ApplicationFactory.CATEGORY_DATABASE_COLUMN_NAME + " TEXT)";
+		
+		stm.execute(cmd);
+		
+		cmd = "SELECT * FROM " + ApplicationFactory.CATEGORY_DATABASE_NAME + " WHERE " + ApplicationFactory.CATEGORY_DATABASE_COLUMN_NAME + " = '" + category + "'";
+		
+		ResultSet res = stm.executeQuery(cmd);
+		
+		if ( !res.next() ) {
+			cmd  = "INSERT INTO " + ApplicationFactory.CATEGORY_DATABASE_NAME + " (" + ApplicationFactory.CATEGORY_DATABASE_COLUMN_NAME + ") VALUES ('" + category +"')";
+			stm.execute(cmd);
+			warehouseController.loadCategory(); //reload category in warehouse page
+		}
+	}
+	
+	private void manipulateSubCategoryDatabase(String category, String subCategory) throws SQLException  {
+		
+		String catePath = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + category + ".db";
+		String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
+		File dir = new File(dbPath);
+		if ( !dir.exists() ) {
+			dir.mkdirs();
+		}
+		
+		Connection connection = DriverManager.getConnection(catePath);
+		Statement catStm = connection.createStatement();
+		
+		String cmd = "CREATE TABLE IF NOT EXISTS " + category + "(" +
+				"id INTEGER PRIMARY KEY AUTOINCREMENT, " + ApplicationFactory.SUB_CATEGORY_COLUMN_NAME + " TEXT)";
+		
+		catStm.execute(cmd);
+		
+		cmd = "SELECT * FROM " + category + " WHERE " + ApplicationFactory.SUB_CATEGORY_COLUMN_NAME + " = '" + subCategory + "'";
+		
+		ResultSet res = catStm.executeQuery(cmd);
+		
+		if ( !res.next() ) {
+			cmd  = "INSERT INTO " + category + " (" + ApplicationFactory.SUB_CATEGORY_COLUMN_NAME + ") VALUES ('" + subCategory +"')";
+			catStm.execute(cmd);
+			warehouseController.loadCategory(); //reload category in warehouse page
+		}
+			
+			/*cmd = "IF NOT EXISTS ( SELECT 1 FROM " + category + " WHERE subcategory = '" + subCategory + "') " +
+					"INSERT INTO " + category + " (" + ApplicationFactory.SUB_CATEGORY_COLUMN_NAME + ") VALUES ('" + subCategory +"')";*/
+			
+	}
+	
+	private void createMainDatabase() throws SQLException {
 		String cmd = "CREATE TABLE IF NOT EXISTS " + ApplicationFactory.MAIN_DATEBASE_NAME +"(" +
 				"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_NAME + " TEXT, " +
@@ -81,18 +173,12 @@ public class ItemInController implements Initializable {
 				ApplicationFactory.MAIN_DATABASE_ITEM_SUBCATEGORY + " TEXT, " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_NOTE + " TEXT)";
 	
-		try {
 			statement.execute(cmd);
-		} 
-		catch (SQLException e) {
-			// TODO Auto-generated catch block
-			showInfomationDialog("มีบางอย่างผิดพลาด", "กรุณาลองใหม่ภายหลัง");
-			e.printStackTrace();
-		}
+
 	}
 	
 	private void insertDataToMainDatabase(String itemName, int itemId, int sn, String unit, double buyPrice
-			, double sellPrice, int amount, String category, String subCategory, String note) {
+			, double sellPrice, int amount, String category, String subCategory, String note) throws Exception {
 		String cmd = "INSERT INTO " + ApplicationFactory.MAIN_DATEBASE_NAME + "(" +
 				ApplicationFactory.MAIN_DATABASE_ITEM_NAME + ", " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_ID + ", " +
@@ -115,19 +201,27 @@ public class ItemInController implements Initializable {
 				subCategory + "', '" +
 				note + "')";
 		
-			try {
 				statement.executeUpdate(cmd);
-				saveImage();
+				saveImage(itemId);
 				showInfomationDialog("ฐานข้อมูลสินค้า", "เพิ่มสินค้าในคลังสินค้าสำเร็จ");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				showInfomationDialog("มีบางอย่างผิดพลาด", "กรุณาลองใหม่ภายหลัง");
-				e.printStackTrace();
-			}
+				
 	}
 	
-	private void saveImage() {
+	private void saveImage(int itemId) throws IOException {
 		// save image with unique name <serial number>.jpg box.png if image that name not found
+		if ( pickedImage == null ) {
+			return;
+		}
+		
+		String path = "./" + ApplicationFactory.MAIN_DATABASE_IMAGE_DIRECTORY + "/";
+		File destination = new File(path);
+		if ( !destination.exists() ) {
+			destination.mkdirs();
+		}
+		
+		File output = new File(path + itemId + ".jpg");
+		ImageIO.write(pickedImage, "jpg", output);
+
 	}
 
 	public void validateUserInput() {
@@ -185,11 +279,16 @@ public class ItemInController implements Initializable {
 			try {
 			initilizeDatabaseConnection();
 			createMainDatabase();
+			manipulateCategoryDatabase(category);
+			manipulateSubCategoryDatabase(category, subCategory);
 			insertDataToMainDatabase(itemName, Integer.parseInt(itemId), Integer.parseInt(sn), unit, Double.parseDouble(buyPrice)
 					, Double.parseDouble(sellPrice), Integer.parseInt(amount), category, subCategory, note);
 			}
 			catch(Exception e) {
 				//e.printStackTrace();
+				e.printStackTrace();
+				showInfomationDialog("มีบางอย่างผิดพลาด", "กรุณาลองใหม่ภายหลัง");
+				return;
 			}
 		}
 	}
