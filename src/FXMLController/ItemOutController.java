@@ -6,37 +6,25 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
-public class ItemOutController  {
+public class ItemOutController implements Initializable {
 	
 	@FXML
-	private TextField customerNameTf, noteTf, billDestDirTf, discountByAmountBathTf, discountByPercentTf, vatTf;
-	
-	@FXML
-	private Label billIDLabel, billDateLabel, priceLabel, discountByPercentBathLabel, vatBathLabel, profitBathLabel, netPriceLabel;
-		
-	@FXML
-	private TableView itemOutTv;
-	
-	public ItemOutController() {
-		
-	}
+	private TextField customerNameTf;
 
-	@FXML
-	private URL location;
-	     
-	@FXML
-	private ResourceBundle resources;
-	
-	@FXML
-	public void initialize() {
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
-		
 		if ( customerNameTf == null ) {
 			System.out.println("null");
 		}
-		
+	}
+
+	public void sellItem() {
+		System.out.println("sell items");
 	}
 }

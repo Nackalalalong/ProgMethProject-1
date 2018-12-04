@@ -3,6 +3,7 @@ package application;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import FXMLController.ItemOutController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
 
@@ -24,7 +25,7 @@ public class ApplicationController {
 	private Pane warehousePane;
 	private Pane itemInPane;
 	private Pane itemOutPane;
-	
+		
 	private ApplicationController() {
 		NavigationButton warehouseBtn = new NavigationButton("คลัง", "icons/warehouse.png");
 		NavigationButton itemInBtn = new NavigationButton("เข้า", "icons/item_in.png");
@@ -59,8 +60,7 @@ public class ApplicationController {
 			warehousePane = FXMLLoader.load(ClassLoader.getSystemResource("warehouse.fxml"));
 			itemInPane = FXMLLoader.load(ClassLoader.getSystemResource("itemIn.fxml"));
 			itemOutPane = FXMLLoader.load(ClassLoader.getSystemResource("itemOut.fxml"));
-			
-			
+						
 			contentPanes.add(warehousePane);
 			contentPanes.add(itemInPane);
 			contentPanes.add(itemOutPane);
