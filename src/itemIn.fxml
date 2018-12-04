@@ -8,10 +8,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<Pane prefHeight="720.0" prefWidth="1200.0" style="-fx-background-color: f4e7e7;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<Pane prefHeight="720.0" prefWidth="1200.0" style="-fx-background-color: f4e7e7;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXMLController.ItemInController">
    <children>
-      <VBox prefHeight="720.0" prefWidth="200.0" spacing="20.0">
+      <VBox layoutY="7.0" prefHeight="713.0" prefWidth="200.0" spacing="29.0">
          <children>
+            <Label text="ชื่อสินค้า" />
             <Label text="รหัสสินค้า">
                <font>
                   <Font size="20.0" />
@@ -86,29 +87,24 @@
             <Insets left="20.0" top="30.0" />
          </padding>
       </VBox>
-      <VBox layoutX="200.0" prefHeight="421.0" prefWidth="300.0" spacing="20.0">
+      <VBox layoutX="200.0" prefHeight="465.0" prefWidth="300.0" spacing="20.0">
          <padding>
             <Insets left="10.0" top="30.0" />
          </padding>
          <children>
-            <TextField id="itemidTf" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" VBox.vgrow="ALWAYS" />
-            <TextField id="snTf" minHeight="30.0" prefHeight="30.0" />
-            <TextField id="unitTf" minHeight="30.0" prefHeight="30.0" />
-            <TextField id="buypriceTf" minHeight="30.0" prefHeight="30.0" />
-            <TextField id="sellpriceTf" minHeight="30.0" prefHeight="30.0" />
-            <TextField id="amountTf" minHeight="30.0" prefHeight="30.0" />
-            <TextField id="categoryTf" minHeight="30.0" prefHeight="30.0" />
+            <TextField fx:id="itemNameTf" prefHeight="30.0" />
+            <TextField fx:id="itemIdTf" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" VBox.vgrow="ALWAYS" />
+            <TextField fx:id="snTf" minHeight="30.0" prefHeight="30.0" />
+            <TextField fx:id="unitTf" minHeight="30.0" prefHeight="30.0" />
+            <TextField fx:id="buyPriceTf" minHeight="30.0" prefHeight="30.0" />
+            <TextField fx:id="sellPriceTf" minHeight="30.0" prefHeight="30.0" />
+            <TextField fx:id="amountTf" minHeight="30.0" prefHeight="30.0" />
+            <TextField fx:id="categoryTf" minHeight="30.0" prefHeight="30.0" />
+            <TextField fx:id="subCategoryTf" minHeight="30.0" prefHeight="30.0" />
             <HBox prefHeight="81.0" prefWidth="290.0">
                <children>
-                  <VBox prefHeight="0.0" prefWidth="320.0" spacing="20.0">
-                     <children>
-                        <ComboBox id="subcateCb" minHeight="30.0" prefHeight="30.0" prefWidth="200.0" />
-                     </children>
-                  </VBox>
+                  <VBox prefHeight="0.0" prefWidth="320.0" spacing="20.0" />
                   <VBox prefHeight="81.0" prefWidth="202.0" spacing="20.0">
-                     <children>
-                        <Button id="addsubBtn" minHeight="30.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="119.0" text="เพิ่ม" />
-                     </children>
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
@@ -117,14 +113,18 @@
             </HBox>
          </children>
       </VBox>
-      <TextArea layoutX="200.0" layoutY="432.0" prefHeight="224.0" prefWidth="665.0" />
-      <ImageView id="showimageIv" fitHeight="255.0" fitWidth="410.0" layoutX="710.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true" />
-      <Button id="addimageBtn" layoutX="865.0" layoutY="345.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="เพิ่มรูปภาพ" />
-      <Button id="acceptBtn" layoutX="909.0" layoutY="432.0" mnemonicParsing="false" prefHeight="139.0" prefWidth="248.0" text="ยืนยัน">
+      <TextArea fx:id="noteTa" layoutX="200.0" layoutY="486.0" prefHeight="170.0" prefWidth="665.0" />
+      <Button fx:id="addImageBtn" layoutX="865.0" layoutY="345.0" mnemonicParsing="false" onAction="#pickImage" prefHeight="30.0" prefWidth="100.0" text="เพิ่มรูปภาพ" />
+      <Button fx:id="acceptBtn" layoutX="909.0" layoutY="432.0" mnemonicParsing="false" onAction="#validateUserInput" prefHeight="139.0" prefWidth="248.0" text="ยืนยัน">
          <font>
             <Font size="30.0" />
          </font>
       </Button>
-      <Button id="deniedBtn" layoutX="909.0" layoutY="614.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="248.0" text="ยกเลิก" />
+      <Button fx:id="deniedBtn" layoutX="909.0" layoutY="614.0" mnemonicParsing="false" onAction="#clearInput" prefHeight="42.0" prefWidth="248.0" text="ยกเลิก" />
+      <StackPane layoutX="704.0" layoutY="53.0" prefHeight="255.0" prefWidth="410.0" style="-fx-alignment: CENTER;">
+         <children>
+            <ImageView fx:id="showImageIv" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </StackPane>
    </children>
 </Pane>
