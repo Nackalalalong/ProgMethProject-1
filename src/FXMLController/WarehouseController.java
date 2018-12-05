@@ -57,7 +57,7 @@ public class WarehouseController implements Initializable {
 	
 	
 	public void loadCategory() {
-		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.CATEGORY_DATABASE_NAME + ".db";
+		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.CATEGORY_DATABASE_NAME + ".sqlite";
 		
 		try {
 			String dbPath = "./database/";
@@ -88,7 +88,7 @@ public class WarehouseController implements Initializable {
 	}
 	
 	private void initializeDatabaseConnection() {
-		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.MAIN_DATABASE_FILE_NAME + ".db";
+		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.MAIN_DATABASE_FILE_NAME + ".sqlite";
 		
 		try {
 			String dbPath = "./database/";
@@ -194,7 +194,7 @@ public class WarehouseController implements Initializable {
 				ApplicationFactory.MAIN_DATABASE_ITEM_CATEGORY + " LIKE '%" + category + "%' AND " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_SUBCATEGORY + " LIKE '%" + subCategory + "%'";
 		
-		//System.out.println(cmd);
+		System.out.println(cmd);
 		
 		try {
 			ResultSet searchResult = statement.executeQuery(cmd);
@@ -224,8 +224,9 @@ public class WarehouseController implements Initializable {
 			
 			String category = categoryCb.getSelectionModel().getSelectedItem().toString();
 			
-			String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + category + ".db";
+			String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + category + ".sqlite";
 			
+			Statement stm;
 			try {
 				String dbPath = "./database/";
 				File dir = new File(dbPath);
@@ -233,17 +234,11 @@ public class WarehouseController implements Initializable {
 					dir.mkdirs();
 				}
 				Connection connection = DriverManager.getConnection(path);
-				statement = connection.createStatement();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			String cmd = "SELECT " + ApplicationFactory.SUB_CATEGORY_COLUMN_NAME + " FROM " + category;
-			
-			try {
+				stm = connection.createStatement();
 				
-				ResultSet res = statement.executeQuery(cmd);
+				String cmd = "SELECT " + ApplicationFactory.SUB_CATEGORY_COLUMN_NAME + " FROM " + category;
+				
+				ResultSet res = stm.executeQuery(cmd);
 				ObservableList<String> subs = FXCollections.observableArrayList();
 				subs.add("ทั้งหมด");
 				
@@ -256,7 +251,6 @@ public class WarehouseController implements Initializable {
 				
 				subCategoryCb.setItems(subs);
 				subCategoryCb.getSelectionModel().select(0);
-				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -88,7 +88,7 @@ public class ItemInController implements Initializable {
 	}
 	
 	public void initilizeDatabaseConnection() throws SQLException {
-		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.MAIN_DATABASE_FILE_NAME + ".db";
+		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.MAIN_DATABASE_FILE_NAME + ".sqlite";
 		
 			String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
 			File dir = new File(dbPath);
@@ -101,7 +101,7 @@ public class ItemInController implements Initializable {
 	}
 	
 	private void manipulateCategoryDatabase(String category) throws SQLException {
-		String catePath = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.CATEGORY_DATABASE_NAME + ".db";
+		String catePath = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.CATEGORY_DATABASE_NAME + ".sqlite";
 		String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
 		File dir = new File(dbPath);
 		if ( !dir.exists() ) {
@@ -129,7 +129,7 @@ public class ItemInController implements Initializable {
 	
 	private void manipulateSubCategoryDatabase(String category, String subCategory) throws SQLException  {
 		
-		String catePath = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + category + ".db";
+		String catePath = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + category + ".sqlite";
 		String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
 		File dir = new File(dbPath);
 		if ( !dir.exists() ) {
