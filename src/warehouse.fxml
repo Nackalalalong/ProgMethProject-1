@@ -44,15 +44,17 @@
       </Pane>
       <TableView fx:id="table" prefHeight="620.0" prefWidth="1200.0">
         <columns>
-          <TableColumn prefWidth="155.0" text="รูป" />
-          <TableColumn prefWidth="83.0" text="รหัสสินค้า" />
-            <TableColumn prefWidth="175.0" text="ชื่อสินค้า" />
-            <TableColumn prefWidth="74.0" text="หน่วย" />
-            <TableColumn prefWidth="67.0" text="จำนวน" />
-            <TableColumn prefWidth="104.0" text="ราคา/หน่วย" />
-            <TableColumn prefWidth="189.0" text="หมวดหมู่" />
-            <TableColumn prefWidth="124.0" text="หมวดหมู่ย่อย" />
-            <TableColumn minWidth="0.0" prefWidth="228.0" text="หมายเหตุ" />
+          <TableColumn fx:id="imageTc" prefWidth="100.0" text="รูป" />
+          <TableColumn fx:id="itemIdTc" prefWidth="100.0" text="รหัสสินค้า" />
+            <TableColumn fx:id="snTc" prefWidth="110.0" text="serial number" />
+            <TableColumn fx:id="itemNameTc" prefWidth="160.0" text="ชื่อสินค้า" />
+            <TableColumn fx:id="unitTc" text="หน่วย" />
+            <TableColumn fx:id="amountTc" text="จำนวน" />
+            <TableColumn fx:id="buyPriceTc" prefWidth="104.0" text="ราคาซื้อ/หน่วย" />
+            <TableColumn fx:id="sellPriceTc" prefWidth="112.0" text="ราคาขาย/หน่วย" />
+            <TableColumn fx:id="categoryTc" prefWidth="155.0" text="หมวดหมู่" />
+            <TableColumn fx:id="subCategoryTc" prefWidth="109.0" text="หมวดหมู่ย่อย" />
+            <TableColumn fx:id="noteTc" minWidth="0.0" prefWidth="240.0" text="หมายเหตุ" />
         </columns>
       </TableView>
    </children>
