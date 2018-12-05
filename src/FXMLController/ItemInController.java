@@ -148,7 +148,7 @@ public class ItemInController implements Initializable {
 		
 		ResultSet res = catStm.executeQuery(cmd);
 		
-		if ( !res.next() ) {
+		if ( !res.next() ) {    //ไม่มี sub-category ต้องเพิ่มใหม่
 			cmd  = "INSERT INTO " + category + " (" + ApplicationFactory.SUB_CATEGORY_COLUMN_NAME + ") VALUES ('" + subCategory +"')";
 			catStm.execute(cmd);
 			warehouseController.loadCategory(); //reload category in warehouse page
@@ -166,8 +166,8 @@ public class ItemInController implements Initializable {
 				ApplicationFactory.MAIN_DATABASE_ITEM_ID + " INTEGER, " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_SERIAL_NUNBER + " INTEGER, " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_UNIT + " TEXT, " +
-				ApplicationFactory.MAIN_DATABASE_ITEM_BUYPRICE + " REAL, " +
-				ApplicationFactory.MAIN_DATABASE_ITEM_SELLPRICE + " REAL, " +
+				ApplicationFactory.MAIN_DATABASE_ITEM_BUY_PRICE + " REAL, " +
+				ApplicationFactory.MAIN_DATABASE_ITEM_SELL_PRICE + " REAL, " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_AMOUNT + " INTEGER, " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_CATEGORY + " TEXT, " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_SUBCATEGORY + " TEXT, " +
@@ -184,8 +184,8 @@ public class ItemInController implements Initializable {
 				ApplicationFactory.MAIN_DATABASE_ITEM_ID + ", " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_SERIAL_NUNBER + ", " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_UNIT + ", " +
-				ApplicationFactory.MAIN_DATABASE_ITEM_BUYPRICE + ", " +
-				ApplicationFactory.MAIN_DATABASE_ITEM_SELLPRICE + ", " +
+				ApplicationFactory.MAIN_DATABASE_ITEM_BUY_PRICE + ", " +
+				ApplicationFactory.MAIN_DATABASE_ITEM_SELL_PRICE + ", " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_AMOUNT + ", " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_CATEGORY + ", " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_SUBCATEGORY + ", " +
