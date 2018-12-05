@@ -11,6 +11,7 @@
 		</accessrules>
 	</classpathentry>
 	<classpathentry exported="true" kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="D:/Eclipse Workspace/sqlite-jdbc-3.23.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/p_nga/OneDrive/Documents/sqlite-jdbc-3.23.1/sqlite-jdbc-3.23.1.jar"/>
+	<classpathentry kind="lib" path="lib/itextpdf-5.4.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
