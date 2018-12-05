@@ -14,6 +14,11 @@
 	-fx-font-size: 14px;
 }
 
+.table-view .table-cell {
+	-fx-font-family: supermarket;
+	-fx-font-size: 16px;
+}
+
 .label {
 	-fx-font-family: supermarket;
 	-fx-font-size: 20px;
