@@ -163,6 +163,7 @@ public class WarehouseController implements Initializable {
 			}
 			
 			table.setItems(dataSets);
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

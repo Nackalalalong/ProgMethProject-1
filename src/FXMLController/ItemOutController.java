@@ -24,4 +24,12 @@ public class ItemOutController implements Initializable {
 	public void sellItem() {
 		System.out.println("sell items");
 	}
+	
+	public void setDiscountByBath() {
+		
+	}
+	
+	public void setDiscountByPercent() {
+		
+	}
 }
