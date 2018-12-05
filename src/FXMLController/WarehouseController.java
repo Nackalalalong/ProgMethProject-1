@@ -194,7 +194,7 @@ public class WarehouseController implements Initializable {
 				ApplicationFactory.MAIN_DATABASE_ITEM_CATEGORY + " LIKE '%" + category + "%' AND " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_SUBCATEGORY + " LIKE '%" + subCategory + "%'";
 		
-		System.out.println(cmd);
+		//System.out.println(cmd);
 		
 		try {
 			ResultSet searchResult = statement.executeQuery(cmd);
