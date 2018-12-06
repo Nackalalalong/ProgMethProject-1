@@ -27,7 +27,7 @@ public class BillPDF {
 	private BillPDF() {
 		
 	}
-																																          // price ราคารวมทั้งหมดยังไม่ลด
+																				  // path มีแค่ directory เช่น /bills/ ยังไม่รวมชื่อไฟล์		          // price ราคารวมทั้งหมดยังไม่ลด
 	public static void printPDF(ObservableList<ItemOutDataSet> items, int billNum, String path , String discountBath, String taxPercent, String price, String netPrice) {
 		boolean isFirst = true;
 		double totalAmount = 0;

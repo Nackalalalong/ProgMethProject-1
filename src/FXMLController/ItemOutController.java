@@ -51,7 +51,8 @@ public class ItemOutController implements Initializable {
 	private ObservableList<ItemOutDataSet> itemOutDataSets;
 	private File destinationDirectory;
 	
-	private Statement customerStatement;
+	private Statement customersStatement;
+	private Statement statisticsStatement;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -80,7 +81,19 @@ public class ItemOutController implements Initializable {
 			dir.mkdirs();
 		}
 		Connection connection = DriverManager.getConnection(path);
-		customerStatement = connection.createStatement();
+		customersStatement = connection.createStatement();
+	}
+	
+	private void initializeStatisticsDatabaseConnection() throws SQLException {
+		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.DEFAULT_BILL_DIRECTORY_NAME + ".sqlite";
+		
+		String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
+		File dir = new File(dbPath);
+		if ( !dir.exists() ) {
+			dir.mkdirs();
+		}
+		Connection connection = DriverManager.getConnection(path);
+		statisticsStatement = connection.createStatement();
 	}
 	
 	private void updateCustomerDatabase() {
