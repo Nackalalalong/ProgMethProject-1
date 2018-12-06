@@ -27,8 +27,8 @@ public class BillPDF {
 	private BillPDF() {
 		
 	}
-	
-	public static void printPDF(ObservableList<ItemOutDataSet> items, int billNum, String path ) {
+																																          // price ราคารวมทั้งหมดยังไม่ลด
+	public static void printPDF(ObservableList<ItemOutDataSet> items, int billNum, String path , String discountBath, String taxPercent, String price, String netPrice) {
 		boolean isFirst = true;
 		double totalAmount = 0;
 		

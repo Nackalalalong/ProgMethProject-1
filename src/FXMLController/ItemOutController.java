@@ -2,11 +2,16 @@ package FXMLController;
 
 import java.io.File;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
 import application.DateThai;
 import application.ItemOutDataSet;
+import factory.ApplicationFactory;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -46,7 +51,7 @@ public class ItemOutController implements Initializable {
 	private ObservableList<ItemOutDataSet> itemOutDataSets;
 	private File destinationDirectory;
 	
-	private static final String DEFAULT_BILL_DIRECTORY = "./bills/";
+	private Statement customerStatement;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -64,6 +69,22 @@ public class ItemOutController implements Initializable {
 	
 	public ObservableList<ItemOutDataSet> getItemOutDataSets() {
 		return itemOutDataSets;
+	}
+	
+	public void initializeCustomerDatabaseConnection() throws SQLException {
+		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.CUSTOMER_DATABASE_FILE_NAME + ".sqlite";
+		
+		String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
+		File dir = new File(dbPath);
+		if ( !dir.exists() ) {
+			dir.mkdirs();
+		}
+		Connection connection = DriverManager.getConnection(path);
+		customerStatement = connection.createStatement();
+	}
+	
+	private void updateCustomerDatabase() {
+		
 	}
 	
 	public void pickDirectory() {

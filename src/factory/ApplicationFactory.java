@@ -36,4 +36,9 @@ public final class ApplicationFactory {
 	public static final String	WAREHOUSE_TABLE_CATEGORY_COLUMN_NAME = "หมวดหมู่";
 	public static final String	WAREHOUSE_TABLE_SUB_CATEGORY_COLUMN_NAME = "หมวดหมู่ย่อย";
 	public static final String	WAREHOUSE_TABLE_NOTE_COLUMN_NAME = "หมายเหตุ";
+
+	//item out
+	public static final String DEFAULT_BILL_DIRECTORY_NAME = "bills";
+	public static final String CUSTOMER_DATABASE_FILE_NAME = "customers";
+	public static final String STATISTICS_DATABASE_FILE_NAME = "statistics";
 }
