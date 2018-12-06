@@ -41,7 +41,7 @@ public class CustomerController implements Initializable {
 	private TextField customerNameTf;
 	
 	@FXML
-	private Button searchBtn;
+	private Button searchBtn, clearBtn;
 	
 	@FXML
 	private TableView table;
@@ -63,6 +63,10 @@ public class CustomerController implements Initializable {
 			showErrorDialog("การเชื่อมต่อกับฐานข้อมูลผิดพลาด", "กรุณาลองใหม่ภายหลัง");
 		}
 		initializeTable();
+	}
+	
+	public void clearInput() {
+		customerNameTf.setText("");
 	}
 	
 	public void showErrorDialog(String header, String message) {

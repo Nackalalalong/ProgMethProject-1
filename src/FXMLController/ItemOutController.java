@@ -60,6 +60,8 @@ public class ItemOutController implements Initializable {
 	private Statement stockStatement;
 	
 	private DecimalFormat decimalFormatter;
+	
+	private WarehouseController warehouseController;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -86,6 +88,11 @@ public class ItemOutController implements Initializable {
 			e.printStackTrace();
 		}
 	}
+	
+	public void setWarehouseController(WarehouseController wc) {
+		warehouseController = wc;
+	}
+	
 	
 	public ObservableList<ItemOutDataSet> getItemOutDataSets() {
 		return itemOutDataSets;
@@ -181,7 +188,7 @@ public class ItemOutController implements Initializable {
 		
 		try {
 			cmd = "SELECT * FROM " + ApplicationFactory.CUSTOMER_DATABASE_NAME + " WHERE " + 
-					ApplicationFactory.CUSTOMER_DATABASE_CUSTOMER_NAME_COLOUMN_NAME + " = " + customerName;
+					ApplicationFactory.CUSTOMER_DATABASE_CUSTOMER_NAME_COLOUMN_NAME + " = '" + customerName + "'";
 			ResultSet res = customersStatement.executeQuery(cmd);
 		
 			String count = res.getString(ApplicationFactory.CUSTOMER_DATABASE_BUY_AMOUNT_COLUMN_NAME);
@@ -189,13 +196,15 @@ public class ItemOutController implements Initializable {
 			String totalProfit = res.getString(ApplicationFactory.CUSTOMER_DATABASE_TOTAL_PROFIT_COLUMN_NAME);
 			
 			cmd = "UPDATE " + ApplicationFactory.CUSTOMER_DATABASE_NAME + " SET " +
-					ApplicationFactory.CUSTOMER_DATABASE_BUY_AMOUNT_COLUMN_NAME + " = " + ( Integer.parseInt(count) + 1 ) + 
-					ApplicationFactory.CUSTOMER_DATABASE_TOTAL_BUY_COLUMN_NAME + " = " + ( Double.parseDouble(totalBuy) + netPrice ) +
-					ApplicationFactory.CUSTOMER_DATABASE_TOTAL_PROFIT_COLUMN_NAME + " = " + ( Double.parseDouble(totalProfit) + profit );
+					ApplicationFactory.CUSTOMER_DATABASE_BUY_AMOUNT_COLUMN_NAME + " = " + ( Integer.parseInt(count) + 1 ) + ", " +
+					ApplicationFactory.CUSTOMER_DATABASE_TOTAL_BUY_COLUMN_NAME + " = " + ( Double.parseDouble(totalBuy) + Double.parseDouble(netPrice) ) + ", " +
+					ApplicationFactory.CUSTOMER_DATABASE_TOTAL_PROFIT_COLUMN_NAME + " = " + ( Double.parseDouble(totalProfit) + Double.parseDouble(profit) ) + " WHERE " +
+					ApplicationFactory.CUSTOMER_DATABASE_CUSTOMER_NAME_COLOUMN_NAME + " = '" + customerName + "'";
 			
 			customersStatement.executeUpdate(cmd);
 		}
 		catch(SQLException e) {
+			e.printStackTrace();
 			cmd = "INSERT INTO " + ApplicationFactory.CUSTOMER_DATABASE_NAME + "(" + 
 					ApplicationFactory.CUSTOMER_DATABASE_CUSTOMER_NAME_COLOUMN_NAME + ", " +
 					ApplicationFactory.CUSTOMER_DATABASE_BUY_AMOUNT_COLUMN_NAME + ", " + 
@@ -393,7 +402,8 @@ public class ItemOutController implements Initializable {
 					updateData();
 					updateCustomerDatabase(customerName, netPrice, profit, lastestBuyDate, note);
 					showInfomationDialog("คำสั่งสำเร็จ", "คำสั่งขายเสร็จสิ้น", "");
-					}
+					warehouseController.searchData();
+				}
 					catch(SQLException e) {
 						showErrorDialog("ข้อผิดพลาด", "มีบางอย่างผิดปกติขณะกำลังอัพเดทฐานข้อมูล", "กรุณาลองใหม่ภายหลัง");
 						e.printStackTrace();

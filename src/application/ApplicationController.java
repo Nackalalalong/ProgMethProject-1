@@ -76,6 +76,7 @@ public class ApplicationController {
 			itemOutPane = ioLoader.load();
 			((FXMLController.ItemInController)(iiLoader.getController())).setWarehouseController(whLoader.getController());
 			((FXMLController.WarehouseController)(whLoader.getController())).setItemOutController(ioLoader.getController());
+			((FXMLController.ItemOutController)(ioLoader.getController())).setWarehouseController(whLoader.getController());
 						
 			contentPanes.add(warehousePane);
 			contentPanes.add(itemInPane);
