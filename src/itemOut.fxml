@@ -37,12 +37,13 @@
       <TableView fx:id="table" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="433.0" prefWidth="1200.0">
         <columns>
             <TableColumn fx:id="imageTc" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="รูป" />
-          <TableColumn fx:id="itemIdTc" prefWidth="183.0" text="รหัสสินค้า" />
-          <TableColumn fx:id="itemNameTc" prefWidth="287.0" text="ชื่อสินค้า" />
-            <TableColumn fx:id="buyPriceTc" prefWidth="129.0" text="ราคาซื้อ / หน่วย" />
-            <TableColumn fx:id="sellPriceTc" prefWidth="170.0" text="ราคาขาย / หน่วย" />
-            <TableColumn fx:id="sellAmountTc" minWidth="0.0" prefWidth="133.0" text="จำนวน" />
-            <TableColumn fx:id="itemTotalPriceTc" prefWidth="197.0" text="รวม ( บาท )" />
+          <TableColumn fx:id="itemIdTc" prefWidth="139.0" text="รหัสสินค้า" />
+            <TableColumn fx:id="snTc" prefWidth="142.0" text="serial number" />
+          <TableColumn fx:id="itemNameTc" prefWidth="245.0" text="ชื่อสินค้า" />
+            <TableColumn fx:id="buyPriceTc" prefWidth="162.0" text="ราคาซื้อ / หน่วย" />
+            <TableColumn fx:id="sellPriceTc" prefWidth="138.0" text="ราคาขาย / หน่วย" />
+            <TableColumn fx:id="sellAmountTc" minWidth="0.0" prefWidth="132.0" text="จำนวน" />
+            <TableColumn fx:id="itemTotalPriceTc" prefWidth="141.0" text="รวม ( บาท )" />
         </columns>
       </TableView>
       <Pane prefHeight="233.0" prefWidth="1200.0">

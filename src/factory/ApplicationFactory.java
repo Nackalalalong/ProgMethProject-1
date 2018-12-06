@@ -39,6 +39,25 @@ public final class ApplicationFactory {
 
 	//item out
 	public static final String DEFAULT_BILL_DIRECTORY_NAME = "bills";
-	public static final String CUSTOMER_DATABASE_FILE_NAME = "customers";
-	public static final String STATISTICS_DATABASE_FILE_NAME = "statistics";
+	public static final String CUSTOMER_DATABASE_NAME = "customers";
+	public static final String STATISTICS_DATABASE_NAME = "statistics";
+	
+	//customer
+	public static final String CUSTOMER_DATABASE_CUSTOMER_NAME_COLOUMN_NAME = "customername";
+	public static final String CUSTOMER_DATABASE_BUY_COUNT_COLUMN_NAME = "buycount";
+	public static final String CUSTOMER_DATABASE_LASTEST_BUY_DATE_COLUMN_NAME = "lastestbuydate";
+	public static final String CUSTOMER_DATABASE_TOTAL_BUY_COLUMN_NAME = "totalbuy";
+	public static final String CUSTOMER_DATABASE_TOTAL_PROFIT_COLUMN_NAME = "totalprofit";
+	public static final String CUSTOMER_DATABASE_NOTE_COLUMN_NAME = "note";
+	
+	//statistics
+	public static final String STATISTICS_DATABASE_ITEM_NAME_COLUMN_NAME = "itemname";
+	public static final String STATISTICS_DATABASE_ITEM_ID_COLUMN_NAME = "itemid";
+	public static final String STATISTICS_DATABASE_ITEM_SERIAL_NUMBER_COLUMN_NAME = "sn";
+	public static final String STATISTICS_DATABASE_SELL_COUNT_COLUMN_NAME = "sellcount";
+	public static final String STATISTICS_DATABASE_TOTAL_SELL_COLUMN_NAME = "totalsell";
+	public static final String STATISTICS_DATABASE_TOTAL_PROFIT_COLUMN_NAME = "totalprofit";
+	public static final String STATISTICS_DATABASE_MONTH_COLUMN_NAME = "month";	// 1-12
+	public static final String STATISTICS_DATABASE_YEAR_COLUMN_NAME = "year"; // ¤È
+	
 }

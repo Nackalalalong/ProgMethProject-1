@@ -4,8 +4,10 @@ import java.io.File;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
@@ -34,7 +36,7 @@ public class ItemOutController implements Initializable {
 	
 	@FXML
 	private TextField customerNameTf, billIdTf, billDateTf, noteTf, saveBillDestinationTf, priceTf, discountByBahtTf , discountByPercentTf, discountByPercentBahtTf,
-		vatTf, vatbathTf, netPriceTf, profitTf;
+		vatTf, vatBahtTf, netPriceTf, profitTf;
 	
 	@FXML
 	private Button viewBillBtn, selectBillDestinationBtn, okBtn, cancelBtn;
@@ -46,19 +48,23 @@ public class ItemOutController implements Initializable {
 	private TableView table;
 	
 	@FXML
-	private TableColumn imageTc, itemIdTc, itemNameTc, buyPriceTc, sellPriceTc, sellAmountTc, itemTotalPriceTc;
+	private TableColumn imageTc, itemIdTc, snTc, itemNameTc, buyPriceTc, sellPriceTc, sellAmountTc, itemTotalPriceTc;
 	
 	private ObservableList<ItemOutDataSet> itemOutDataSets;
 	private File destinationDirectory;
 	
 	private Statement customersStatement;
 	private Statement statisticsStatement;
+	
+	private DecimalFormat decimalFormatter;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
 		itemOutDataSets = FXCollections.observableArrayList();
 		destinationDirectory = null;
+		
+		decimalFormatter = new DecimalFormat("#0.00");
 		
 		initializeNumericTextField();
 		initializeTable();
@@ -73,7 +79,7 @@ public class ItemOutController implements Initializable {
 	}
 	
 	public void initializeCustomerDatabaseConnection() throws SQLException {
-		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.CUSTOMER_DATABASE_FILE_NAME + ".sqlite";
+		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.CUSTOMER_DATABASE_NAME + ".sqlite";
 		
 		String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
 		File dir = new File(dbPath);
@@ -85,7 +91,7 @@ public class ItemOutController implements Initializable {
 	}
 	
 	private void initializeStatisticsDatabaseConnection() throws SQLException {
-		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.DEFAULT_BILL_DIRECTORY_NAME + ".sqlite";
+		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.STATISTICS_DATABASE_NAME + ".sqlite";
 		
 		String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
 		File dir = new File(dbPath);
@@ -96,9 +102,87 @@ public class ItemOutController implements Initializable {
 		statisticsStatement = connection.createStatement();
 	}
 	
-	private void updateCustomerDatabase() {
+	private void updateStatisticsDatabase(String itemName, String itemId, String itemSn, String sellCount, String totalSell, String totalProfit, int month, int year) throws SQLException {
+		String cmd = "CREATE TABLE IF NOT EXIST " + ApplicationFactory.STATISTICS_DATABASE_NAME + "(" +
+				"id INTEGER PRIMARY KEY AUTOINCREMENT, " + ApplicationFactory.STATISTICS_DATABASE_ITEM_NAME_COLUMN_NAME + " TEXT, " +
+				ApplicationFactory.STATISTICS_DATABASE_ITEM_ID_COLUMN_NAME + " INTEGER, " +
+				ApplicationFactory.STATISTICS_DATABASE_ITEM_SERIAL_NUMBER_COLUMN_NAME + " INTEGER, " + 
+				ApplicationFactory.STATISTICS_DATABASE_SELL_COUNT_COLUMN_NAME + " INTEGER, " +
+				ApplicationFactory.STATISTICS_DATABASE_TOTAL_SELL_COLUMN_NAME + " REAL, " +
+				ApplicationFactory.STATISTICS_DATABASE_TOTAL_PROFIT_COLUMN_NAME + " REAL, " +
+				ApplicationFactory.STATISTICS_DATABASE_MONTH_COLUMN_NAME + " INTEGER, " +
+				ApplicationFactory.STATISTICS_DATABASE_YEAR_COLUMN_NAME + " YEAR)";
 		
+		statisticsStatement.execute(cmd);
+		
+		cmd = "INSERT INTO " +ApplicationFactory.STATISTICS_DATABASE_NAME + "(" +
+				ApplicationFactory.STATISTICS_DATABASE_ITEM_NAME_COLUMN_NAME + ", " +
+				ApplicationFactory.STATISTICS_DATABASE_ITEM_ID_COLUMN_NAME + ", " +
+				ApplicationFactory.STATISTICS_DATABASE_ITEM_SERIAL_NUMBER_COLUMN_NAME + ", " + 
+				ApplicationFactory.STATISTICS_DATABASE_SELL_COUNT_COLUMN_NAME + ", " +
+				ApplicationFactory.STATISTICS_DATABASE_TOTAL_SELL_COLUMN_NAME + ", " +
+				ApplicationFactory.STATISTICS_DATABASE_TOTAL_PROFIT_COLUMN_NAME + ", " +
+				ApplicationFactory.STATISTICS_DATABASE_MONTH_COLUMN_NAME + ", " +
+				ApplicationFactory.STATISTICS_DATABASE_YEAR_COLUMN_NAME + ") VALUES ('" +
+				itemName + "', " +
+				itemId + ", " +
+				itemSn + ", " +
+				sellCount + ", " +
+				totalSell + ", " +
+				totalProfit + ", " +
+				month + ", " +
+				year + ")" ;
+		
+		statisticsStatement.execute(cmd);
 	}
+	
+	private void updateCustomerDatabase(String customerName, String netPrice, String profit, String lastestBuyDate, String note) throws SQLException {
+		String cmd = "CREATE TABLE IF NOT EXISTS " + ApplicationFactory.CUSTOMER_DATABASE_NAME + "(" +
+				"id INTEGER PRIMARY KEY AUTOINCREMENT, " + ApplicationFactory.CUSTOMER_DATABASE_CUSTOMER_NAME_COLOUMN_NAME + " TEXT, " +
+				ApplicationFactory.CUSTOMER_DATABASE_BUY_COUNT_COLUMN_NAME + " INTEGER, " + 
+				ApplicationFactory.CUSTOMER_DATABASE_LASTEST_BUY_DATE_COLUMN_NAME + " TEXT, " +
+				ApplicationFactory.CUSTOMER_DATABASE_TOTAL_BUY_COLUMN_NAME + " REAL, " +
+				ApplicationFactory.CUSTOMER_DATABASE_TOTAL_PROFIT_COLUMN_NAME + " REAL, " +
+				ApplicationFactory.CUSTOMER_DATABASE_NOTE_COLUMN_NAME + " TEXT)";
+		
+		customersStatement.execute(cmd);
+		
+		cmd = "SELECT * FROM " + ApplicationFactory.CUSTOMER_DATABASE_NAME + " WHERE " + 
+				ApplicationFactory.CUSTOMER_DATABASE_CUSTOMER_NAME_COLOUMN_NAME + " = " + customerName;
+		ResultSet res = customersStatement.executeQuery(cmd);
+		
+		if ( res.next() ) {
+			String count = res.getString(ApplicationFactory.CUSTOMER_DATABASE_BUY_COUNT_COLUMN_NAME);
+			String totalBuy = res.getString(ApplicationFactory.CUSTOMER_DATABASE_TOTAL_BUY_COLUMN_NAME);
+			String totalProfit = res.getString(ApplicationFactory.CUSTOMER_DATABASE_TOTAL_PROFIT_COLUMN_NAME);
+			
+			cmd = "UPDATE " + ApplicationFactory.CUSTOMER_DATABASE_NAME + " SET " +
+					ApplicationFactory.CUSTOMER_DATABASE_BUY_COUNT_COLUMN_NAME + " = " + ( Integer.parseInt(count) + 1 ) + 
+					ApplicationFactory.CUSTOMER_DATABASE_TOTAL_BUY_COLUMN_NAME + " = " + ( Double.parseDouble(totalBuy) + netPrice ) +
+					ApplicationFactory.CUSTOMER_DATABASE_TOTAL_PROFIT_COLUMN_NAME + " = " + ( Double.parseDouble(totalProfit) + profit );
+			
+			customersStatement.executeUpdate(cmd);
+		}
+		else {
+			cmd = "INSERT INTO " + ApplicationFactory.CUSTOMER_DATABASE_NAME + "(" + 
+					ApplicationFactory.CUSTOMER_DATABASE_CUSTOMER_NAME_COLOUMN_NAME + ", " +
+					ApplicationFactory.CUSTOMER_DATABASE_BUY_COUNT_COLUMN_NAME + ", " + 
+					ApplicationFactory.CUSTOMER_DATABASE_LASTEST_BUY_DATE_COLUMN_NAME + ", " +
+					ApplicationFactory.CUSTOMER_DATABASE_TOTAL_BUY_COLUMN_NAME + ", " +
+					ApplicationFactory.CUSTOMER_DATABASE_TOTAL_PROFIT_COLUMN_NAME + ", " +
+					ApplicationFactory.CUSTOMER_DATABASE_NOTE_COLUMN_NAME + ")" + " VALUES ('" +
+					customerName + "', " +
+					"1, '" +
+					lastestBuyDate + "', " + 
+					netPrice + ", " +
+					profit + ", '" +
+					note + "')";
+			
+			customersStatement.executeUpdate(cmd);
+		}
+	}
+	
+
 	
 	public void pickDirectory() {
 		DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -122,6 +206,7 @@ public class ItemOutController implements Initializable {
 		String style = "-fx-alignment: CENTER";
 		imageTc.setStyle(style);
 		itemIdTc.setStyle(style);
+		snTc.setStyle(style);
 		itemNameTc.setStyle(style);
 		buyPriceTc.setStyle(style);
 		sellPriceTc.setStyle(style);
@@ -130,6 +215,7 @@ public class ItemOutController implements Initializable {
 		
 		imageTc.setCellValueFactory(new PropertyValueFactory<>("image"));
 		itemIdTc.setCellValueFactory(new PropertyValueFactory<>("itemId"));
+		snTc.setCellValueFactory(new PropertyValueFactory<>("itemSn"));
 		itemNameTc.setCellValueFactory(new PropertyValueFactory<>("itemName"));
 		buyPriceTc.setCellValueFactory(new PropertyValueFactory<>("buyPrice"));
 		sellPriceTc.setCellValueFactory(new PropertyValueFactory<>("sellPrice"));
@@ -202,16 +288,23 @@ public class ItemOutController implements Initializable {
 			if ( !discountByPercentTf.getText().equals("") ) {
 				double percent = Double.parseDouble(discountByPercentTf.getText());
 				discount = percent * price / 100.0;
-				discountByPercentBahtTf.setText(discount + "");
+				discountByPercentBahtTf.setText(decimalFormatter.format(discount));
 			}
 		}
 		
+		double taxPercent = 0.0;
+		if ( !vatTf.getText().equals("") ) {
+			taxPercent = Double.parseDouble(vatTf.getText());
+		}
 		netPrice = price - discount;
+		double taxBaht = netPrice * taxPercent / 100.0;
+		netPrice -= taxBaht;
 		profit = netPrice - allBuyPrice;
 		
-		priceTf.setText(price + "");
-		netPriceTf.setText(netPrice + "");
-		profitTf.setText(profit + "");
+		vatBahtTf.setText(decimalFormatter.format(taxBaht));
+		priceTf.setText(decimalFormatter.format(price));
+		netPriceTf.setText(decimalFormatter.format(netPrice));
+		profitTf.setText(decimalFormatter.format(profit));
 	}
 
 	public void validateInput() {
@@ -284,7 +377,7 @@ public class ItemOutController implements Initializable {
 		discountByPercentTf.setText("0");
 		discountByPercentBahtTf.setText("0.0");
 		vatTf.setText("0");
-		vatbathTf.setText("");
+		vatBahtTf.setText("");
 		netPriceTf.setText("");
 		profitTf.setText("");
 		

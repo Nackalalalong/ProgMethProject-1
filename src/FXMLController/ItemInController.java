@@ -164,7 +164,7 @@ public class ItemInController implements Initializable {
 				"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_NAME + " TEXT, " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_ID + " INTEGER, " +
-				ApplicationFactory.MAIN_DATABASE_ITEM_SERIAL_NUNBER + " INTEGER, " +
+				ApplicationFactory.MAIN_DATABASE_ITEM_SERIAL_NUNBER + " TEXT, " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_UNIT + " TEXT, " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_BUY_PRICE + " REAL, " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_SELL_PRICE + " REAL, " +
@@ -191,8 +191,8 @@ public class ItemInController implements Initializable {
 				ApplicationFactory.MAIN_DATABASE_ITEM_SUBCATEGORY + ", " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_NOTE + ") VALUES('" +
 				itemName + "', " +
-				itemId + ", " +
-				sn + ", '" +
+				itemId + ", '" +
+				sn + "', '" +
 				unit + "', " +
 				buyPrice + ", " +
 				sellPrice + ", " +
@@ -247,9 +247,6 @@ public class ItemInController implements Initializable {
 		}
 		else if ( sn.equals("") ) {
 			showInvalidInputDialog("กรุณาใส่ serial number");
-		}
-		else if ( !isNumeric(sn) ) {
-			showInvalidInputDialog("กรุณาใส่ serial number เป็นตัวเลข");
 		}
 		else if ( unit.equals("") ) {
 			showInvalidInputDialog("กรุณาใส่หน่วยสินค้า");
