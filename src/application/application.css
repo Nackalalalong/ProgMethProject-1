@@ -16,7 +16,7 @@
 
 .table-view .table-cell {
 	-fx-font-family: supermarket;
-	-fx-font-size: 16px;
+	-fx-font-size: 18px;
 }
 
 .label {
@@ -40,4 +40,8 @@
 
 .menu-item:focused .label {
 	-fx-text-fill: black;
+}
+
+.table-cell {
+	-fx-alignment: CENTER;
 }

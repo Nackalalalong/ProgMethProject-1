@@ -130,18 +130,6 @@ public class WarehouseController implements Initializable {
 	
 	private void initializeTable() {
 		table.setFixedCellSize(TABLE_ROW_SIZE);
-		String style = "-fx-alignment: CENTER";
-		imageTc.setStyle(style);
-		itemIdTc.setStyle(style);
-		snTc.setStyle(style);
-		itemNameTc.setStyle(style);
-		unitTc.setStyle(style);
-		amountTc.setStyle(style);
-		buyPriceTc.setStyle(style);
-		sellPriceTc.setStyle(style);
-		categoryTc.setStyle(style);
-		subCategoryTc.setStyle(style);
-		noteTc.setStyle(style);
 		
 		imageTc.setCellValueFactory(new PropertyValueFactory<>("image"));
 		itemIdTc.setCellValueFactory(new PropertyValueFactory<>("itemId"));
@@ -176,7 +164,10 @@ public class WarehouseController implements Initializable {
 		if ( result.isPresent() ) {
 			try {
 				int sellAmount = Integer.parseInt(result.get().trim());
-				if ( sellAmount > Integer.parseInt(dataSet.getAmount()) ) {
+				if ( Integer.parseInt(dataSet.getAmount()) <= 0 ) {
+					showErrorDialog("ไม่มีสินค้าในคลังในขณะนี้", "กรุณาลองใหม่ภายหลัง");
+				}
+				else if ( sellAmount > Integer.parseInt(dataSet.getAmount()) ) {
 					showErrorDialog("จำนวนสินค้าในคลังไม่เพียงพอ", "คุณใส่จำนวนสินค้าที่จะขายมากกว่าจำนวนสินค้าในคลัง");
 				}
 				else {
@@ -258,7 +249,6 @@ public class WarehouseController implements Initializable {
 				ApplicationFactory.MAIN_DATABASE_ITEM_CATEGORY + " LIKE '%" + category + "%' AND " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_SUBCATEGORY + " LIKE '%" + subCategory + "%'";
 		
-		System.out.println(cmd);
 		
 		try {
 			ResultSet searchResult = statement.executeQuery(cmd);

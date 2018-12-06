@@ -33,7 +33,7 @@ public class BillPDF {
 		double totalAmount = 0;
 		
 		try {
-			PdfReader pdfTemplate = new PdfReader("Draft.pdf");
+			PdfReader pdfTemplate = new PdfReader(ClassLoader.getSystemResource("Draft.pdf"));
 			FileOutputStream fileOutputStream = new FileOutputStream("test.pdf");
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			PdfStamper stamper = new PdfStamper(pdfTemplate, fileOutputStream);
@@ -61,7 +61,7 @@ public class BillPDF {
 				order++;
 			}
 			stamper.getAcroFields().setField("sumTotal", totalAmount + "");
-			double tax = (7/100) * totalAmount;
+			double tax = (Double.parseDouble(taxPercent)/100) * totalAmount;
 			stamper.getAcroFields().setField("tax",  String.valueOf(tax));
 			stamper.getAcroFields().setField("net", String.valueOf(tax + totalAmount));
 			stamper.close();

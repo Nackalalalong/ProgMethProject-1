@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
@@ -21,6 +22,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.RadioButton;
@@ -55,6 +57,7 @@ public class ItemOutController implements Initializable {
 	
 	private Statement customersStatement;
 	private Statement statisticsStatement;
+	private Statement stockStatement;
 	
 	private DecimalFormat decimalFormatter;
 
@@ -72,10 +75,39 @@ public class ItemOutController implements Initializable {
 		
 		billDateTf.setText(DateThai.getCurrentThaiDate());
 		discountByBahtRb.fire();
+		
+		try {
+			initializeCustomerDatabaseConnection();
+			initializeStatisticsDatabaseConnection();
+			initializeStockDatabaseConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			showErrorDialog("มีบางอย่างผิดพลาด", "การเชื่อมต่อกับฐานข้อมูลล้มเหลว", "กรุณาลองใหม่ภายหลัง");
+			e.printStackTrace();
+		}
 	}
 	
 	public ObservableList<ItemOutDataSet> getItemOutDataSets() {
 		return itemOutDataSets;
+	}
+	
+	private void showErrorDialog(String title, String header, String message) {
+		Alert error = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
+		error.setTitle(title);
+		error.setHeaderText(header);
+		error.show();
+	}
+	
+	public void initializeStockDatabaseConnection() throws SQLException {
+		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.MAIN_DATABASE_FILE_NAME + ".sqlite";
+		
+		String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
+		File dir = new File(dbPath);
+		if ( !dir.exists() ) {
+			dir.mkdirs();
+		}
+		Connection connection = DriverManager.getConnection(path);
+		stockStatement = connection.createStatement();
 	}
 	
 	public void initializeCustomerDatabaseConnection() throws SQLException {
@@ -102,12 +134,12 @@ public class ItemOutController implements Initializable {
 		statisticsStatement = connection.createStatement();
 	}
 	
-	private void updateStatisticsDatabase(String itemName, String itemId, String itemSn, String sellCount, String totalSell, String totalProfit, int month, int year) throws SQLException {
-		String cmd = "CREATE TABLE IF NOT EXIST " + ApplicationFactory.STATISTICS_DATABASE_NAME + "(" +
+	private void updateStatisticsDatabase(String itemName, String itemId, String itemSn, String sellAmount, String totalSell, String totalProfit, int month, int year) throws SQLException {
+		String cmd = "CREATE TABLE IF NOT EXISTS " + ApplicationFactory.STATISTICS_DATABASE_NAME + "(" +
 				"id INTEGER PRIMARY KEY AUTOINCREMENT, " + ApplicationFactory.STATISTICS_DATABASE_ITEM_NAME_COLUMN_NAME + " TEXT, " +
 				ApplicationFactory.STATISTICS_DATABASE_ITEM_ID_COLUMN_NAME + " INTEGER, " +
 				ApplicationFactory.STATISTICS_DATABASE_ITEM_SERIAL_NUMBER_COLUMN_NAME + " INTEGER, " + 
-				ApplicationFactory.STATISTICS_DATABASE_SELL_COUNT_COLUMN_NAME + " INTEGER, " +
+				ApplicationFactory.STATISTICS_DATABASE_SELL_AMOUNT_COLUMN_NAME + " INTEGER, " +
 				ApplicationFactory.STATISTICS_DATABASE_TOTAL_SELL_COLUMN_NAME + " REAL, " +
 				ApplicationFactory.STATISTICS_DATABASE_TOTAL_PROFIT_COLUMN_NAME + " REAL, " +
 				ApplicationFactory.STATISTICS_DATABASE_MONTH_COLUMN_NAME + " INTEGER, " +
@@ -119,15 +151,15 @@ public class ItemOutController implements Initializable {
 				ApplicationFactory.STATISTICS_DATABASE_ITEM_NAME_COLUMN_NAME + ", " +
 				ApplicationFactory.STATISTICS_DATABASE_ITEM_ID_COLUMN_NAME + ", " +
 				ApplicationFactory.STATISTICS_DATABASE_ITEM_SERIAL_NUMBER_COLUMN_NAME + ", " + 
-				ApplicationFactory.STATISTICS_DATABASE_SELL_COUNT_COLUMN_NAME + ", " +
+				ApplicationFactory.STATISTICS_DATABASE_SELL_AMOUNT_COLUMN_NAME + ", " +
 				ApplicationFactory.STATISTICS_DATABASE_TOTAL_SELL_COLUMN_NAME + ", " +
 				ApplicationFactory.STATISTICS_DATABASE_TOTAL_PROFIT_COLUMN_NAME + ", " +
 				ApplicationFactory.STATISTICS_DATABASE_MONTH_COLUMN_NAME + ", " +
 				ApplicationFactory.STATISTICS_DATABASE_YEAR_COLUMN_NAME + ") VALUES ('" +
 				itemName + "', " +
-				itemId + ", " +
-				itemSn + ", " +
-				sellCount + ", " +
+				itemId + ", '" +
+				itemSn + "', " +
+				sellAmount + ", " +
 				totalSell + ", " +
 				totalProfit + ", " +
 				month + ", " +
@@ -139,7 +171,7 @@ public class ItemOutController implements Initializable {
 	private void updateCustomerDatabase(String customerName, String netPrice, String profit, String lastestBuyDate, String note) throws SQLException {
 		String cmd = "CREATE TABLE IF NOT EXISTS " + ApplicationFactory.CUSTOMER_DATABASE_NAME + "(" +
 				"id INTEGER PRIMARY KEY AUTOINCREMENT, " + ApplicationFactory.CUSTOMER_DATABASE_CUSTOMER_NAME_COLOUMN_NAME + " TEXT, " +
-				ApplicationFactory.CUSTOMER_DATABASE_BUY_COUNT_COLUMN_NAME + " INTEGER, " + 
+				ApplicationFactory.CUSTOMER_DATABASE_BUY_AMOUNT_COLUMN_NAME + " INTEGER, " + 
 				ApplicationFactory.CUSTOMER_DATABASE_LASTEST_BUY_DATE_COLUMN_NAME + " TEXT, " +
 				ApplicationFactory.CUSTOMER_DATABASE_TOTAL_BUY_COLUMN_NAME + " REAL, " +
 				ApplicationFactory.CUSTOMER_DATABASE_TOTAL_PROFIT_COLUMN_NAME + " REAL, " +
@@ -147,26 +179,26 @@ public class ItemOutController implements Initializable {
 		
 		customersStatement.execute(cmd);
 		
-		cmd = "SELECT * FROM " + ApplicationFactory.CUSTOMER_DATABASE_NAME + " WHERE " + 
-				ApplicationFactory.CUSTOMER_DATABASE_CUSTOMER_NAME_COLOUMN_NAME + " = " + customerName;
-		ResultSet res = customersStatement.executeQuery(cmd);
+		try {
+			cmd = "SELECT * FROM " + ApplicationFactory.CUSTOMER_DATABASE_NAME + " WHERE " + 
+					ApplicationFactory.CUSTOMER_DATABASE_CUSTOMER_NAME_COLOUMN_NAME + " = " + customerName;
+			ResultSet res = customersStatement.executeQuery(cmd);
 		
-		if ( res.next() ) {
-			String count = res.getString(ApplicationFactory.CUSTOMER_DATABASE_BUY_COUNT_COLUMN_NAME);
+			String count = res.getString(ApplicationFactory.CUSTOMER_DATABASE_BUY_AMOUNT_COLUMN_NAME);
 			String totalBuy = res.getString(ApplicationFactory.CUSTOMER_DATABASE_TOTAL_BUY_COLUMN_NAME);
 			String totalProfit = res.getString(ApplicationFactory.CUSTOMER_DATABASE_TOTAL_PROFIT_COLUMN_NAME);
 			
 			cmd = "UPDATE " + ApplicationFactory.CUSTOMER_DATABASE_NAME + " SET " +
-					ApplicationFactory.CUSTOMER_DATABASE_BUY_COUNT_COLUMN_NAME + " = " + ( Integer.parseInt(count) + 1 ) + 
+					ApplicationFactory.CUSTOMER_DATABASE_BUY_AMOUNT_COLUMN_NAME + " = " + ( Integer.parseInt(count) + 1 ) + 
 					ApplicationFactory.CUSTOMER_DATABASE_TOTAL_BUY_COLUMN_NAME + " = " + ( Double.parseDouble(totalBuy) + netPrice ) +
 					ApplicationFactory.CUSTOMER_DATABASE_TOTAL_PROFIT_COLUMN_NAME + " = " + ( Double.parseDouble(totalProfit) + profit );
 			
 			customersStatement.executeUpdate(cmd);
 		}
-		else {
+		catch(SQLException e) {
 			cmd = "INSERT INTO " + ApplicationFactory.CUSTOMER_DATABASE_NAME + "(" + 
 					ApplicationFactory.CUSTOMER_DATABASE_CUSTOMER_NAME_COLOUMN_NAME + ", " +
-					ApplicationFactory.CUSTOMER_DATABASE_BUY_COUNT_COLUMN_NAME + ", " + 
+					ApplicationFactory.CUSTOMER_DATABASE_BUY_AMOUNT_COLUMN_NAME + ", " + 
 					ApplicationFactory.CUSTOMER_DATABASE_LASTEST_BUY_DATE_COLUMN_NAME + ", " +
 					ApplicationFactory.CUSTOMER_DATABASE_TOTAL_BUY_COLUMN_NAME + ", " +
 					ApplicationFactory.CUSTOMER_DATABASE_TOTAL_PROFIT_COLUMN_NAME + ", " +
@@ -180,9 +212,23 @@ public class ItemOutController implements Initializable {
 			
 			customersStatement.executeUpdate(cmd);
 		}
+		
 	}
 	
-
+	private void updateStockDatabase(String itemSn, int sellAmount) throws SQLException {
+		
+		String cmd = "SELECT " + ApplicationFactory.MAIN_DATABASE_ITEM_AMOUNT + " FROM " +
+				ApplicationFactory.MAIN_DATEBASE_NAME + " WHERE " +
+				ApplicationFactory.MAIN_DATABASE_ITEM_SERIAL_NUNBER + " = '" + itemSn + "'";
+		
+		ResultSet res = stockStatement.executeQuery(cmd);
+		int amount  = res.getInt(ApplicationFactory.MAIN_DATABASE_ITEM_AMOUNT);
+		
+		cmd = "UPDATE " + ApplicationFactory.MAIN_DATEBASE_NAME + " SET " + 
+				ApplicationFactory.MAIN_DATABASE_ITEM_AMOUNT + " = " + ( amount - sellAmount ) + " WHERE " +
+				ApplicationFactory.MAIN_DATABASE_ITEM_SERIAL_NUNBER + " = '" + itemSn + "'";
+		stockStatement.executeUpdate(cmd);
+	}
 	
 	public void pickDirectory() {
 		DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -203,15 +249,6 @@ public class ItemOutController implements Initializable {
 	
 	private void initializeTable() {
 		table.setFixedCellSize(WarehouseController.TABLE_ROW_SIZE);
-		String style = "-fx-alignment: CENTER";
-		imageTc.setStyle(style);
-		itemIdTc.setStyle(style);
-		snTc.setStyle(style);
-		itemNameTc.setStyle(style);
-		buyPriceTc.setStyle(style);
-		sellPriceTc.setStyle(style);
-		sellAmountTc.setStyle(style);
-		itemTotalPriceTc.setStyle(style);
 		
 		imageTc.setCellValueFactory(new PropertyValueFactory<>("image"));
 		itemIdTc.setCellValueFactory(new PropertyValueFactory<>("itemId"));
@@ -298,7 +335,7 @@ public class ItemOutController implements Initializable {
 		}
 		netPrice = price - discount;
 		double taxBaht = netPrice * taxPercent / 100.0;
-		netPrice -= taxBaht;
+		netPrice += taxBaht;
 		profit = netPrice - allBuyPrice;
 		
 		vatBahtTf.setText(decimalFormatter.format(taxBaht));
@@ -314,6 +351,9 @@ public class ItemOutController implements Initializable {
 		String note = noteTf.getText().trim();
 		String discount;
 		String netPrice = netPriceTf.getText();
+		
+		String profit = profitTf.getText().trim();
+		String lastestBuyDate = DateThai.getNumberDateFormat();
 		
 		if ( itemOutDataSets.size() <= 0 ) {
 			showInputWarningDialog("ไม่มีสินค้าที่จะขายในขณะนี้");
@@ -342,7 +382,51 @@ public class ItemOutController implements Initializable {
 		}
 		else {
 			
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("คำสั่งซื้อ	");
+			alert.setHeaderText("ยืนยันคำสั่งซื้อ?");
+			alert.setContentText("ยืนยันคำสั่งซื้อ " + itemOutDataSets.size() + "รายการ");
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK){
+				try {
+					updateData();
+					updateCustomerDatabase(customerName, netPrice, profit, lastestBuyDate, note);
+					showInfomationDialog("คำสั่งสำเร็จ", "คำสั่งขายเสร็จสิ้น", "");
+					}
+					catch(SQLException e) {
+						showErrorDialog("ข้อผิดพลาด", "มีบางอย่างผิดปกติขณะกำลังอัพเดทฐานข้อมูล", "กรุณาลองใหม่ภายหลัง");
+						e.printStackTrace();
+					}
+			} else {
+			    // ... user chose CANCEL or closed the dialog
+			}
+		
 		}
+	}
+	
+	private void showInfomationDialog(String title, String header, String message) {
+		Alert info = new Alert(Alert.AlertType.INFORMATION, message, ButtonType.OK);
+		info.setTitle(title);
+		info.setHeaderText(header);
+		info.show();
+	}
+	
+	private void updateData() throws SQLException {
+		for( ItemOutDataSet itds : itemOutDataSets ) {
+			String itemName = itds.getItemName();
+			String itemId = itds.getItemId();
+			String itemSn = itds.getItemSn();
+			String sellAmount = itds.getSellAmount();
+			String totalSell = itds.getTotalPrice();
+			String itemProfit = ( Double.parseDouble(totalSell) - (Double.parseDouble(itds.getBuyPrice()) * Double.parseDouble(sellAmount))) + "";
+			int month = DateThai.getCurrentMonthNumber();
+			int year = DateThai.getCurrentYear();
+			
+			updateStockDatabase(itemSn, Integer.parseInt(sellAmount));
+			updateStatisticsDatabase(itemName, itemId, itemSn, sellAmount, totalSell, itemProfit, month, year);
+		}
+		
 	}
 	
 	private boolean isNumeric(String text) {

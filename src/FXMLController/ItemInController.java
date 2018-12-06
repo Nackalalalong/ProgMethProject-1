@@ -177,7 +177,7 @@ public class ItemInController implements Initializable {
 
 	}
 	
-	private void insertDataToMainDatabase(String itemName, int itemId, int sn, String unit, double buyPrice
+	private void insertDataToMainDatabase(String itemName, int itemId, String sn, String unit, double buyPrice
 			, double sellPrice, int amount, String category, String subCategory, String note) throws Exception {
 		String cmd = "INSERT INTO " + ApplicationFactory.MAIN_DATEBASE_NAME + "(" +
 				ApplicationFactory.MAIN_DATABASE_ITEM_NAME + ", " +
@@ -278,7 +278,7 @@ public class ItemInController implements Initializable {
 			createMainDatabase();
 			manipulateCategoryDatabase(category);
 			manipulateSubCategoryDatabase(category, subCategory);
-			insertDataToMainDatabase(itemName, Integer.parseInt(itemId), Integer.parseInt(sn), unit, Double.parseDouble(buyPrice)
+			insertDataToMainDatabase(itemName, Integer.parseInt(itemId), sn, unit, Double.parseDouble(buyPrice)
 					, Double.parseDouble(sellPrice), Integer.parseInt(amount), category, subCategory, note);
 			}
 			catch(Exception e) {
