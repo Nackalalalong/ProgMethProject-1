@@ -38,6 +38,23 @@ public class DataSet {
 		this.subCategory = subCategory;
 		this.note = note;
 	}
+	
+	public DataSet(DataSet other) {
+		this.image = new ImageView(other.getImage().getImage());
+		this.image.setFitHeight(CELL_IMAGE_WIDTH);
+		this.image.setFitWidth(CELL_IMAGE_WIDTH);
+		
+		this.itemId = other.itemId;
+		this.itemSn = other.itemSn;
+		this.itemName = other.itemName;
+		this.unit = other.unit;
+		this.amount = other.amount;
+		this.buyPrice = other.buyPrice;
+		this.sellPrice = other.sellPrice;
+		this.category = other.category;
+		this.subCategory = other.subCategory;
+		this.note = other.note;
+	}
 
 	public ImageView getImage() {
 		return image;

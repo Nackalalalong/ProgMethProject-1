@@ -14,18 +14,24 @@ import com.itextpdf.text.pdf.codec.Base64.InputStream;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class BillPFD {
-	private ObservableList<ItemOutDataSet> items = FXCollections.observableArrayList();
-	int billNum ;
-	boolean isFirst = true;
-	double totalAmount = 0;
+public class BillPDF {
+	//private ObservableList<ItemOutDataSet> items = FXCollections.observableArrayList();
+	//int billNum ;
 	
-	public BillPFD(ObservableList<ItemOutDataSet> items, int billNum) {
+	/*public BillPFD(ObservableList<ItemOutDataSet> items, int billNum) {
 		this.items = items;
 		this.billNum = billNum;
 		
+	}*/
+	
+	private BillPDF() {
+		
 	}
-	public void printPDF() {
+	
+	public static void printPDF(ObservableList<ItemOutDataSet> items, int billNum, String path ) {
+		boolean isFirst = true;
+		double totalAmount = 0;
+		
 		try {
 			PdfReader pdfTemplate = new PdfReader("Draft.pdf");
 			FileOutputStream fileOutputStream = new FileOutputStream("test.pdf");

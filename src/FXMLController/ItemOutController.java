@@ -7,6 +7,8 @@ import java.util.function.UnaryOperator;
 
 import application.DateThai;
 import application.ItemOutDataSet;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -54,6 +56,7 @@ public class ItemOutController implements Initializable {
 		
 		initializeNumericTextField();
 		initializeTable();
+		initializeFinancialTextFieldBinding();
 		
 		billDateTf.setText(DateThai.getCurrentThaiDate());
 		discountByBahtRb.fire();
@@ -102,11 +105,27 @@ public class ItemOutController implements Initializable {
 		table.setItems(itemOutDataSets);
 	}
 	
-	private void initializeNumericTextField() {
+	private void initializeFinancialTextFieldBinding() {
+		
+		ChangeListener<String> cl = new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
+		    	updateFinancialTextField();
+			}
+			
+		};
+		
+		discountByBahtTf.textProperty().addListener(cl);
+		discountByPercentTf.textProperty().addListener(cl);
+		vatTf.textProperty().addListener(cl);
+	}
+	
+	private void initializeNumericTextField() {			//do not use right now
 		UnaryOperator<Change> filter = change -> {
 		    String text = change.getText();
 
-		    if (text.matches("[0-9]*")) {
+		    if (text.matches("[.0-9]*")) {
 		        return change;
 		    }
 
@@ -123,19 +142,7 @@ public class ItemOutController implements Initializable {
 		vatTf.setTextFormatter(vatTextFormatter);
 	}
 	
-	public void validateDiscountByBahtTextField() {
-		updateFinancialTextField();
-	}
-	
-	public void validateDiscountByPercentTextField() {
-		updateFinancialTextField();
-	}
-	
-	public void validateVatTextField() {
-		updateFinancialTextField();
-	}
-	
-	private void updateFinancialTextField() {
+	public void updateFinancialTextField() {
 		
 		if ( itemOutDataSets.size() <= 0 ) {
 			return ;
@@ -148,17 +155,17 @@ public class ItemOutController implements Initializable {
 		double profit = 0.0;
 		
 		for( ItemOutDataSet data : itemOutDataSets ) {
-			price += Double.parseDouble(data.getSellAmount()) * Double.parseDouble(data.getSellPrice());
+			price += Double.parseDouble(data.getTotalPrice());
 			allBuyPrice += Double.parseDouble(data.getSellAmount()) * Double.parseDouble(data.getBuyPrice());
 		}
 		
 		if ( discountByBahtRb.isSelected() ) {
-			if ( !discountByBahtTf.equals("") ) {
+			if ( !discountByBahtTf.getText().equals("") ) {
 				discount = Double.parseDouble(discountByBahtTf.getText());
 			}
 		}
 		else {
-			if ( !discountByPercentTf.equals("") ) {
+			if ( !discountByPercentTf.getText().equals("") ) {
 				double percent = Double.parseDouble(discountByPercentTf.getText());
 				discount = percent * price / 100.0;
 				discountByPercentBahtTf.setText(discount + "");
@@ -168,6 +175,7 @@ public class ItemOutController implements Initializable {
 		netPrice = price - discount;
 		profit = netPrice - allBuyPrice;
 		
+		priceTf.setText(price + "");
 		netPriceTf.setText(netPrice + "");
 		profitTf.setText(profit + "");
 	}
@@ -241,7 +249,7 @@ public class ItemOutController implements Initializable {
 		discountByBahtTf.setText("0.0");
 		discountByPercentTf.setText("0");
 		discountByPercentBahtTf.setText("0.0");
-		vatTf.setText("7");
+		vatTf.setText("0");
 		vatbathTf.setText("");
 		netPriceTf.setText("");
 		profitTf.setText("");
@@ -254,6 +262,7 @@ public class ItemOutController implements Initializable {
 		
 		discountByPercentTf.setDisable(true);
 		discountByPercentBahtTf.setDisable(true);
+		updateFinancialTextField();
 	}
 	
 	public void setDiscountByPercent() {
@@ -261,5 +270,7 @@ public class ItemOutController implements Initializable {
 		discountByPercentBahtTf.setDisable(false);
 		
 		discountByBahtTf.setDisable(true);
+		updateFinancialTextField();
+
 	}
 }

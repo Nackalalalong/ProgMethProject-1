@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import application.DataSet;
@@ -26,6 +27,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class WarehouseController implements Initializable {
@@ -165,12 +167,41 @@ public class WarehouseController implements Initializable {
 	}
 	
 	private void showSellDialog(DataSet dataSet) {
-		//sentItemToItemOutPage(dataSet, sellAmount);
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.setTitle("เลือกจำนวนสินค้าที่จะขาย");
+		dialog.setHeaderText("จำนวนสินค้าในคลัง : " + dataSet.getAmount());
+		dialog.setContentText("จำนวนสินค้าที่จะขาย");
+	
+		Optional<String> result = dialog.showAndWait();
+		if ( result.isPresent() ) {
+			try {
+				int sellAmount = Integer.parseInt(result.get().trim());
+				if ( sellAmount > Integer.parseInt(dataSet.getAmount()) ) {
+					showErrorDialog("จำนวนสินค้าในคลังไม่เพียงพอ", "คุณใส่จำนวนสินค้าที่จะขายมากกว่าจำนวนสินค้าในคลัง");
+				}
+				else {
+					sendItemToItemOutPage(dataSet, sellAmount);
+					
+				}
+			}
+			catch(Exception e) {
+				showErrorDialog("กรุณาใส่จำนวนสินค้าเป็นตัวเลข", "");
+			}
+		}
+	
 	}
 	
-	private void sentItemToItemOutPage(DataSet dataSet, int sellAmount) {
-		ItemOutDataSet itemOutDataSet = new ItemOutDataSet(dataSet, sellAmount);
+	private void sendItemToItemOutPage(DataSet dataSet, int sellAmount) {
+		for( ItemOutDataSet iods : itemOutController.getItemOutDataSets() ) {
+			if ( iods.getItemSn().equals(dataSet.getItemSn()) ) {
+				showErrorDialog("คุณได้เพิ่มสินค้านี้แล้ว", "");
+				return ;
+			}
+		}
+		ItemOutDataSet itemOutDataSet = new ItemOutDataSet(new DataSet(dataSet), sellAmount);
 		itemOutController.getItemOutDataSets().add(itemOutDataSet);
+		itemOutController.updateFinancialTextField();
+	
 	}
 	
 	private void loadDataToTable(ResultSet res) {

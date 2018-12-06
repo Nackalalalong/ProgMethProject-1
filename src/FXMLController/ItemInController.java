@@ -308,6 +308,7 @@ public class ItemInController implements Initializable {
 		pickedImage = null;
 		showImageIv.setImage(new Image(ClassLoader.getSystemResource("icons/box.png").toString()));
 		
+		itemNameTf.setText("");
 		itemIdTf.setText("");
 		snTf.setText("");
 		unitTf.setText("");

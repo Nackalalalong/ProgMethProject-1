@@ -15,6 +15,10 @@ public class ItemOutDataSet {
 		totalPrice = sellAmount * Double.parseDouble(dataSet.getSellPrice());
 	}
 	
+	public String getItemSn() {
+		return dataSet.getItemSn();
+	}
+	
 	public ImageView getImage() {
 		return dataSet.getImage();
 	}
