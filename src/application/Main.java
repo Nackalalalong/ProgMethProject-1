@@ -33,8 +33,8 @@ public class Main extends Application {
 
 
 	public static void main(String[] args) {
-		billPFDF a = new billPFDF();
-		a.printPDF();
+		//BillPFD a = new BillPFD();
+		//a.printPDF();
 		launch(args);
 	}
 }
