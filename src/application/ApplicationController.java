@@ -63,16 +63,19 @@ public class ApplicationController {
 		try {
 			//warehousePane = FXMLLoader.load(ClassLoader.getSystemResource("warehouse.fxml"));
 			// = FXMLLoader.load(ClassLoader.getSystemResource("itemIn.fxml"));
-			itemOutPane = FXMLLoader.load(ClassLoader.getSystemResource("itemOut.fxml"));
+			//itemOutPane = FXMLLoader.load(ClassLoader.getSystemResource("itemOut.fxml"));
 			statPane = FXMLLoader.load(ClassLoader.getSystemResource("stat.fxml"));
 			customerPane = FXMLLoader.load(ClassLoader.getSystemResource("customer.fxml"));
 			alBillPane = FXMLLoader.load(ClassLoader.getSystemResource("alBill.fxml"));
 			
 			FXMLLoader whLoader = new FXMLLoader(ClassLoader.getSystemResource("warehouse.fxml"));
 			FXMLLoader iiLoader = new FXMLLoader(ClassLoader.getSystemResource("itemIn.fxml"));
+			FXMLLoader ioLoader = new FXMLLoader(ClassLoader.getSystemResource("itemOut.fxml"));
 			warehousePane = whLoader.load();
 			itemInPane = iiLoader.load();
+			itemOutPane = ioLoader.load();
 			((FXMLController.ItemInController)(iiLoader.getController())).setWarehouseController(whLoader.getController());
+			((FXMLController.WarehouseController)(whLoader.getController())).setItemOutController(ioLoader.getController());
 						
 			contentPanes.add(warehousePane);
 			contentPanes.add(itemInPane);

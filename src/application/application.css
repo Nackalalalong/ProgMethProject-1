@@ -28,3 +28,16 @@
 	-fx-font-family: supermarket;
 	-fx-font-size: 20px;
 }
+
+.text-field {
+	-fx-font-family: supermarket;
+	-fx-font-size: 16px;
+}
+
+.menu-item:focused {
+	-fx-background-color: pink;
+}
+
+.menu-item:focused .label {
+	-fx-text-fill: black;
+}

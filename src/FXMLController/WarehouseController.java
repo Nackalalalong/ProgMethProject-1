@@ -10,15 +10,19 @@ import java.sql.Statement;
 import java.util.ResourceBundle;
 
 import application.DataSet;
+import application.ItemOutDataSet;
 import factory.ApplicationFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -45,6 +49,8 @@ public class WarehouseController implements Initializable {
 	
 	private Statement statement;
 	private Statement categoryStatement;
+	
+	private ItemOutController itemOutController;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -55,6 +61,13 @@ public class WarehouseController implements Initializable {
 		
 	}
 	
+	public ItemOutController getItemOutController() {
+		return itemOutController;
+	}
+	
+	public void setItemOutController(ItemOutController ioc) {
+		itemOutController = ioc;
+	}
 	
 	public void loadCategory() {
 		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.CATEGORY_DATABASE_NAME + ".sqlite";
@@ -139,6 +152,25 @@ public class WarehouseController implements Initializable {
 		categoryTc.setCellValueFactory(new PropertyValueFactory<>("category"));
 		subCategoryTc.setCellValueFactory(new PropertyValueFactory<>("subCategory"));
 		noteTc.setCellValueFactory(new PropertyValueFactory<>("note"));
+		
+		MenuItem menuItem = new MenuItem("ขาย");
+		menuItem.setOnAction((ActionEvent event) -> {
+		    DataSet dataSet = (DataSet) table.getSelectionModel().getSelectedItem();
+		    showSellDialog(dataSet);
+		});
+
+		ContextMenu menu = new ContextMenu();
+		menu.getItems().add(menuItem);
+		table.setContextMenu(menu);
+	}
+	
+	private void showSellDialog(DataSet dataSet) {
+		//sentItemToItemOutPage(dataSet, sellAmount);
+	}
+	
+	private void sentItemToItemOutPage(DataSet dataSet, int sellAmount) {
+		ItemOutDataSet itemOutDataSet = new ItemOutDataSet(dataSet, sellAmount);
+		itemOutController.getItemOutDataSets().add(itemOutDataSet);
 	}
 	
 	private void loadDataToTable(ResultSet res) {
