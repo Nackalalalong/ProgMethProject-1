@@ -1,4 +1,6 @@
-package application;
+package dataModel;
+
+import javafx.scene.image.ImageView;
 
 public class ItemOutDataSet {
 	
@@ -11,6 +13,14 @@ public class ItemOutDataSet {
 		this.sellAmount = sellAmount;
 		
 		totalPrice = sellAmount * Double.parseDouble(dataSet.getSellPrice());
+	}
+	
+	public String getItemSn() {
+		return dataSet.getItemSn();
+	}
+	
+	public ImageView getImage() {
+		return dataSet.getImage();
 	}
 	
 	public String getItemId() {

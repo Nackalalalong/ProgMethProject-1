@@ -1,12 +1,16 @@
 package application;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class NavigationButton extends Button implements Discolorable{
+public class NavigationButton extends ToggleButton implements Discolorable{
+	
+	//public static final Background HIGHLIGHT_NAVIGATION_BUTTON_BACKGROUND = new  Background(new BackgroundFill(Color.web("#fdae84"), CornerRadii.EMPTY, Insets.EMPTY));
+	//public static final Background UNHIGHLIGHT_NAVIGATION_BUTTON_BACKGROUND = new  Background(new BackgroundFill(Color.web("#dae9e4"), CornerRadii.EMPTY, Insets.EMPTY));
+
 	
 	public static final int NAVIGATION_BUTTON_WIDTH = 90;
 	public static final int NAVIGATION_BUTTON_HEIGHT = 90;
@@ -35,9 +39,17 @@ public class NavigationButton extends Button implements Discolorable{
 		
 		this.setPadding(new Insets(NAVIGATION_BUTTON_PADDING));
 		
+		setCssStyle("navigation-button-beautiful");
+		
 	}
 	
+	/*public void highlightBackground() {
+		this.setBackground(HIGHLIGHT_NAVIGATION_BUTTON_BACKGROUND);
+	}
 	
+	public void unHighlightBackground() {
+		this.setBackground(UNHIGHLIGHT_NAVIGATION_BUTTON_BACKGROUND);
+	}*/
 	
 	public NavigationButtonPane getNavigationButtonPane() {
 		return navigationButtonPane;
@@ -71,7 +83,7 @@ public class NavigationButton extends Button implements Discolorable{
 	@Override
 	public void setCssStyle(String cssClass) {
 		// TODO Auto-generated method stub
-		
+		getStyleClass().add(cssClass);
 	}
 
 }

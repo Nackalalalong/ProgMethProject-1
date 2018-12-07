@@ -7,21 +7,27 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
-import application.DataSet;
+import dataModel.DataSet;
+import dataModel.ItemOutDataSet;
 import factory.ApplicationFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class WarehouseController implements Initializable {
@@ -45,6 +51,8 @@ public class WarehouseController implements Initializable {
 	
 	private Statement statement;
 	private Statement categoryStatement;
+	
+	private ItemOutController itemOutController;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -55,6 +63,13 @@ public class WarehouseController implements Initializable {
 		
 	}
 	
+	public ItemOutController getItemOutController() {
+		return itemOutController;
+	}
+	
+	public void setItemOutController(ItemOutController ioc) {
+		itemOutController = ioc;
+	}
 	
 	public void loadCategory() {
 		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.CATEGORY_DATABASE_NAME + ".sqlite";
@@ -115,18 +130,6 @@ public class WarehouseController implements Initializable {
 	
 	private void initializeTable() {
 		table.setFixedCellSize(TABLE_ROW_SIZE);
-		String style = "-fx-alignment: CENTER";
-		imageTc.setStyle(style);
-		itemIdTc.setStyle(style);
-		snTc.setStyle(style);
-		itemNameTc.setStyle(style);
-		unitTc.setStyle(style);
-		amountTc.setStyle(style);
-		buyPriceTc.setStyle(style);
-		sellPriceTc.setStyle(style);
-		categoryTc.setStyle(style);
-		subCategoryTc.setStyle(style);
-		noteTc.setStyle(style);
 		
 		imageTc.setCellValueFactory(new PropertyValueFactory<>("image"));
 		itemIdTc.setCellValueFactory(new PropertyValueFactory<>("itemId"));
@@ -139,6 +142,57 @@ public class WarehouseController implements Initializable {
 		categoryTc.setCellValueFactory(new PropertyValueFactory<>("category"));
 		subCategoryTc.setCellValueFactory(new PropertyValueFactory<>("subCategory"));
 		noteTc.setCellValueFactory(new PropertyValueFactory<>("note"));
+		
+		MenuItem menuItem = new MenuItem("ขาย");
+		menuItem.setOnAction((ActionEvent event) -> {
+		    DataSet dataSet = (DataSet) table.getSelectionModel().getSelectedItem();
+		    showSellDialog(dataSet);
+		});
+
+		ContextMenu menu = new ContextMenu();
+		menu.getItems().add(menuItem);
+		table.setContextMenu(menu);
+	}
+	
+	private void showSellDialog(DataSet dataSet) {
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.setTitle("เลือกจำนวนสินค้าที่จะขาย");
+		dialog.setHeaderText("จำนวนสินค้าในคลัง : " + dataSet.getAmount());
+		dialog.setContentText("จำนวนสินค้าที่จะขาย");
+	
+		Optional<String> result = dialog.showAndWait();
+		if ( result.isPresent() ) {
+			try {
+				int sellAmount = Integer.parseInt(result.get().trim());
+				if ( Integer.parseInt(dataSet.getAmount()) <= 0 ) {
+					showErrorDialog("ไม่มีสินค้าในคลังในขณะนี้", "กรุณาลองใหม่ภายหลัง");
+				}
+				else if ( sellAmount > Integer.parseInt(dataSet.getAmount()) ) {
+					showErrorDialog("จำนวนสินค้าในคลังไม่เพียงพอ", "คุณใส่จำนวนสินค้าที่จะขายมากกว่าจำนวนสินค้าในคลัง");
+				}
+				else {
+					sendItemToItemOutPage(dataSet, sellAmount);
+					
+				}
+			}
+			catch(Exception e) {
+				showErrorDialog("กรุณาใส่จำนวนสินค้าเป็นตัวเลข", "");
+			}
+		}
+	
+	}
+	
+	private void sendItemToItemOutPage(DataSet dataSet, int sellAmount) {
+		for( ItemOutDataSet iods : itemOutController.getItemOutDataSets() ) {
+			if ( iods.getItemSn().equals(dataSet.getItemSn()) ) {
+				showErrorDialog("คุณได้เพิ่มสินค้านี้แล้ว", "");
+				return ;
+			}
+		}
+		ItemOutDataSet itemOutDataSet = new ItemOutDataSet(new DataSet(dataSet), sellAmount);
+		itemOutController.getItemOutDataSets().add(itemOutDataSet);
+		itemOutController.updateFinancialTextField();
+	
 	}
 	
 	private void loadDataToTable(ResultSet res) {
@@ -195,7 +249,6 @@ public class WarehouseController implements Initializable {
 				ApplicationFactory.MAIN_DATABASE_ITEM_CATEGORY + " LIKE '%" + category + "%' AND " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_SUBCATEGORY + " LIKE '%" + subCategory + "%'";
 		
-		System.out.println(cmd);
 		
 		try {
 			ResultSet searchResult = statement.executeQuery(cmd);

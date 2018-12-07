@@ -3,8 +3,8 @@ package application;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import FXMLController.ItemOutController;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 
 public class ApplicationController {
@@ -39,6 +39,20 @@ public class ApplicationController {
 		NavigationButton listBtn = new NavigationButton("รายการบิล", "icons/list.png");
 		NavigationButton helpBtn = new NavigationButton("ช่วยเหลือ", "icons/question.png");
 		
+		ToggleGroup navGroup = new ToggleGroup();
+		warehouseBtn.setToggleGroup(navGroup);
+		itemInBtn.setToggleGroup(navGroup);
+		itemOutBtn.setToggleGroup(navGroup);
+		statBtn.setToggleGroup(navGroup);
+		customerBtn.setToggleGroup(navGroup);
+		listBtn.setToggleGroup(navGroup);
+		helpBtn.setToggleGroup(navGroup);
+		
+		navGroup.selectedToggleProperty().addListener((obsVal, oldVal, newVal) -> {		// prevent navigation bar from not being selected at least one
+		    if (newVal == null)
+		        oldVal.setSelected(true);
+		});
+		
 		warehouseBtnPane = new NavigationButtonPane(warehouseBtn);
 		itemInBtnPane = new NavigationButtonPane(itemInBtn);
 		itemOutBtnPane = new NavigationButtonPane(itemOutBtn);
@@ -63,16 +77,20 @@ public class ApplicationController {
 		try {
 			//warehousePane = FXMLLoader.load(ClassLoader.getSystemResource("warehouse.fxml"));
 			// = FXMLLoader.load(ClassLoader.getSystemResource("itemIn.fxml"));
-			itemOutPane = FXMLLoader.load(ClassLoader.getSystemResource("itemOut.fxml"));
+			//itemOutPane = FXMLLoader.load(ClassLoader.getSystemResource("itemOut.fxml"));
 			statPane = FXMLLoader.load(ClassLoader.getSystemResource("stat.fxml"));
 			customerPane = FXMLLoader.load(ClassLoader.getSystemResource("customer.fxml"));
 			alBillPane = FXMLLoader.load(ClassLoader.getSystemResource("alBill.fxml"));
 			
 			FXMLLoader whLoader = new FXMLLoader(ClassLoader.getSystemResource("warehouse.fxml"));
 			FXMLLoader iiLoader = new FXMLLoader(ClassLoader.getSystemResource("itemIn.fxml"));
+			FXMLLoader ioLoader = new FXMLLoader(ClassLoader.getSystemResource("itemOut.fxml"));
 			warehousePane = whLoader.load();
 			itemInPane = iiLoader.load();
+			itemOutPane = ioLoader.load();
 			((FXMLController.ItemInController)(iiLoader.getController())).setWarehouseController(whLoader.getController());
+			((FXMLController.WarehouseController)(whLoader.getController())).setItemOutController(ioLoader.getController());
+			((FXMLController.ItemOutController)(ioLoader.getController())).setWarehouseController(whLoader.getController());
 						
 			contentPanes.add(warehousePane);
 			contentPanes.add(itemInPane);

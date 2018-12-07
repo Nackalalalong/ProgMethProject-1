@@ -13,9 +13,11 @@ import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.codec.Base64.InputStream;
 
+import dataModel.ItemOutDataSet;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+<<<<<<< HEAD:src/application/BillPDF.java
 public class BillPDF {
 	private ObservableList<ItemOutDataSet> items = FXCollections.observableArrayList();
 	int billNum ;
@@ -24,15 +26,56 @@ public class BillPDF {
 	public BillPDF() {
 		
 	}
+||||||| merged common ancestors
+public class BillPFD {
+	private ObservableList<ItemOutDataSet> items = FXCollections.observableArrayList();
+	int billNum ;
+	boolean isFirst = true;
+	double totalAmount = 0;
+=======
+public class BillPDF {
+	//private ObservableList<ItemOutDataSet> items = FXCollections.observableArrayList();
+	//int billNum ;
+>>>>>>> 862b082edfe3c1e95b958af8bea83f44651861dc:src/application/BillPDF.java
 	
+<<<<<<< HEAD:src/application/BillPDF.java
 	public BillPDF(ObservableList<ItemOutDataSet> items, int billNum) {
+||||||| merged common ancestors
+	public BillPFD(ObservableList<ItemOutDataSet> items, int billNum) {
+=======
+	/*public BillPFD(ObservableList<ItemOutDataSet> items, int billNum) {
+>>>>>>> 862b082edfe3c1e95b958af8bea83f44651861dc:src/application/BillPDF.java
 		this.items = items;
+<<<<<<< HEAD:src/application/BillPDF.java
 		this.billNum = billNum;	
+||||||| merged common ancestors
+		this.billNum = billNum;
+		
+=======
+		this.billNum = billNum;
+		
+	}*/
+	
+	private BillPDF() {
+		
+>>>>>>> 862b082edfe3c1e95b958af8bea83f44651861dc:src/application/BillPDF.java
 	}
-	public void printPDF() {
+																				  // path มีแค่ directory เช่น /bills/ ยังไม่รวมชื่อไฟล์		          // price ราคารวมทั้งหมดยังไม่ลด
+	public static void printPDF(ObservableList<ItemOutDataSet> items, int billNum, String path , String discountBath, String taxPercent, String price, String netPrice) {
+		boolean isFirst = true;
+		double totalAmount = 0;
+		
 		try {
+<<<<<<< HEAD:src/application/BillPDF.java
 			PdfReader pdfTemplate = new PdfReader("Draft.pdf");
 			FileOutputStream fileOutputStream = new FileOutputStream(billNum + ".pdf");
+||||||| merged common ancestors
+			PdfReader pdfTemplate = new PdfReader("Draft.pdf");
+			FileOutputStream fileOutputStream = new FileOutputStream("test.pdf");
+=======
+			PdfReader pdfTemplate = new PdfReader(ClassLoader.getSystemResource("Draft.pdf"));
+			FileOutputStream fileOutputStream = new FileOutputStream("test.pdf");
+>>>>>>> 862b082edfe3c1e95b958af8bea83f44651861dc:src/application/BillPDF.java
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			PdfStamper stamper = new PdfStamper(pdfTemplate, fileOutputStream);
 			stamper.setFormFlattening(true);
@@ -59,7 +102,7 @@ public class BillPDF {
 				order++;
 			}
 			stamper.getAcroFields().setField("sumTotal", totalAmount + "");
-			double tax = (7/100) * totalAmount;
+			double tax = (Double.parseDouble(taxPercent)/100) * totalAmount;
 			stamper.getAcroFields().setField("tax",  String.valueOf(tax));
 			stamper.getAcroFields().setField("net", String.valueOf(tax + totalAmount));
 			//////////////////////////////////////////////////////////////////////////////

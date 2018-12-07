@@ -164,7 +164,7 @@ public class ItemInController implements Initializable {
 				"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_NAME + " TEXT, " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_ID + " INTEGER, " +
-				ApplicationFactory.MAIN_DATABASE_ITEM_SERIAL_NUNBER + " INTEGER, " +
+				ApplicationFactory.MAIN_DATABASE_ITEM_SERIAL_NUNBER + " TEXT, " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_UNIT + " TEXT, " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_BUY_PRICE + " REAL, " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_SELL_PRICE + " REAL, " +
@@ -177,7 +177,7 @@ public class ItemInController implements Initializable {
 
 	}
 	
-	private void insertDataToMainDatabase(String itemName, int itemId, int sn, String unit, double buyPrice
+	private void insertDataToMainDatabase(String itemName, int itemId, String sn, String unit, double buyPrice
 			, double sellPrice, int amount, String category, String subCategory, String note) throws Exception {
 		String cmd = "INSERT INTO " + ApplicationFactory.MAIN_DATEBASE_NAME + "(" +
 				ApplicationFactory.MAIN_DATABASE_ITEM_NAME + ", " +
@@ -191,8 +191,8 @@ public class ItemInController implements Initializable {
 				ApplicationFactory.MAIN_DATABASE_ITEM_SUBCATEGORY + ", " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_NOTE + ") VALUES('" +
 				itemName + "', " +
-				itemId + ", " +
-				sn + ", '" +
+				itemId + ", '" +
+				sn + "', '" +
 				unit + "', " +
 				buyPrice + ", " +
 				sellPrice + ", " +
@@ -248,9 +248,6 @@ public class ItemInController implements Initializable {
 		else if ( sn.equals("") ) {
 			showInvalidInputDialog("กรุณาใส่ serial number");
 		}
-		else if ( !isNumeric(sn) ) {
-			showInvalidInputDialog("กรุณาใส่ serial number เป็นตัวเลข");
-		}
 		else if ( unit.equals("") ) {
 			showInvalidInputDialog("กรุณาใส่หน่วยสินค้า");
 		}
@@ -281,7 +278,7 @@ public class ItemInController implements Initializable {
 			createMainDatabase();
 			manipulateCategoryDatabase(category);
 			manipulateSubCategoryDatabase(category, subCategory);
-			insertDataToMainDatabase(itemName, Integer.parseInt(itemId), Integer.parseInt(sn), unit, Double.parseDouble(buyPrice)
+			insertDataToMainDatabase(itemName, Integer.parseInt(itemId), sn, unit, Double.parseDouble(buyPrice)
 					, Double.parseDouble(sellPrice), Integer.parseInt(amount), category, subCategory, note);
 			}
 			catch(Exception e) {
@@ -308,6 +305,7 @@ public class ItemInController implements Initializable {
 		pickedImage = null;
 		showImageIv.setImage(new Image(ClassLoader.getSystemResource("icons/box.png").toString()));
 		
+		itemNameTf.setText("");
 		itemIdTf.setText("");
 		snTf.setText("");
 		unitTf.setText("");
