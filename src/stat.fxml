@@ -8,59 +8,56 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<Pane prefHeight="720.0" prefWidth="1200.0" style="-fx-background-color: f4e7e7;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<Pane prefHeight="720.0" prefWidth="1200.0" style="-fx-background-color: f4e7e7;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXMLController.StatController">
    <padding>
       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
    </padding>
    <children>
-      <HBox prefHeight="210.0" prefWidth="1200.0">
+      <HBox alignment="CENTER_LEFT" prefHeight="65.0" prefWidth="1200.0" spacing="20.0">
          <children>
-            <VBox prefHeight="210.0" prefWidth="123.0" spacing="20.0">
-               <children>
-                  <Label text="แกนตั้ง">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label text="แกนนอน">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Label text="สินค้า">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-               </children>
+            <Label text="แกนตั้ง">
+               <font>
+                  <Font size="20.0" />
+               </font>
                <padding>
-                  <Insets left="20.0" top="30.0" />
+                  <Insets left="20.0" />
                </padding>
+            </Label>
+            <ComboBox fx:id="yCb" minHeight="30.0" onAction="#onYAxisChange" prefHeight="30.0" prefWidth="150.0" />
+            <Label text="แกนนอน">
+               <font>
+                  <Font size="20.0" />
+               </font>
                <HBox.margin>
                   <Insets />
                </HBox.margin>
-            </VBox>
-            <VBox prefHeight="203.0" prefWidth="369.0" spacing="20.0">
-               <children>
-                  <ComboBox id="vCombo" minHeight="30.0" prefHeight="30.0" prefWidth="150.0" />
-                  <ComboBox id="hCombo" minHeight="30.0" prefHeight="30.0" prefWidth="150.0" />
-                  <TextField id="objectToChart" maxWidth="200.0" minHeight="30.0" prefHeight="30.0" />
-               </children>
-               <HBox.margin>
-                  <Insets top="30.0" />
-               </HBox.margin>
-            </VBox>
+               <padding>
+                  <Insets left="50.0" />
+               </padding>
+            </Label>
+            <ComboBox minHeight="30.0" prefHeight="30.0" prefWidth="150.0" fx:id="xCb" />
+            <Label text="ชื่อสินค้า">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <padding>
+                  <Insets left="50.0" />
+               </padding>
+            </Label>
+            <ComboBox fx:id="itemNameCb" minHeight="30.0" onAction="#onItemNameChange" prefHeight="30.0" prefWidth="203.0" />
          </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
       </HBox>
-      <ScatterChart layoutX="59.0" layoutY="210.0" prefHeight="500.0" prefWidth="500.0">
+      <LineChart fx:id="chart" layoutX="29.0" layoutY="93.0" prefHeight="592.0" prefWidth="1147.0">
         <xAxis>
-          <CategoryAxis side="BOTTOM" />
+          <CategoryAxis side="BOTTOM" fx:id="xAxis" />
         </xAxis>
         <yAxis>
-          <NumberAxis side="LEFT" />
+          <NumberAxis fx:id="yAxis" prefHeight="519.0" prefWidth="32.0" side="LEFT" />
         </yAxis>
-      </ScatterChart>
-      <PieChart layoutX="642.0" layoutY="210.0" prefHeight="500.0" prefWidth="500.0" />
+      </LineChart>
+      <Label layoutX="48.0" layoutY="65.0" text="บาท" />
    </children>
 </Pane>

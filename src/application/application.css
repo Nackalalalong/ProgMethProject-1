@@ -45,3 +45,10 @@
 .table-cell {
 	-fx-alignment: CENTER;
 }
+
+.axis {
+	-fx-tick-label-font-family: supermarket;
+	-fx-tick-label-font-size: 14px;
+	-fx-font-family: supermarket;
+	-fx-font-size: 12px;
+}

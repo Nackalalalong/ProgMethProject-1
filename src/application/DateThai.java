@@ -30,6 +30,10 @@ public class DateThai {
 		
 	}
 	
+	public static String getThaiAbrevMonth(int month) {
+		return abrevMonths[month-1];
+	}
+	
 	public static String getCurrentThaiDate() {
 		
 		int year=0,month=0,day=0;
