@@ -49,6 +49,8 @@ public class StatController implements Initializable{
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
 		
+		chart.setAnimated(false);
+		
 		try {
 			initializeDatabaseConnection();
 			initializeAxisComboBox();
@@ -133,7 +135,9 @@ public class StatController implements Initializable{
 				"sum(" + ApplicationFactory.STATISTICS_DATABASE_TOTAL_PROFIT_COLUMN_NAME + "), " +
 				ApplicationFactory.STATISTICS_DATABASE_MONTH_COLUMN_NAME + ", " +
 				ApplicationFactory.STATISTICS_DATABASE_YEAR_COLUMN_NAME + " FROM " +
-				ApplicationFactory.STATISTICS_DATABASE_NAME + where + " ORDER BY " + 
+				ApplicationFactory.STATISTICS_DATABASE_NAME + where + " GROUP BY " +
+				ApplicationFactory.STATISTICS_DATABASE_MONTH_COLUMN_NAME + ", " +
+				ApplicationFactory.STATISTICS_DATABASE_YEAR_COLUMN_NAME + " ORDER BY " + 
 				ApplicationFactory.STATISTICS_DATABASE_YEAR_COLUMN_NAME + " ASC, " + 
 				ApplicationFactory.STATISTICS_DATABASE_MONTH_COLUMN_NAME + " ASC";
 		
