@@ -60,7 +60,7 @@ public class BillPDF {
 		
 >>>>>>> 862b082edfe3c1e95b958af8bea83f44651861dc:src/application/BillPDF.java
 	}
-																				  // path มีแค่ directory เช่น /bills/ ยังไม่รวมชื่อไฟล์		          // price ราคารวมทั้งหมดยังไม่ลด
+																				  // path รร•รกยครจ directory ร ยชรจยน /bills/ รร‘ยงรครรจรรรยชร—รจรรคยฟร…รฌ		          // price รร’ยคร’รรรยทร‘รฉยงรรยดรร‘ยงรครรจร…ยด
 	public static void printPDF(ObservableList<ItemOutDataSet> items, int billNum, String path , String discountBath, String taxPercent, String price, String netPrice) {
 		boolean isFirst = true;
 		double totalAmount = 0;
@@ -114,10 +114,10 @@ public class BillPDF {
 		System.out.println("Print bill done");
 	}
 	
-	public void readPDF() {
+	public void readPDF(String fileName) {
 		if(Desktop.isDesktopSupported()){
 			try {
-				File myFile = new File("test.pdf");
+				File myFile = new File(fileName + ".pdf");
 				Desktop.getDesktop().open(myFile);
 			
 			}catch(Exception e) {
