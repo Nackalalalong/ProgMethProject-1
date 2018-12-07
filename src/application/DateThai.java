@@ -63,7 +63,7 @@ public class DateThai {
 	}
 	
 	public static int getCurrentMonthNumber() {
-		return c.get(Calendar.MONTH);
+		return c.get(Calendar.MONTH) + 1;
 	}
 	
 	public static int getCurrentYear() {

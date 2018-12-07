@@ -158,6 +158,7 @@ public class BillsController implements Initializable{
 				billStatement.executeUpdate(cmd);
 				model.setNote(note);
 				table.refresh();
+				showInfomationDialog("หมายเหตุ", "แก้ไขหมายเหตุสำเร็จ", "");
 			}
 			catch(SQLException e) {
 				showErrorDialog("มีบางอย่างผิดพลาดขณะกำลังแก้ไขฐานข้อมูล", "กรุณาลองใหม่ภายหลัง");
@@ -171,6 +172,13 @@ public class BillsController implements Initializable{
 		error.setTitle("ข้อผิดพลาด");
 		error.setHeaderText(header);
 		error.show();
+	}
+	
+	private void showInfomationDialog(String title, String header, String message) {
+		Alert info = new Alert(Alert.AlertType.INFORMATION, message, ButtonType.OK);
+		info.setTitle(title);
+		info.setHeaderText(header);
+		info.show();
 	}
 	
 	private void initializeBillDatabase() throws SQLException {
