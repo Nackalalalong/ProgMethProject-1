@@ -4,6 +4,16 @@
 	-fx-background-color : #f4e7e7;
 }
 
+.dialog-pane > .content.label {
+	-fx-font-family: supermarket;
+	-fx-font-size: 20px;
+}
+
+.dialog-pane:header .header-panel .label {
+	-fx-font-family: supermarket;
+	-fx-font-size: 16px
+}
+
 .navigation-button-beautiful {
 	-fx-background-color: #dae9e4;
 }
