@@ -1,4 +1,4 @@
-package application;
+package dataModel;
 
 import javafx.scene.image.ImageView;
 

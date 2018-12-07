@@ -1,4 +1,4 @@
-package application;
+package dataModel;
 
 import java.io.File;
 

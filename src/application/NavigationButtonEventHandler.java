@@ -17,9 +17,11 @@ public abstract class NavigationButtonEventHandler implements EventHandler<Actio
 	for( NavigationButtonPane navBtnPane : navBar.getNavigationButtonPanes() ) {  // loop through every navigation button in navigation bar
 		if ( navBtnPane.equals(sourcePane) ) {
 			navBtnPane.highlightBackground();
+			//navBtnPane.getNavigationButton().highlightBackground();
 		}
 		else {
 			navBtnPane.unHighlightBackground();
+			//navBtnPane.getNavigationButton().unHighlightBackground();
 		}
 	}
 	showContentPane();

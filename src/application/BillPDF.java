@@ -11,6 +11,7 @@ import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.codec.Base64.InputStream;
 
+import dataModel.ItemOutDataSet;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

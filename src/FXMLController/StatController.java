@@ -19,6 +19,9 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 
 public class StatController implements Initializable{
@@ -34,6 +37,9 @@ public class StatController implements Initializable{
 	
 	@FXML
 	private CategoryAxis xAxis;
+	
+	@FXML
+	private Button reloadBtn;
 	
 	private Statement statement;
 	
@@ -52,6 +58,18 @@ public class StatController implements Initializable{
 		
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			showErrorDialog("มีบางอย่างผิดพลาดขณะกำลังแก้ไขฐานข้อมูล", "กรุณาลองใหม่ภายหลัง");
+			e.printStackTrace();
+		}
+	}
+	
+	public void reloadData() {
+		try {
+			createChart();
+			showChart();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			showErrorDialog("มีบางอย่างผิดพลาดขณะกำลังแก้ไขฐานข้อมูล", "กรุณาลองใหม่ภายหลัง");
 			e.printStackTrace();
 		}
 	}
@@ -90,6 +108,13 @@ public class StatController implements Initializable{
 		else if ( yItem.equals("กำไร")){
 			chart.getData().add(totalProfitSeries);
 		}
+	}
+	
+	public void showErrorDialog(String header, String message) {
+		Alert error = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
+		error.setTitle("ข้อผิดพลาด");
+		error.setHeaderText(header);
+		error.show();
 	}
 	
 	private void createChart() throws SQLException {

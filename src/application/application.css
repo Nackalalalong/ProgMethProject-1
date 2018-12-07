@@ -4,6 +4,22 @@
 	-fx-background-color : #f4e7e7;
 }
 
+.navigation-button-beautiful {
+	-fx-background-color: #dae9e4;
+}
+
+.navigation-button-beautiful:hover {
+	-fx-background-color: #ebfaf5;
+}
+
+.navigation-button-beautiful:selected {
+	-fx-background-color: #fdae84;
+}
+
+.navigation-button-beautiful:pressed {
+	-fx-background-color: #ec9d73;
+}
+
 .button {
 	-fx-font-family: supermarket;
 	-fx-font-size: 14px;
@@ -52,3 +68,13 @@
 	-fx-font-family: supermarket;
 	-fx-font-size: 12px;
 }
+
+.combo-box .list-cell {
+	-fx-font-family: supermarket;
+	-fx-font-size: 18px;
+}
+
+.dialog-pane .label {
+	-fx-font-family: supermarket;
+}
+

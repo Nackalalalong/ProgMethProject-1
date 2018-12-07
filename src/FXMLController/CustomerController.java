@@ -10,8 +10,8 @@ import java.sql.Statement;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import application.CustomerTableModel;
 import application.DateThai;
+import dataModel.CustomerTableModel;
 import factory.ApplicationFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,8 +34,8 @@ import javafx.scene.layout.GridPane;
 public class CustomerController implements Initializable {
 	
 	private static final int CUSTOMER_CELL_SIZE = 40;
-	private static final int NOTE_DIALOG_WIDTH = 300;
-	private static final int NOTE_DIALOG_HEIGHT = 150;
+	public static final int NOTE_DIALOG_WIDTH = 300;
+	public static final int NOTE_DIALOG_HEIGHT = 150;
 	
 	@FXML
 	private TextField customerNameTf;

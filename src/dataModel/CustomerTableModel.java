@@ -1,4 +1,4 @@
-package application;
+package dataModel;
 
 public class CustomerTableModel {
 

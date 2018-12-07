@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
 import application.DateThai;
-import application.ItemOutDataSet;
+import dataModel.ItemOutDataSet;
 import factory.ApplicationFactory;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -58,6 +58,7 @@ public class ItemOutController implements Initializable {
 	private Statement customersStatement;
 	private Statement statisticsStatement;
 	private Statement stockStatement;
+	private Statement billStatement;
 	
 	private DecimalFormat decimalFormatter;
 	
@@ -82,6 +83,7 @@ public class ItemOutController implements Initializable {
 			initializeCustomerDatabaseConnection();
 			initializeStatisticsDatabaseConnection();
 			initializeStockDatabaseConnection();
+			initializeBillDatabaseConnection();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			showErrorDialog("มีบางอย่างผิดพลาด", "การเชื่อมต่อกับฐานข้อมูลล้มเหลว", "กรุณาลองใหม่ภายหลัง");
@@ -103,6 +105,18 @@ public class ItemOutController implements Initializable {
 		error.setTitle(title);
 		error.setHeaderText(header);
 		error.show();
+	}
+	
+	public void initializeBillDatabaseConnection() throws SQLException {
+		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.BILL_DATABASE_NAME + ".sqlite";
+		
+		String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
+		File dir = new File(dbPath);
+		if ( !dir.exists() ) {
+			dir.mkdirs();
+		}
+		Connection connection = DriverManager.getConnection(path);
+		billStatement = connection.createStatement();
 	}
 	
 	public void initializeStockDatabaseConnection() throws SQLException {
@@ -141,6 +155,28 @@ public class ItemOutController implements Initializable {
 		statisticsStatement = connection.createStatement();
 	}
 	
+	private void updateBillsDatabase(String billId, String billDate, String customerName, String note) throws SQLException {
+		String cmd = "CREATE TABLE IF NOT EXISTS " + ApplicationFactory.BILL_DATABASE_NAME + "(" +
+				"id INTEGER PRIMARY KEY AUTOINCREMENT, " + ApplicationFactory.BILL_DATABASE_BILL_ID_COLUMN_NAME + " TEXT, " +
+				ApplicationFactory.BILL_DATABASE_BILL_DATE_COLUMN_NAME + " TEXT, " + 
+				ApplicationFactory.BILL_DATABASE_CUSTOMER_NAME_COLUMN_NAME + " TEXT, " +
+				ApplicationFactory.BILL_DATABASE_NOTE_COLUMN_NAME + " TEXT)";
+		
+		billStatement.execute(cmd);
+		
+		cmd = "INSERT INTO " + ApplicationFactory.BILL_DATABASE_NAME + " (" +
+				ApplicationFactory.BILL_DATABASE_BILL_ID_COLUMN_NAME + ", " +
+				ApplicationFactory.BILL_DATABASE_BILL_DATE_COLUMN_NAME + ", " +
+				ApplicationFactory.BILL_DATABASE_CUSTOMER_NAME_COLUMN_NAME + ", " +
+				ApplicationFactory.BILL_DATABASE_NOTE_COLUMN_NAME + ") VALUES ('" +
+				billId + "', '" +
+				billDate + "', '" +
+				customerName + "', '" +
+				note + "')";
+		
+		billStatement.executeUpdate(cmd);
+	}
+	
 	private void updateStatisticsDatabase(String itemName, String itemId, String itemSn, String sellAmount, String totalSell, String totalProfit, int month, int year) throws SQLException {
 		String cmd = "CREATE TABLE IF NOT EXISTS " + ApplicationFactory.STATISTICS_DATABASE_NAME + "(" +
 				"id INTEGER PRIMARY KEY AUTOINCREMENT, " + ApplicationFactory.STATISTICS_DATABASE_ITEM_NAME_COLUMN_NAME + " TEXT, " +
@@ -175,7 +211,7 @@ public class ItemOutController implements Initializable {
 		statisticsStatement.execute(cmd);
 	}
 	
-	private void updateCustomerDatabase(String customerName, String netPrice, String profit, String lastestBuyDate, String note) throws SQLException {
+	private void updateCustomerDatabase(String customerName, String netPrice, String profit, String lastestBuyDate) throws SQLException {
 		String cmd = "CREATE TABLE IF NOT EXISTS " + ApplicationFactory.CUSTOMER_DATABASE_NAME + "(" +
 				"id INTEGER PRIMARY KEY AUTOINCREMENT, " + ApplicationFactory.CUSTOMER_DATABASE_CUSTOMER_NAME_COLOUMN_NAME + " TEXT, " +
 				ApplicationFactory.CUSTOMER_DATABASE_BUY_AMOUNT_COLUMN_NAME + " INTEGER, " + 
@@ -210,14 +246,12 @@ public class ItemOutController implements Initializable {
 					ApplicationFactory.CUSTOMER_DATABASE_BUY_AMOUNT_COLUMN_NAME + ", " + 
 					ApplicationFactory.CUSTOMER_DATABASE_LASTEST_BUY_DATE_COLUMN_NAME + ", " +
 					ApplicationFactory.CUSTOMER_DATABASE_TOTAL_BUY_COLUMN_NAME + ", " +
-					ApplicationFactory.CUSTOMER_DATABASE_TOTAL_PROFIT_COLUMN_NAME + ", " +
-					ApplicationFactory.CUSTOMER_DATABASE_NOTE_COLUMN_NAME + ")" + " VALUES ('" +
+					ApplicationFactory.CUSTOMER_DATABASE_TOTAL_PROFIT_COLUMN_NAME  + ")" + " VALUES ('" +
 					customerName + "', " +
 					"1, '" +
 					lastestBuyDate + "', " + 
 					netPrice + ", " +
-					profit + ", '" +
-					note + "')";
+					profit + ")";
 			
 			customersStatement.executeUpdate(cmd);
 		}
@@ -399,8 +433,9 @@ public class ItemOutController implements Initializable {
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.get() == ButtonType.OK){
 				try {
+					updateCustomerDatabase(customerName, netPrice, profit, lastestBuyDate);
+					updateBillsDatabase(billId, billDate, customerName, note);
 					updateData();
-					updateCustomerDatabase(customerName, netPrice, profit, lastestBuyDate, note);
 					showInfomationDialog("คำสั่งสำเร็จ", "คำสั่งขายเสร็จสิ้น", "");
 					warehouseController.searchData();
 				}

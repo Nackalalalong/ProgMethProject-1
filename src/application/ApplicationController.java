@@ -3,8 +3,8 @@ package application;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import FXMLController.ItemOutController;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 
 public class ApplicationController {
@@ -38,6 +38,20 @@ public class ApplicationController {
 		NavigationButton customerBtn = new NavigationButton("ลูกค้า", "icons/feedback.png");
 		NavigationButton listBtn = new NavigationButton("รายการบิล", "icons/list.png");
 		NavigationButton helpBtn = new NavigationButton("ช่วยเหลือ", "icons/question.png");
+		
+		ToggleGroup navGroup = new ToggleGroup();
+		warehouseBtn.setToggleGroup(navGroup);
+		itemInBtn.setToggleGroup(navGroup);
+		itemOutBtn.setToggleGroup(navGroup);
+		statBtn.setToggleGroup(navGroup);
+		customerBtn.setToggleGroup(navGroup);
+		listBtn.setToggleGroup(navGroup);
+		helpBtn.setToggleGroup(navGroup);
+		
+		navGroup.selectedToggleProperty().addListener((obsVal, oldVal, newVal) -> {		// prevent navigation bar from not being selected at least one
+		    if (newVal == null)
+		        oldVal.setSelected(true);
+		});
 		
 		warehouseBtnPane = new NavigationButtonPane(warehouseBtn);
 		itemInBtnPane = new NavigationButtonPane(itemInBtn);

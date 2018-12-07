@@ -60,4 +60,11 @@ public final class ApplicationFactory {
 	public static final String STATISTICS_DATABASE_MONTH_COLUMN_NAME = "month";	// 1-12
 	public static final String STATISTICS_DATABASE_YEAR_COLUMN_NAME = "year"; // ¤È
 	
+	//bill
+	public static final String BILL_DATABASE_NAME = "bills";
+	public static final String BILL_DATABASE_BILL_ID_COLUMN_NAME = "billid";
+	public static final String BILL_DATABASE_BILL_DATE_COLUMN_NAME = "billdate";
+	public static final String BILL_DATABASE_CUSTOMER_NAME_COLUMN_NAME = "customername";
+	public static final String BILL_DATABASE_NOTE_COLUMN_NAME = "note";
+	
 }
