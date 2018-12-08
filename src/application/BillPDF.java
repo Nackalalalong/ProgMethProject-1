@@ -19,7 +19,7 @@ public class BillPDF {
 	boolean isFirst = true;
 	double totalAmount = 0;
 		
-	
+	 
 	private BillPDF() {
 		
 	}
