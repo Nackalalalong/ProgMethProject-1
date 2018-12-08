@@ -23,7 +23,6 @@ public class BillPDF {
 	private BillPDF() {
 		
 	}
-																				  // path ร�ร•รกยครจ directory ร ยชรจยน /bills/ ร�ร‘ยงรคร�รจร�ร�ร�ยชร—รจร�รคยฟร…รฌ		          // price ร�ร’ยคร’ร�ร�ร�ยทร‘รฉยงร�ร�ยดร�ร‘ยงรคร�รจร…ยด
 	public static void printPDF(ObservableList<ItemOutDataSet> items, int billNum, String path , String discountBath, String taxPercent, String price, String netPrice) {
 		boolean isFirst = true;
 		double totalAmount = 0;
