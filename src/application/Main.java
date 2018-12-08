@@ -34,8 +34,8 @@ public class Main extends Application {
 
 
 	public static void main(String[] args) {
-		BillPDF a = new BillPDF();
-		a.readPDF();
+		//BillPDF a = new BillPDF();
+		//a.readPDF();
 		launch(args);
 	}
 }

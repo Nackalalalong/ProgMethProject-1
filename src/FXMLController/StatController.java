@@ -144,44 +144,67 @@ public class StatController implements Initializable{
 		
 		ResultSet res = statement.executeQuery(cmd);
 		res.next();
+		int countYear = res.getInt(ApplicationFactory.STATISTICS_DATABASE_YEAR_COLUMN_NAME);
+		int countMonth = res.getInt(ApplicationFactory.STATISTICS_DATABASE_MONTH_COLUMN_NAME) - 1;
 		
 		setupSeries();
-		
-		int countMonth = 1;
+		boolean needFirstMarkYear = false;
+		if ( countMonth >= 6 ) {
+			needFirstMarkYear = true;
+		}
+				
 		while ( true ) {
 			int month = res.getInt(ApplicationFactory.STATISTICS_DATABASE_MONTH_COLUMN_NAME);
-			if ( month == countMonth ) {
+			int year = res.getInt(ApplicationFactory.STATISTICS_DATABASE_YEAR_COLUMN_NAME);
+			String mon = DateThai.getThaiAbrevMonth(countMonth);
+			for(int i=0; i<countYear; i++) mon+="\0";
+			if ( month == countMonth && year == countYear) {
 				double totalSell = Double.parseDouble(res.getString(4));  //select sum(totalsell) มาเป็นอันดับที่ 4 จาก cmd
 				double totalProfit = Double.parseDouble(res.getString(5));
 				if ( month == 6 ) {
 					System.out.println("reach");
-					int year = res.getInt(ApplicationFactory.STATISTICS_DATABASE_YEAR_COLUMN_NAME);
-					totalSellSeries.getData().add(new XYChart.Data<>(DateThai.getThaiAbrevMonth(month) + "\n\n" + (year + 543), totalSell));
-					totalProfitSeries.getData().add(new XYChart.Data<>(DateThai.getThaiAbrevMonth(month) + "\n\n" + (year + 543), totalProfit));
+					totalSellSeries.getData().add(new XYChart.Data<>(mon + "\n\n" + (year + 543), totalSell));
+					totalProfitSeries.getData().add(new XYChart.Data<>(mon + "\n\n" + (year + 543), totalProfit));
 				}
 				else {
-					totalSellSeries.getData().add(new XYChart.Data<>(DateThai.getThaiAbrevMonth(month), totalSell));
-					totalProfitSeries.getData().add(new XYChart.Data<>(DateThai.getThaiAbrevMonth(month), totalProfit));
+					
+					totalSellSeries.getData().add(new XYChart.Data<>(mon, totalSell));
+					totalProfitSeries.getData().add(new XYChart.Data<>(mon, totalProfit));
 				}
 				if ( !res.next() ) {
+					if ( countMonth < 6 || needFirstMarkYear ) {
+						XYChart.Data lastData = (XYChart.Data)(totalSellSeries.getData().get((int)(totalSellSeries.getData().size()-1)/2));
+						lastData.setXValue(lastData.getXValue().toString() + "\n\n" + (countYear + 543));
+						lastData = (XYChart.Data)(totalProfitSeries.getData().get((int)(totalProfitSeries.getData().size()-1)/2));
+						lastData.setXValue(lastData.getXValue().toString() + "\n\n" + (countYear + 543));
+					}
 					break;
 				}
 			}
 			else {
 				if ( countMonth == 6 ) {
-					int year = res.getInt(ApplicationFactory.STATISTICS_DATABASE_YEAR_COLUMN_NAME);
-					totalSellSeries.getData().add(new XYChart.Data<>(DateThai.getThaiAbrevMonth(countMonth)+ "\n\n" + (year + 543), 0));
-					totalProfitSeries.getData().add(new XYChart.Data<>(DateThai.getThaiAbrevMonth(countMonth)+ "\n\n" + (year + 543), 0));
+					totalSellSeries.getData().add(new XYChart.Data<>(mon + "\n\n" + (countYear + 543), 0));
+					totalProfitSeries.getData().add(new XYChart.Data<>(mon + "\n\n" + (countYear + 543), 0));
 				}
 				else {
-					totalSellSeries.getData().add(new XYChart.Data<>(DateThai.getThaiAbrevMonth(countMonth), 0));
-					totalProfitSeries.getData().add(new XYChart.Data<>(DateThai.getThaiAbrevMonth(countMonth), 0));
+					totalSellSeries.getData().add(new XYChart.Data<>(mon, 0));
+					totalProfitSeries.getData().add(new XYChart.Data<>(mon , 0));
 				}
 			}
-			countMonth++;
-			if ( countMonth > 12 ) {
-				countMonth = 1;
+			if ( countMonth >= 12 ) {
+				if ( needFirstMarkYear ) {
+						XYChart.Data lastData = (XYChart.Data)(totalSellSeries.getData().get((int)(totalSellSeries.getData().size()-1)/2));
+						lastData.setXValue(lastData.getXValue().toString() + "\n\n" + (countYear + 543));
+						lastData = (XYChart.Data)(totalProfitSeries.getData().get((int)(totalProfitSeries.getData().size()-1)/2));
+						lastData.setXValue(lastData.getXValue().toString() + "\n\n" + (countYear + 543));
+					
+					needFirstMarkYear = false;
+				}
+				countMonth = 0; // must be ++;
+				countYear++;
 			}
+			countMonth++;
+
 		}
 		
 	}
