@@ -10,23 +10,23 @@ public abstract class NavigationButtonEventHandler implements EventHandler<Actio
 	public void handle(ActionEvent event) {
 		// TODO Auto-generated method stub
 		
-	NavigationButton source = (NavigationButton)event.getSource();
-	NavigationButtonPane sourcePane = source.getNavigationButtonPane();
-	NavigationBar navBar = source.getNavigationBar();
+		NavigationButton source = (NavigationButton)event.getSource();
+		NavigationButtonPane sourcePane = source.getNavigationButtonPane();
+		NavigationBar navBar = source.getNavigationBar();
 	
-	for( NavigationButtonPane navBtnPane : navBar.getNavigationButtonPanes() ) {  // loop through every navigation button in navigation bar
-		if ( navBtnPane.equals(sourcePane) ) {
-			navBtnPane.highlightBackground();
-			//navBtnPane.getNavigationButton().highlightBackground();
+		for( NavigationButtonPane navBtnPane : navBar.getNavigationButtonPanes() ) {  // loop through every navigation button in navigation bar
+			if ( navBtnPane.equals(sourcePane) ) {
+				navBtnPane.highlightBackground();
+				//navBtnPane.getNavigationButton().highlightBackground();
+			}
+			else {
+				navBtnPane.unHighlightBackground();
+				//navBtnPane.getNavigationButton().unHighlightBackground();
+			}
 		}
-		else {
-			navBtnPane.unHighlightBackground();
-			//navBtnPane.getNavigationButton().unHighlightBackground();
-		}
-	}
-	showContentPane();
+		showContentPane();
 	
-	}
+		}
 
 	public abstract void showContentPane();  //set specific FXML pane to front
 	

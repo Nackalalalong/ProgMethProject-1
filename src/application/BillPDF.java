@@ -15,14 +15,10 @@ import javafx.collections.ObservableList;
 
 public class BillPDF {
 	private ObservableList<ItemOutDataSet> items = FXCollections.observableArrayList();
-	int billNum ;
-	boolean isFirst = true;
-	double totalAmount = 0;
+	private int billNum ;
+	private boolean isFirst;
+	private double totalAmount;
 		
-	
-	private BillPDF() {
-		
-	}
 	public static void printPDF(ObservableList<ItemOutDataSet> items, int billNum, String path , String discountBath, String taxPercent, String price, String netPrice) {
 		boolean isFirst = true;
 		double totalAmount = 0;
@@ -70,7 +66,7 @@ public class BillPDF {
 		System.out.println("Print bill done");
 	}
 	
-	public void readPDF(String fileName) {
+	public static void readPDF(String fileName) {
 		if(Desktop.isDesktopSupported()){
 			try {
 				File myFile = new File(fileName + ".pdf");

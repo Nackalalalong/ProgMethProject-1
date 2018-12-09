@@ -25,10 +25,6 @@ public class DateThai {
 		c = Calendar.getInstance();
 		c.setTime(date);
 	}
-
-	private DateThai() {
-		
-	}
 	
 	public static String getThaiAbrevMonth(int month) {
 		return abrevMonths[month-1];
