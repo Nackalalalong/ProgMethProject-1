@@ -55,12 +55,12 @@ public class StatController implements Initializable{
 		try {
 			initializeAxisComboBox();
 			initializeItemNameComboBox();
-			createChart();
-			showChart();
+			//createChart();
+			//showChart();
 		
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			showErrorDialog("มีบางอย่างผิดพลาดขณะกำลังแก้เชื่อมต่อฐานข้อมูล", "กรุณาลองใหม่ภายหลัง");
+			showErrorDialog("มีบางอย่างผิดพลาดขณะกำลังเชื่อมต่อฐานข้อมูล", "กรุณาลองใหม่ภายหลัง");
 			e.printStackTrace();
 		}
 		
@@ -150,7 +150,9 @@ public class StatController implements Initializable{
 		//System.out.println(cmd);
 		
 		ResultSet res = statisticsStatement.executeQuery(cmd);
-		res.next();
+		if ( !res.next() ) {	//ตอนเปิดโปรแกรมครั้งแรกไม่มีไฟลื stat database จะ error เด้ง alert
+			return ;
+		}
 		
 		int countYear = res.getInt(ApplicationFactory.STATISTICS_DATABASE_YEAR_COLUMN_NAME);
 		int countMonth = res.getInt(ApplicationFactory.STATISTICS_DATABASE_MONTH_COLUMN_NAME);

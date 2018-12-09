@@ -59,7 +59,7 @@ public class BillPDF {
 				totalAmount -= Double.parseDouble(discountBath);
 				stamper.getAcroFields().setField("sum", "\nส่วนลด " + discountBath);
 			}
-			stamper.getAcroFields().setField("sumTotal", totalAmount + "");
+			stamper.getAcroFields().setField("sumTotal", price + "");
 			//double tax = (Double.parseDouble(taxPercent)/100) * totalAmount;
 			stamper.getAcroFields().setField("tax",  taxBath);
 			stamper.getAcroFields().setField("net", String.valueOf(netPrice));
@@ -79,7 +79,7 @@ public class BillPDF {
 				Desktop.getDesktop().open(myFile);
 			
 			}catch(Exception e) {
-				System.out.println(e);
+				e.printStackTrace();
 			
 			}
 		}
