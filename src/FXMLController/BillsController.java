@@ -14,6 +14,7 @@ import dataModel.BillModel;
 import dataModel.CustomerTableModel;
 import dataModel.DataSet;
 import factory.ApplicationFactory;
+import factory.DatabaseCenter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -52,13 +53,7 @@ public class BillsController implements Initializable{
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
 		initializeTable();
-		try {
-			initializeBillDatabase();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			showErrorDialog("มีบางอย่างผิดพลาดขณะกำลังเชื่อมต่อกับฐานข้อมูล", "กรุณาลองใหม่ภายหลัง");
-			e.printStackTrace();
-		}
+		billStatement = DatabaseCenter.getBillStatement();
 	}
 	
 	public void clearInput() {
@@ -179,18 +174,6 @@ public class BillsController implements Initializable{
 		info.setTitle(title);
 		info.setHeaderText(header);
 		info.show();
-	}
-	
-	private void initializeBillDatabase() throws SQLException {
-		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.BILL_DATABASE_NAME + ".sqlite";
-		
-		String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
-		File dir = new File(dbPath);
-		if ( !dir.exists() ) {
-			dir.mkdirs();
-		}
-		Connection connection = DriverManager.getConnection(path);
-		billStatement = connection.createStatement();
 	}
 	
 }

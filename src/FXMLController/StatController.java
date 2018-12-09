@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import application.DateThai;
 import application.HoverNode;
 import factory.ApplicationFactory;
+import factory.DatabaseCenter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -42,7 +43,7 @@ public class StatController implements Initializable{
 	@FXML
 	private Button reloadBtn;
 	
-	private Statement statement;
+	private Statement statisticsStatement;
 	
 	private XYChart.Series totalSellSeries, totalProfitSeries;
 
@@ -51,9 +52,9 @@ public class StatController implements Initializable{
 		// TODO Auto-generated method stub
 		
 		chart.setAnimated(false);
+		statisticsStatement = DatabaseCenter.getStatisticsStatement();
 		
 		try {
-			initializeDatabaseConnection();
 			initializeAxisComboBox();
 			initializeItemNameComboBox();
 			createChart();
@@ -79,7 +80,6 @@ public class StatController implements Initializable{
 		}
 		catch (SQLException e) {
 			// TODO Auto-generated catch block
-			showErrorDialog("มีบางอย่างผิดพลาดขณะกำลังแก้เชื่อมต่อฐานข้อมูล", "กรุณาลองใหม่ภายหลัง");
 			e.printStackTrace();
 		}
 	}
@@ -151,7 +151,7 @@ public class StatController implements Initializable{
 		
 		//System.out.println(cmd);
 		
-		ResultSet res = statement.executeQuery(cmd);
+		ResultSet res = statisticsStatement.executeQuery(cmd);
 		res.next();
 		
 		int countYear = res.getInt(ApplicationFactory.STATISTICS_DATABASE_YEAR_COLUMN_NAME);
@@ -227,18 +227,6 @@ public class StatController implements Initializable{
 		
 	}
 	
-	private void initializeDatabaseConnection() throws SQLException {
-		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.STATISTICS_DATABASE_NAME + ".sqlite";
-		
-		String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
-		File dir = new File(dbPath);
-		if ( !dir.exists() ) {
-			dir.mkdirs();
-		}
-		Connection connection = DriverManager.getConnection(path);
-		statement = connection.createStatement();
-	}
-	
 	private void initializeAxisComboBox() throws SQLException {
 		ObservableList<String> yItems = FXCollections.observableArrayList();
 		yItems.add("ทั้งหมด");
@@ -264,7 +252,7 @@ public class StatController implements Initializable{
 		String cmd = "SELECT DISTINCT " + ApplicationFactory.STATISTICS_DATABASE_ITEM_NAME_COLUMN_NAME + " FROM " + 
 				ApplicationFactory.STATISTICS_DATABASE_NAME;
 		
-		ResultSet res = statement.executeQuery(cmd);
+		ResultSet res = statisticsStatement.executeQuery(cmd);
 		
 		while ( res.next() ) {
 			String itemName = res.getString(ApplicationFactory.STATISTICS_DATABASE_ITEM_NAME_COLUMN_NAME);

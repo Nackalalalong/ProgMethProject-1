@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
 
 import factory.ApplicationFactory;
+import factory.DatabaseCenter;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -44,13 +45,14 @@ public class ItemInController implements Initializable {
 	
 	private BufferedImage pickedImage;
 	
-	private Statement statement;
+	private Statement mainStatement;
 	
 	private WarehouseController warehouseController;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
+		mainStatement = DatabaseCenter.getMainStatement();
 		pickedImage = null;
 		showImageIv.setImage(new Image(ClassLoader.getSystemResource("icons/box.png").toString()));
 		showImageIv.setFitWidth(ITEM_IN_IMAGE_FIT_WIDTH);
@@ -87,94 +89,41 @@ public class ItemInController implements Initializable {
 		addImageBtn.setDisable(false);
 	}
 	
-	public void initilizeDatabaseConnection() throws SQLException {
-		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.MAIN_DATABASE_FILE_NAME + ".sqlite";
+	private void manipulateCategoryDatabase(String category) throws SQLException {	
+		Statement categoryStatement = DatabaseCenter.getCategoryStatement();
 		
-			String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
-			File dir = new File(dbPath);
-			if ( !dir.exists() ) {
-				dir.mkdirs();
-			}
-			Connection connection = DriverManager.getConnection(path);
-			statement = connection.createStatement();
+		String cmd = "SELECT * FROM " + ApplicationFactory.CATEGORY_DATABASE_NAME + " WHERE " + ApplicationFactory.CATEGORY_DATABASE_COLUMN_NAME + " = '" + category + "'";
 		
-	}
-	
-	private void manipulateCategoryDatabase(String category) throws SQLException {
-		String catePath = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.CATEGORY_DATABASE_NAME + ".sqlite";
-		String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
-		File dir = new File(dbPath);
-		if ( !dir.exists() ) {
-			dir.mkdirs();
-		}
-		
-		Connection connection = DriverManager.getConnection(catePath);
-		Statement stm = connection.createStatement();
-		
-		String cmd = "CREATE TABLE IF NOT EXISTS " + ApplicationFactory.CATEGORY_DATABASE_NAME + "(" +
-				"id INTEGER PRIMARY KEY AUTOINCREMENT, " + ApplicationFactory.CATEGORY_DATABASE_COLUMN_NAME + " TEXT)";
-		
-		stm.execute(cmd);
-		
-		cmd = "SELECT * FROM " + ApplicationFactory.CATEGORY_DATABASE_NAME + " WHERE " + ApplicationFactory.CATEGORY_DATABASE_COLUMN_NAME + " = '" + category + "'";
-		
-		ResultSet res = stm.executeQuery(cmd);
+		ResultSet res = categoryStatement.executeQuery(cmd);
 		
 		if ( !res.next() ) {
 			cmd  = "INSERT INTO " + ApplicationFactory.CATEGORY_DATABASE_NAME + " (" + ApplicationFactory.CATEGORY_DATABASE_COLUMN_NAME + ") VALUES ('" + category +"')";
-			stm.execute(cmd);
+			categoryStatement.execute(cmd);
 			warehouseController.loadCategory(); //reload category in warehouse page
 		}
 	}
 	
 	private void manipulateSubCategoryDatabase(String category, String subCategory) throws SQLException  {
-		
-		String catePath = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + category + ".sqlite";
-		String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
-		File dir = new File(dbPath);
-		if ( !dir.exists() ) {
-			dir.mkdirs();
-		}
-		
-		Connection connection = DriverManager.getConnection(catePath);
-		Statement catStm = connection.createStatement();
+		Statement subCategoryStatement = DatabaseCenter.getSubCategoryDatabaseConnection(category);
 		
 		String cmd = "CREATE TABLE IF NOT EXISTS " + category + "(" +
 				"id INTEGER PRIMARY KEY AUTOINCREMENT, " + ApplicationFactory.SUB_CATEGORY_COLUMN_NAME + " TEXT)";
 		
-		catStm.execute(cmd);
+		subCategoryStatement.execute(cmd);
 		
 		cmd = "SELECT * FROM " + category + " WHERE " + ApplicationFactory.SUB_CATEGORY_COLUMN_NAME + " = '" + subCategory + "'";
 		
-		ResultSet res = catStm.executeQuery(cmd);
+		ResultSet res = subCategoryStatement.executeQuery(cmd);
 		
 		if ( !res.next() ) {    //ไม่มี sub-category ต้องเพิ่มใหม่
 			cmd  = "INSERT INTO " + category + " (" + ApplicationFactory.SUB_CATEGORY_COLUMN_NAME + ") VALUES ('" + subCategory +"')";
-			catStm.execute(cmd);
+			subCategoryStatement.execute(cmd);
 			warehouseController.loadCategory(); //reload category in warehouse page
 		}
 			
 			/*cmd = "IF NOT EXISTS ( SELECT 1 FROM " + category + " WHERE subcategory = '" + subCategory + "') " +
 					"INSERT INTO " + category + " (" + ApplicationFactory.SUB_CATEGORY_COLUMN_NAME + ") VALUES ('" + subCategory +"')";*/
 			
-	}
-	
-	private void createMainDatabase() throws SQLException {
-		String cmd = "CREATE TABLE IF NOT EXISTS " + ApplicationFactory.MAIN_DATEBASE_NAME +"(" +
-				"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				ApplicationFactory.MAIN_DATABASE_ITEM_NAME + " TEXT, " +
-				ApplicationFactory.MAIN_DATABASE_ITEM_ID + " INTEGER, " +
-				ApplicationFactory.MAIN_DATABASE_ITEM_SERIAL_NUNBER + " TEXT, " +
-				ApplicationFactory.MAIN_DATABASE_ITEM_UNIT + " TEXT, " +
-				ApplicationFactory.MAIN_DATABASE_ITEM_BUY_PRICE + " REAL, " +
-				ApplicationFactory.MAIN_DATABASE_ITEM_SELL_PRICE + " REAL, " +
-				ApplicationFactory.MAIN_DATABASE_ITEM_AMOUNT + " INTEGER, " +
-				ApplicationFactory.MAIN_DATABASE_ITEM_CATEGORY + " TEXT, " +
-				ApplicationFactory.MAIN_DATABASE_ITEM_SUBCATEGORY + " TEXT, " +
-				ApplicationFactory.MAIN_DATABASE_ITEM_NOTE + " TEXT)";
-	
-			statement.execute(cmd);
-
 	}
 	
 	private void insertDataToMainDatabase(String itemName, int itemId, String sn, String unit, double buyPrice
@@ -201,7 +150,7 @@ public class ItemInController implements Initializable {
 				subCategory + "', '" +
 				note + "')";
 		
-				statement.executeUpdate(cmd);
+				mainStatement.executeUpdate(cmd);
 				saveImage(itemId);
 				showInfomationDialog("ฐานข้อมูลสินค้า", "เพิ่มสินค้าในคลังสินค้าสำเร็จ");
 				
@@ -274,8 +223,6 @@ public class ItemInController implements Initializable {
 		}
 		else {
 			try {
-			initilizeDatabaseConnection();
-			createMainDatabase();
 			manipulateCategoryDatabase(category);
 			manipulateSubCategoryDatabase(category, subCategory);
 			insertDataToMainDatabase(itemName, Integer.parseInt(itemId), sn, unit, Double.parseDouble(buyPrice)

@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 import application.DateThai;
 import dataModel.CustomerTableModel;
 import factory.ApplicationFactory;
+import factory.DatabaseCenter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -49,19 +50,13 @@ public class CustomerController implements Initializable {
 	@FXML 
 	private TableColumn customerNameTc, buyAmountTc, lastestBuyDateTc, totalBuyTc, totalProfitTc, noteTc;
 	
-	private Statement statement;
+	private Statement customerStatement;
 	
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
-		try {
-			initializeDatabaseConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			showErrorDialog("การเชื่อมต่อกับฐานข้อมูลผิดพลาด", "กรุณาลองใหม่ภายหลัง");
-		}
+		customerStatement = DatabaseCenter.getCustomerStatement();
 		initializeTable();
 	}
 	
@@ -129,7 +124,7 @@ public class CustomerController implements Initializable {
 						note + "' WHERE " + 
 						ApplicationFactory.CUSTOMER_DATABASE_CUSTOMER_NAME_COLOUMN_NAME + " = '" + customerName + "'";
 				
-				statement.executeUpdate(cmd);
+				customerStatement.executeUpdate(cmd);
 				model.setNote(note);
 				table.refresh();
 			}
@@ -140,25 +135,13 @@ public class CustomerController implements Initializable {
 		}
 	}
 
-	private void initializeDatabaseConnection() throws SQLException {
-		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.CUSTOMER_DATABASE_NAME + ".sqlite";
-		
-		String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
-		File dir = new File(dbPath);
-		if ( !dir.exists() ) {
-			dir.mkdirs();
-		}
-		Connection connection = DriverManager.getConnection(path);
-		statement = connection.createStatement();
-	}
-
 	public void searchCustomer() throws SQLException {
 		String customerName = customerNameTf.getText().trim();
 		
 		String cmd = "SELECT * FROM " + ApplicationFactory.CUSTOMER_DATABASE_NAME + " WHERE " +
 				ApplicationFactory.CUSTOMER_DATABASE_CUSTOMER_NAME_COLOUMN_NAME + " LIKE '%" + customerName + "%'";
 		
-		ResultSet res = statement.executeQuery(cmd);
+		ResultSet res = customerStatement.executeQuery(cmd);
 		loadDataToTable(res);
 	}
 	

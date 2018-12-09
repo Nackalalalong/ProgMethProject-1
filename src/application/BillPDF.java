@@ -70,7 +70,7 @@ public class BillPDF {
 		System.out.println("Print bill done");
 	}
 	
-	public void readPDF(String fileName) {
+	public static void readPDF(String fileName) {
 		if(Desktop.isDesktopSupported()){
 			try {
 				File myFile = new File(fileName + ".pdf");
