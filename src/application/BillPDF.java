@@ -21,14 +21,14 @@ public class BillPDF {
 		
 
 	 
-	public static void printPDF(ObservableList<ItemOutDataSet> items, int billNum, String path , String discountBath, String taxPercent, String price, String netPrice) {
+	public static void printPDF(ObservableList<ItemOutDataSet> items, String customerName, String date, String billNum, String path , String discountBath, String taxBath, String price, String netPrice) {
 		boolean isFirst = true;
 		double totalAmount = 0;
 		
 		try {
 
-			PdfReader pdfTemplate = new PdfReader("Draft.pdf");
-			FileOutputStream fileOutputStream = new FileOutputStream(billNum + ".pdf");
+			PdfReader pdfTemplate = new PdfReader(ClassLoader.getSystemResource("Draft.pdf"));
+			FileOutputStream fileOutputStream = new FileOutputStream(path);   // ใช้ path แทน รวม .pdf ไวเในชื่อแล้ว
 
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			PdfStamper stamper = new PdfStamper(pdfTemplate, fileOutputStream);
@@ -60,9 +60,9 @@ public class BillPDF {
 				stamper.getAcroFields().setField("sum", "\nส่วนลด " + discountBath);
 			}
 			stamper.getAcroFields().setField("sumTotal", totalAmount + "");
-			double tax = (Double.parseDouble(taxPercent)/100) * totalAmount;
-			stamper.getAcroFields().setField("tax",  String.valueOf(tax));
-			stamper.getAcroFields().setField("net", String.valueOf(tax + totalAmount));
+			//double tax = (Double.parseDouble(taxPercent)/100) * totalAmount;
+			stamper.getAcroFields().setField("tax",  taxBath);
+			stamper.getAcroFields().setField("net", String.valueOf(netPrice));
 			//////////////////////////////////////////////////////////////////////////////
 			stamper.close();
 			out.close();

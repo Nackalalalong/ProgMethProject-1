@@ -2,8 +2,6 @@ package FXMLController;
 
 import java.io.File;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,6 +10,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
+import application.BillPDF;
 import application.DateThai;
 import dataModel.ItemOutDataSet;
 import factory.ApplicationFactory;
@@ -33,7 +32,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 
 public class ItemOutController implements Initializable {
 	
@@ -197,9 +196,10 @@ public class ItemOutController implements Initializable {
 	}
 	
 	public void pickDirectory() {
-		DirectoryChooser directoryChooser = new DirectoryChooser();
-		directoryChooser.setTitle("เลือกโฟลเดอร์ปลายทาง");
-		destinationDirectory = directoryChooser.showDialog(null);
+		FileChooser saver = new FileChooser();
+		saver.setTitle("เลือกโฟลเดอร์ปลายทาง");
+		saver.getExtensionFilters().add(new FileChooser.ExtensionFilter("pdf files (*.pdf)", "*.pdf"));
+		destinationDirectory = saver.showSaveDialog(null);
 
 		selectBillDestinationBtn.setDisable(true);
 		
@@ -207,7 +207,8 @@ public class ItemOutController implements Initializable {
 		     //No Directory selected
 		}else{
 		     String path = destinationDirectory.getAbsolutePath();
-		     saveBillDestinationTf.setText(path);
+		     saveBillDestinationTf.setText(path);		     
+		     
 		}
 		
 		selectBillDestinationBtn.setDisable(false);
@@ -324,10 +325,15 @@ public class ItemOutController implements Initializable {
 		String billDate = billDateTf.getText().trim();
 		String note = noteTf.getText().trim();
 		String discount;
-		String netPrice = netPriceTf.getText();
+		String netPrice = netPriceTf.getText().trim();
+		String price = priceTf.getText().trim();
 		
 		String profit = profitTf.getText().trim();
 		String lastestBuyDate = DateThai.getNumberDateFormat();
+		String taxBaht = vatBahtTf.getText().trim();
+		if ( taxBaht.equals("") ) {
+			taxBaht = "0.00";
+		}
 		
 		if ( itemOutDataSets.size() <= 0 ) {
 			showInputWarningDialog("ไม่มีสินค้าที่จะขายในขณะนี้");
@@ -367,6 +373,7 @@ public class ItemOutController implements Initializable {
 					updateCustomerDatabase(customerName, netPrice, profit, lastestBuyDate);
 					updateBillsDatabase(billId, billDate, customerName, note);
 					updateData();
+					BillPDF.printPDF(itemOutDataSets, customerName, lastestBuyDate,  billId+"", destinationDirectory.getAbsolutePath(), discount, taxBaht, price, netPrice);
 					showInfomationDialog("คำสั่งสำเร็จ", "คำสั่งขายเสร็จสิ้น", "");
 					warehouseController.searchData();
 				}
