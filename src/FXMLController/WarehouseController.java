@@ -35,7 +35,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class WarehouseController implements Initializable {
 	
 	public static final int TABLE_ROW_SIZE  = 100;
-	public static final int MAX_SELL_COUNT = 10;
+	public static final int MAX_SELL_COUNT = 15;
 	
 	@FXML
 	private TextField itemIdTf, itemNameTf;

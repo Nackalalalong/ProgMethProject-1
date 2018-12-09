@@ -158,18 +158,22 @@ public class StatController implements Initializable{
 		setupSeries();
 		boolean needFirstMarkYear = false;
 		boolean needToBreak = false;
-		if ( countMonth >= 6 ) {
+		boolean resEnd = false;
+		if ( countMonth > 6 ) {
 			needFirstMarkYear = true;
 		}
+		
+		int nowYear  = DateThai.getCurrentYear();
+		int nowMonth = DateThai.getCurrentMonthNumber();
 				
-		while ( true ) {
+		while ( countYear <= nowYear &&  countMonth <= nowMonth) {
 			
-			if ( needToBreak ) {
-				break;
+			int month = countMonth;
+			int year = countYear;
+			if ( !resEnd ) {
+				 month = res.getInt(ApplicationFactory.STATISTICS_DATABASE_MONTH_COLUMN_NAME);
+				 year = res.getInt(ApplicationFactory.STATISTICS_DATABASE_YEAR_COLUMN_NAME);
 			}
-			
-			int month = res.getInt(ApplicationFactory.STATISTICS_DATABASE_MONTH_COLUMN_NAME);
-			int year = res.getInt(ApplicationFactory.STATISTICS_DATABASE_YEAR_COLUMN_NAME);
 			String mon = DateThai.getThaiAbrevMonth(countMonth);
 			double sellValue = 0.0;
 			double profitValue = 0.0;
@@ -177,19 +181,24 @@ public class StatController implements Initializable{
 			for(int i=0; i<countYear; i++) mon+="\0";   //make x axis data unique
 			
 			if ( month == countMonth && year == countYear) {
-				double totalSell = Double.parseDouble(res.getString(4));  //select sum(totalsell) มาเป็นอันดับที่ 4 จาก cmd
-				double totalProfit = Double.parseDouble(res.getString(5));
-				sellValue = totalSell;
-				profitValue = totalProfit;
+				if ( !resEnd ) {
+					sellValue = Double.parseDouble(res.getString(4));  //select sum(totalsell) มาเป็นอันดับที่ 4 จาก cmd
+					profitValue = Double.parseDouble(res.getString(5));
+				}
+				//sellValue = totalSell;
+				//profitValue = totalProfit;
 				
-				if ( !res.next() ) {
-					if ( countMonth < 6 || needFirstMarkYear ) {
-						XYChart.Data lastData = (XYChart.Data)(totalSellSeries.getData().get((int)(totalSellSeries.getData().size()-1)/2));
-						lastData.setXValue(lastData.getXValue().toString() + "\n\n" + (countYear + 543));
-						lastData = (XYChart.Data)(totalProfitSeries.getData().get((int)(totalProfitSeries.getData().size()-1)/2));
-						lastData.setXValue(lastData.getXValue().toString() + "\n\n" + (countYear + 543));
+				if ( !resEnd ) {
+					if ( !res.next() ) {
+						/*if ( ( countMonth < 6 || needFirstMarkYear ) && totalSellSeries.getData().size() > 0) {
+							XYChart.Data lastData = (XYChart.Data)(totalSellSeries.getData().get((int)(totalSellSeries.getData().size()-1)/2));
+							lastData.setXValue(lastData.getXValue().toString() + "\n\n" + (countYear + 543));
+							lastData = (XYChart.Data)(totalProfitSeries.getData().get((int)(totalProfitSeries.getData().size()-1)/2));
+							lastData.setXValue(lastData.getXValue().toString() + "\n\n" + (countYear + 543));
+						}*/
+						resEnd = true;
+						//needToBreak = true;
 					}
-					needToBreak = true;
 				}
 				
 			}
@@ -205,6 +214,10 @@ public class StatController implements Initializable{
 			profitData.setNode(new HoverNode(profitValue + ""));
 			totalSellSeries.getData().add(sellData);
 			totalProfitSeries.getData().add(profitData);
+			
+			if ( needToBreak ) {
+				break;
+			}
 			
 			if ( countMonth >= 12 ) {
 				if ( needFirstMarkYear ) {
