@@ -5,6 +5,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import javax.xml.soap.Detail;
+
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 
@@ -34,11 +36,16 @@ public class BillPDF {
 			PdfStamper stamper = new PdfStamper(pdfTemplate, fileOutputStream);
 			stamper.setFormFlattening(true);
 			/////////////////////////////////////////////////////////////////////
+			stamper.getAcroFields().setField("customerName", customerName);
+			stamper.getAcroFields().setField("billNum", billNum);
+			stamper.getAcroFields().setField("date", date);
 			int order = 1;
+			
 			for(ItemOutDataSet e : items) {
+				String detail = "ID:" + e.getItemId() + " S/N:" + e.getItemSn() + " " + e.getItemName();
 				if(isFirst) {
 					stamper.getAcroFields().setField("order", order + "");
-					stamper.getAcroFields().setField("name", e.getItemId() + "   " + e.getItemName());
+					stamper.getAcroFields().setField("name", detail.substring(0,40));
 					stamper.getAcroFields().setField("amount", e.getSellAmount());
 					stamper.getAcroFields().setField("pricePer", e.getSellPrice());
 					stamper.getAcroFields().setField("sum", e.getTotalPrice());
@@ -46,7 +53,7 @@ public class BillPDF {
 				}
 				else {
 					stamper.getAcroFields().setField("order", "\n" + order + "");
-					stamper.getAcroFields().setField("name", "\n" + e.getItemId() + "   " + e.getItemName());
+					stamper.getAcroFields().setField("name", detail.substring(0,40));
 					stamper.getAcroFields().setField("amount", "\n" + e.getSellAmount());
 					stamper.getAcroFields().setField("pricePer", "\n" + e.getSellPrice());
 					stamper.getAcroFields().setField("sum", "\n" + e.getTotalPrice());
@@ -57,10 +64,10 @@ public class BillPDF {
 			}
 			if(!discountBath.equals("")) {
 				totalAmount -= Double.parseDouble(discountBath);
-				stamper.getAcroFields().setField("sum", "\nส่วนลด " + discountBath);
 			}
 			stamper.getAcroFields().setField("sumTotal", totalAmount + "");
 			//double tax = (Double.parseDouble(taxPercent)/100) * totalAmount;
+			stamper.getAcroFields().setField("discount",  discountBath);
 			stamper.getAcroFields().setField("tax",  taxBath);
 			stamper.getAcroFields().setField("net", String.valueOf(netPrice));
 			//////////////////////////////////////////////////////////////////////////////
