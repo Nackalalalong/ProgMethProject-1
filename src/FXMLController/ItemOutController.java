@@ -144,7 +144,7 @@ public class ItemOutController implements Initializable {
 		
 		String cmd = "";
 		
-		try {
+		try { // ถ้ามีอยู่แล้วก็อัพเดท ยังไม่มีก็ insert ในบล็อก catch
 			cmd = "SELECT * FROM " + ApplicationFactory.CUSTOMER_DATABASE_NAME + " WHERE " + 
 					ApplicationFactory.CUSTOMER_DATABASE_CUSTOMER_NAME_COLOUMN_NAME + " = '" + customerName + "'";
 			ResultSet res = customersStatement.executeQuery(cmd);
