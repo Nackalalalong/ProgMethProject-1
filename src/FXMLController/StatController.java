@@ -1,9 +1,6 @@
 package FXMLController;
 
-import java.io.File;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -155,7 +153,7 @@ public class StatController implements Initializable{
 		res.next();
 		
 		int countYear = res.getInt(ApplicationFactory.STATISTICS_DATABASE_YEAR_COLUMN_NAME);
-		int countMonth = res.getInt(ApplicationFactory.STATISTICS_DATABASE_MONTH_COLUMN_NAME) - 1;
+		int countMonth = res.getInt(ApplicationFactory.STATISTICS_DATABASE_MONTH_COLUMN_NAME);
 		
 		setupSeries();
 		boolean needFirstMarkYear = false;

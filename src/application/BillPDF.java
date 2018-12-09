@@ -17,8 +17,7 @@ public class BillPDF {
 	private ObservableList<ItemOutDataSet> items = FXCollections.observableArrayList();
 	int billNum ;
 	boolean isFirst = true;
-	double totalAmount = 0;
-		
+	double totalAmount = 0;	
 	 
 	private BillPDF() {
 		
