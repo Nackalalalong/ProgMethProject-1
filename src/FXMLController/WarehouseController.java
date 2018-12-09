@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 import dataModel.DataSet;
 import dataModel.ItemOutDataSet;
 import factory.ApplicationFactory;
+import factory.DatabaseCenter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -49,14 +50,15 @@ public class WarehouseController implements Initializable {
 	@FXML
 	private TableColumn imageTc, itemIdTc, snTc, itemNameTc, unitTc, amountTc, buyPriceTc, sellPriceTc, categoryTc, subCategoryTc, noteTc;
 	
-	private Statement statement;
+	private Statement mainStatement;
 	private Statement categoryStatement;
 	
 	private ItemOutController itemOutController;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		initializeDatabaseConnection();
+		mainStatement = DatabaseCenter.getMainStatement();
+		categoryStatement = DatabaseCenter.getCategoryStatement();
 		loadCategory();
 		
 		initializeTable();
@@ -72,20 +74,7 @@ public class WarehouseController implements Initializable {
 	}
 	
 	public void loadCategory() {
-		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.CATEGORY_DATABASE_NAME + ".sqlite";
-		
-		try {
-			String dbPath = "./database/";
-			File dir = new File(dbPath);
-			if ( !dir.exists() ) {
-				dir.mkdirs();
-			}
-			Connection connection = DriverManager.getConnection(path);
-			categoryStatement = connection.createStatement();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		String cmd = "SELECT " + ApplicationFactory.CATEGORY_DATABASE_COLUMN_NAME + " FROM " + ApplicationFactory.CATEGORY_DATABASE_NAME;
 		try {
 			ResultSet categoryRes = categoryStatement.executeQuery(cmd);
@@ -100,24 +89,6 @@ public class WarehouseController implements Initializable {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	private void initializeDatabaseConnection() {
-		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.MAIN_DATABASE_FILE_NAME + ".sqlite";
-		
-		try {
-			String dbPath = "./database/";
-			File dir = new File(dbPath);
-			if ( !dir.exists() ) {
-				dir.mkdirs();
-			}
-			Connection connection = DriverManager.getConnection(path);
-			statement = connection.createStatement();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 	}
 	
 	public void clearInput() {
@@ -251,7 +222,7 @@ public class WarehouseController implements Initializable {
 		
 		
 		try {
-			ResultSet searchResult = statement.executeQuery(cmd);
+			ResultSet searchResult = mainStatement.executeQuery(cmd);
 			loadDataToTable(searchResult);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

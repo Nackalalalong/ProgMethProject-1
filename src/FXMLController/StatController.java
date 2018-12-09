@@ -10,7 +10,9 @@ import java.sql.Statement;
 import java.util.ResourceBundle;
 
 import application.DateThai;
+import application.HoverNode;
 import factory.ApplicationFactory;
+import factory.DatabaseCenter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -41,7 +43,7 @@ public class StatController implements Initializable{
 	@FXML
 	private Button reloadBtn;
 	
-	private Statement statement;
+	private Statement statisticsStatement;
 	
 	private XYChart.Series totalSellSeries, totalProfitSeries;
 
@@ -50,9 +52,9 @@ public class StatController implements Initializable{
 		// TODO Auto-generated method stub
 		
 		chart.setAnimated(false);
+		statisticsStatement = DatabaseCenter.getStatisticsStatement();
 		
 		try {
-			initializeDatabaseConnection();
 			initializeAxisComboBox();
 			initializeItemNameComboBox();
 			createChart();
@@ -60,18 +62,24 @@ public class StatController implements Initializable{
 		
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			showErrorDialog("มีบางอย่างผิดพลาดขณะกำลังแก้ไขฐานข้อมูล", "กรุณาลองใหม่ภายหลัง");
+			showErrorDialog("มีบางอย่างผิดพลาดขณะกำลังแก้เชื่อมต่อฐานข้อมูล", "กรุณาลองใหม่ภายหลัง");
 			e.printStackTrace();
 		}
+		
 	}
 	
 	public void reloadData() {
 		try {
+			yCb.getItems().clear();
+			xCb.getItems().clear();
+			itemNameCb.getItems().clear();
+			initializeAxisComboBox();
+			initializeItemNameComboBox();
 			createChart();
 			showChart();
-		} catch (SQLException e) {
+		}
+		catch (SQLException e) {
 			// TODO Auto-generated catch block
-			showErrorDialog("มีบางอย่างผิดพลาดขณะกำลังแก้ไขฐานข้อมูล", "กรุณาลองใหม่ภายหลัง");
 			e.printStackTrace();
 		}
 	}
@@ -141,36 +149,41 @@ public class StatController implements Initializable{
 				ApplicationFactory.STATISTICS_DATABASE_YEAR_COLUMN_NAME + " ASC, " + 
 				ApplicationFactory.STATISTICS_DATABASE_MONTH_COLUMN_NAME + " ASC";
 		
+		//System.out.println(cmd);
 		
-		ResultSet res = statement.executeQuery(cmd);
+		ResultSet res = statisticsStatement.executeQuery(cmd);
 		res.next();
+		
 		int countYear = res.getInt(ApplicationFactory.STATISTICS_DATABASE_YEAR_COLUMN_NAME);
 		int countMonth = res.getInt(ApplicationFactory.STATISTICS_DATABASE_MONTH_COLUMN_NAME) - 1;
 		
 		setupSeries();
 		boolean needFirstMarkYear = false;
+		boolean needToBreak = false;
 		if ( countMonth >= 6 ) {
 			needFirstMarkYear = true;
 		}
 				
 		while ( true ) {
+			
+			if ( needToBreak ) {
+				break;
+			}
+			
 			int month = res.getInt(ApplicationFactory.STATISTICS_DATABASE_MONTH_COLUMN_NAME);
 			int year = res.getInt(ApplicationFactory.STATISTICS_DATABASE_YEAR_COLUMN_NAME);
 			String mon = DateThai.getThaiAbrevMonth(countMonth);
-			for(int i=0; i<countYear; i++) mon+="\0";
+			double sellValue = 0.0;
+			double profitValue = 0.0;
+			
+			for(int i=0; i<countYear; i++) mon+="\0";   //make x axis data unique
+			
 			if ( month == countMonth && year == countYear) {
 				double totalSell = Double.parseDouble(res.getString(4));  //select sum(totalsell) มาเป็นอันดับที่ 4 จาก cmd
 				double totalProfit = Double.parseDouble(res.getString(5));
-				if ( month == 6 ) {
-					System.out.println("reach");
-					totalSellSeries.getData().add(new XYChart.Data<>(mon + "\n\n" + (year + 543), totalSell));
-					totalProfitSeries.getData().add(new XYChart.Data<>(mon + "\n\n" + (year + 543), totalProfit));
-				}
-				else {
-					
-					totalSellSeries.getData().add(new XYChart.Data<>(mon, totalSell));
-					totalProfitSeries.getData().add(new XYChart.Data<>(mon, totalProfit));
-				}
+				sellValue = totalSell;
+				profitValue = totalProfit;
+				
 				if ( !res.next() ) {
 					if ( countMonth < 6 || needFirstMarkYear ) {
 						XYChart.Data lastData = (XYChart.Data)(totalSellSeries.getData().get((int)(totalSellSeries.getData().size()-1)/2));
@@ -178,19 +191,23 @@ public class StatController implements Initializable{
 						lastData = (XYChart.Data)(totalProfitSeries.getData().get((int)(totalProfitSeries.getData().size()-1)/2));
 						lastData.setXValue(lastData.getXValue().toString() + "\n\n" + (countYear + 543));
 					}
-					break;
+					needToBreak = true;
 				}
+				
 			}
-			else {
-				if ( countMonth == 6 ) {
-					totalSellSeries.getData().add(new XYChart.Data<>(mon + "\n\n" + (countYear + 543), 0));
-					totalProfitSeries.getData().add(new XYChart.Data<>(mon + "\n\n" + (countYear + 543), 0));
-				}
-				else {
-					totalSellSeries.getData().add(new XYChart.Data<>(mon, 0));
-					totalProfitSeries.getData().add(new XYChart.Data<>(mon , 0));
-				}
+			
+			if ( countMonth == 6 ) {
+				mon += "\n\n" + ( countYear + 543 );
 			}
+			
+			//System.out.println(month+" "+countMonth+" "+year+" "+countYear);
+			XYChart.Data sellData = new XYChart.Data<>(mon, sellValue);		// ให้แสดงค่าที่จุดตอน mouse hover
+			XYChart.Data profitData = new XYChart.Data<>(mon, profitValue);
+			sellData.setNode(new HoverNode(sellValue + ""));
+			profitData.setNode(new HoverNode(profitValue + ""));
+			totalSellSeries.getData().add(sellData);
+			totalProfitSeries.getData().add(profitData);
+			
 			if ( countMonth >= 12 ) {
 				if ( needFirstMarkYear ) {
 						XYChart.Data lastData = (XYChart.Data)(totalSellSeries.getData().get((int)(totalSellSeries.getData().size()-1)/2));
@@ -203,22 +220,11 @@ public class StatController implements Initializable{
 				countMonth = 0; // must be ++;
 				countYear++;
 			}
+			
 			countMonth++;
 
 		}
 		
-	}
-	
-	private void initializeDatabaseConnection() throws SQLException {
-		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.STATISTICS_DATABASE_NAME + ".sqlite";
-		
-		String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
-		File dir = new File(dbPath);
-		if ( !dir.exists() ) {
-			dir.mkdirs();
-		}
-		Connection connection = DriverManager.getConnection(path);
-		statement = connection.createStatement();
 	}
 	
 	private void initializeAxisComboBox() throws SQLException {
@@ -246,7 +252,7 @@ public class StatController implements Initializable{
 		String cmd = "SELECT DISTINCT " + ApplicationFactory.STATISTICS_DATABASE_ITEM_NAME_COLUMN_NAME + " FROM " + 
 				ApplicationFactory.STATISTICS_DATABASE_NAME;
 		
-		ResultSet res = statement.executeQuery(cmd);
+		ResultSet res = statisticsStatement.executeQuery(cmd);
 		
 		while ( res.next() ) {
 			String itemName = res.getString(ApplicationFactory.STATISTICS_DATABASE_ITEM_NAME_COLUMN_NAME);

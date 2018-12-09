@@ -15,6 +15,7 @@ import java.util.function.UnaryOperator;
 import application.DateThai;
 import dataModel.ItemOutDataSet;
 import factory.ApplicationFactory;
+import factory.DatabaseCenter;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -57,7 +58,7 @@ public class ItemOutController implements Initializable {
 	
 	private Statement customersStatement;
 	private Statement statisticsStatement;
-	private Statement stockStatement;
+	private Statement mainStatement;
 	private Statement billStatement;
 	
 	private DecimalFormat decimalFormatter;
@@ -79,16 +80,11 @@ public class ItemOutController implements Initializable {
 		billDateTf.setText(DateThai.getCurrentThaiDate());
 		discountByBahtRb.fire();
 		
-		try {
-			initializeCustomerDatabaseConnection();
-			initializeStatisticsDatabaseConnection();
-			initializeStockDatabaseConnection();
-			initializeBillDatabaseConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			showErrorDialog("มีบางอย่างผิดพลาด", "การเชื่อมต่อกับฐานข้อมูลล้มเหลว", "กรุณาลองใหม่ภายหลัง");
-			e.printStackTrace();
-		}
+		customersStatement = DatabaseCenter.getCustomerStatement();
+		statisticsStatement = DatabaseCenter.getStatisticsStatement();
+		mainStatement = DatabaseCenter.getMainStatement();
+		billStatement = DatabaseCenter.getBillStatement();
+		
 	}
 	
 	public void setWarehouseController(WarehouseController wc) {
@@ -107,64 +103,9 @@ public class ItemOutController implements Initializable {
 		error.show();
 	}
 	
-	public void initializeBillDatabaseConnection() throws SQLException {
-		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.BILL_DATABASE_NAME + ".sqlite";
-		
-		String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
-		File dir = new File(dbPath);
-		if ( !dir.exists() ) {
-			dir.mkdirs();
-		}
-		Connection connection = DriverManager.getConnection(path);
-		billStatement = connection.createStatement();
-	}
-	
-	public void initializeStockDatabaseConnection() throws SQLException {
-		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.MAIN_DATABASE_FILE_NAME + ".sqlite";
-		
-		String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
-		File dir = new File(dbPath);
-		if ( !dir.exists() ) {
-			dir.mkdirs();
-		}
-		Connection connection = DriverManager.getConnection(path);
-		stockStatement = connection.createStatement();
-	}
-	
-	public void initializeCustomerDatabaseConnection() throws SQLException {
-		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.CUSTOMER_DATABASE_NAME + ".sqlite";
-		
-		String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
-		File dir = new File(dbPath);
-		if ( !dir.exists() ) {
-			dir.mkdirs();
-		}
-		Connection connection = DriverManager.getConnection(path);
-		customersStatement = connection.createStatement();
-	}
-	
-	private void initializeStatisticsDatabaseConnection() throws SQLException {
-		String path = "jdbc:sqlite:" + "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY + "/" + ApplicationFactory.STATISTICS_DATABASE_NAME + ".sqlite";
-		
-		String dbPath = "./" + factory.ApplicationFactory.MAIN_DATABASE_DIRECTORY +"/";
-		File dir = new File(dbPath);
-		if ( !dir.exists() ) {
-			dir.mkdirs();
-		}
-		Connection connection = DriverManager.getConnection(path);
-		statisticsStatement = connection.createStatement();
-	}
-	
 	private void updateBillsDatabase(String billId, String billDate, String customerName, String note) throws SQLException {
-		String cmd = "CREATE TABLE IF NOT EXISTS " + ApplicationFactory.BILL_DATABASE_NAME + "(" +
-				"id INTEGER PRIMARY KEY AUTOINCREMENT, " + ApplicationFactory.BILL_DATABASE_BILL_ID_COLUMN_NAME + " TEXT, " +
-				ApplicationFactory.BILL_DATABASE_BILL_DATE_COLUMN_NAME + " TEXT, " + 
-				ApplicationFactory.BILL_DATABASE_CUSTOMER_NAME_COLUMN_NAME + " TEXT, " +
-				ApplicationFactory.BILL_DATABASE_NOTE_COLUMN_NAME + " TEXT)";
 		
-		billStatement.execute(cmd);
-		
-		cmd = "INSERT INTO " + ApplicationFactory.BILL_DATABASE_NAME + " (" +
+		String cmd = "INSERT INTO " + ApplicationFactory.BILL_DATABASE_NAME + " (" +
 				ApplicationFactory.BILL_DATABASE_BILL_ID_COLUMN_NAME + ", " +
 				ApplicationFactory.BILL_DATABASE_BILL_DATE_COLUMN_NAME + ", " +
 				ApplicationFactory.BILL_DATABASE_CUSTOMER_NAME_COLUMN_NAME + ", " +
@@ -178,19 +119,8 @@ public class ItemOutController implements Initializable {
 	}
 	
 	private void updateStatisticsDatabase(String itemName, String itemId, String itemSn, String sellAmount, String totalSell, String totalProfit, int month, int year) throws SQLException {
-		String cmd = "CREATE TABLE IF NOT EXISTS " + ApplicationFactory.STATISTICS_DATABASE_NAME + "(" +
-				"id INTEGER PRIMARY KEY AUTOINCREMENT, " + ApplicationFactory.STATISTICS_DATABASE_ITEM_NAME_COLUMN_NAME + " TEXT, " +
-				ApplicationFactory.STATISTICS_DATABASE_ITEM_ID_COLUMN_NAME + " INTEGER, " +
-				ApplicationFactory.STATISTICS_DATABASE_ITEM_SERIAL_NUMBER_COLUMN_NAME + " INTEGER, " + 
-				ApplicationFactory.STATISTICS_DATABASE_SELL_AMOUNT_COLUMN_NAME + " INTEGER, " +
-				ApplicationFactory.STATISTICS_DATABASE_TOTAL_SELL_COLUMN_NAME + " REAL, " +
-				ApplicationFactory.STATISTICS_DATABASE_TOTAL_PROFIT_COLUMN_NAME + " REAL, " +
-				ApplicationFactory.STATISTICS_DATABASE_MONTH_COLUMN_NAME + " INTEGER, " +
-				ApplicationFactory.STATISTICS_DATABASE_YEAR_COLUMN_NAME + " YEAR)";
 		
-		statisticsStatement.execute(cmd);
-		
-		cmd = "INSERT INTO " +ApplicationFactory.STATISTICS_DATABASE_NAME + "(" +
+		String cmd = "INSERT INTO " +ApplicationFactory.STATISTICS_DATABASE_NAME + "(" +
 				ApplicationFactory.STATISTICS_DATABASE_ITEM_NAME_COLUMN_NAME + ", " +
 				ApplicationFactory.STATISTICS_DATABASE_ITEM_ID_COLUMN_NAME + ", " +
 				ApplicationFactory.STATISTICS_DATABASE_ITEM_SERIAL_NUMBER_COLUMN_NAME + ", " + 
@@ -212,15 +142,8 @@ public class ItemOutController implements Initializable {
 	}
 	
 	private void updateCustomerDatabase(String customerName, String netPrice, String profit, String lastestBuyDate) throws SQLException {
-		String cmd = "CREATE TABLE IF NOT EXISTS " + ApplicationFactory.CUSTOMER_DATABASE_NAME + "(" +
-				"id INTEGER PRIMARY KEY AUTOINCREMENT, " + ApplicationFactory.CUSTOMER_DATABASE_CUSTOMER_NAME_COLOUMN_NAME + " TEXT, " +
-				ApplicationFactory.CUSTOMER_DATABASE_BUY_AMOUNT_COLUMN_NAME + " INTEGER, " + 
-				ApplicationFactory.CUSTOMER_DATABASE_LASTEST_BUY_DATE_COLUMN_NAME + " TEXT, " +
-				ApplicationFactory.CUSTOMER_DATABASE_TOTAL_BUY_COLUMN_NAME + " REAL, " +
-				ApplicationFactory.CUSTOMER_DATABASE_TOTAL_PROFIT_COLUMN_NAME + " REAL, " +
-				ApplicationFactory.CUSTOMER_DATABASE_NOTE_COLUMN_NAME + " TEXT)";
 		
-		customersStatement.execute(cmd);
+		String cmd = "";
 		
 		try {
 			cmd = "SELECT * FROM " + ApplicationFactory.CUSTOMER_DATABASE_NAME + " WHERE " + 
@@ -264,13 +187,13 @@ public class ItemOutController implements Initializable {
 				ApplicationFactory.MAIN_DATEBASE_NAME + " WHERE " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_SERIAL_NUNBER + " = '" + itemSn + "'";
 		
-		ResultSet res = stockStatement.executeQuery(cmd);
+		ResultSet res = mainStatement.executeQuery(cmd);
 		int amount  = res.getInt(ApplicationFactory.MAIN_DATABASE_ITEM_AMOUNT);
 		
 		cmd = "UPDATE " + ApplicationFactory.MAIN_DATEBASE_NAME + " SET " + 
 				ApplicationFactory.MAIN_DATABASE_ITEM_AMOUNT + " = " + ( amount - sellAmount ) + " WHERE " +
 				ApplicationFactory.MAIN_DATABASE_ITEM_SERIAL_NUNBER + " = '" + itemSn + "'";
-		stockStatement.executeUpdate(cmd);
+		mainStatement.executeUpdate(cmd);
 	}
 	
 	public void pickDirectory() {
