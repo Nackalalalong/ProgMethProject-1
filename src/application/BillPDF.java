@@ -19,18 +19,8 @@ public class BillPDF {
 	private boolean isFirst;
 	private double totalAmount;
 		
-<<<<<<< HEAD
-||||||| merged common ancestors
-	
-	private BillPDF() {
-		
-	}
-=======
+
 	 
-	private BillPDF() {
-		
-	}
->>>>>>> 6bcce3cd789a05f2288d70137b67c777ed1001e6
 	public static void printPDF(ObservableList<ItemOutDataSet> items, int billNum, String path , String discountBath, String taxPercent, String price, String netPrice) {
 		boolean isFirst = true;
 		double totalAmount = 0;
@@ -64,6 +54,10 @@ public class BillPDF {
 				totalAmount += Double.parseDouble(e.getSellPrice());
 				isFirst = false;
 				order++;
+			}
+			if(!discountBath.equals("")) {
+				totalAmount -= Double.parseDouble(discountBath);
+				stamper.getAcroFields().setField("sum", "\nส่วนลด " + discountBath);
 			}
 			stamper.getAcroFields().setField("sumTotal", totalAmount + "");
 			double tax = (Double.parseDouble(taxPercent)/100) * totalAmount;

@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 
 import dataModel.DataSet;
 import dataModel.ItemOutDataSet;
+import exceptions.MaxSellException;
 import factory.ApplicationFactory;
 import factory.DatabaseCenter;
 import javafx.collections.FXCollections;
@@ -34,6 +35,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class WarehouseController implements Initializable {
 	
 	public static final int TABLE_ROW_SIZE  = 100;
+	public static final int MAX_SELL_COUNT = 10;
 	
 	@FXML
 	private TextField itemIdTf, itemNameTf;
@@ -116,8 +118,18 @@ public class WarehouseController implements Initializable {
 		
 		MenuItem menuItem = new MenuItem("ขาย");
 		menuItem.setOnAction((ActionEvent event) -> {
-		    DataSet dataSet = (DataSet) table.getSelectionModel().getSelectedItem();
-		    showSellDialog(dataSet);
+			if ( itemOutController.getItemOutDataSets().size() >= MAX_SELL_COUNT ) {
+				try {
+					throw new MaxSellException();
+				} catch (MaxSellException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			else {
+			    DataSet dataSet = (DataSet) table.getSelectionModel().getSelectedItem();
+			    showSellDialog(dataSet);
+			}
 		});
 
 		ContextMenu menu = new ContextMenu();
