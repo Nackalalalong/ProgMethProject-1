@@ -15,13 +15,12 @@ import javafx.collections.ObservableList;
 
 public class BillPDF {
 	private ObservableList<ItemOutDataSet> items = FXCollections.observableArrayList();
-	int billNum ;
-	boolean isFirst = true;
-	double totalAmount = 0;	
-	 
-	private BillPDF() {
+	private int billNum ;
+	private boolean isFirst;
+	private double totalAmount;
 		
-	}
+
+	 
 	public static void printPDF(ObservableList<ItemOutDataSet> items, int billNum, String path , String discountBath, String taxPercent, String price, String netPrice) {
 		boolean isFirst = true;
 		double totalAmount = 0;
@@ -55,6 +54,10 @@ public class BillPDF {
 				totalAmount += Double.parseDouble(e.getSellPrice());
 				isFirst = false;
 				order++;
+			}
+			if(!discountBath.equals("")) {
+				totalAmount -= Double.parseDouble(discountBath);
+				stamper.getAcroFields().setField("sum", "\nส่วนลด " + discountBath);
 			}
 			stamper.getAcroFields().setField("sumTotal", totalAmount + "");
 			double tax = (Double.parseDouble(taxPercent)/100) * totalAmount;

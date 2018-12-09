@@ -18,7 +18,6 @@ public class NavigationBar extends VBox {
 	public static final int NAVIGATION_BAR_PADDING_LEFT = 0;
 	public static final Background DEFAULT_NAVIGATION_BACKGROUND = new  Background(new BackgroundFill(Color.web("#" + NAVIGATION_BAR_BACKGROUND_COLOR), CornerRadii.EMPTY, Insets.EMPTY));
 
-	
 	private ArrayList<NavigationButtonPane> navBtnPanes;
 
 	public NavigationBar(ArrayList<NavigationButtonPane> navBtnPanes) {

@@ -282,17 +282,25 @@ public class ItemOutController implements Initializable {
 			allBuyPrice += Double.parseDouble(data.getSellAmount()) * Double.parseDouble(data.getBuyPrice());
 		}
 		
-		if ( discountByBahtRb.isSelected() ) {
-			if ( !discountByBahtTf.getText().equals("") ) {
-				discount = Double.parseDouble(discountByBahtTf.getText());
+		try {
+			if ( discountByBahtRb.isSelected() ) {
+				if ( !discountByBahtTf.getText().equals("") ) {
+					discount = Double.parseDouble(discountByBahtTf.getText());
+				}
 			}
-		}
-		else {
-			if ( !discountByPercentTf.getText().equals("") ) {
-				double percent = Double.parseDouble(discountByPercentTf.getText());
-				discount = percent * price / 100.0;
-				discountByPercentBahtTf.setText(decimalFormatter.format(discount));
+			else {
+				if ( !discountByPercentTf.getText().equals("") ) {
+					double percent = Double.parseDouble(discountByPercentTf.getText());
+					discount = percent * price / 100.0;
+					discountByPercentBahtTf.setText(decimalFormatter.format(discount));
+				}
 			}
+		}catch(NumberFormatException e) {
+			System.out.println(e);
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Alert");
+			alert.setContentText("Incorrect Format");
+			alert.show();
 		}
 		
 		double taxPercent = 0.0;
