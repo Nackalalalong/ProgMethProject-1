@@ -23,20 +23,6 @@ public final class ApplicationFactory {
 	
 	public static final String SUB_CATEGORY_COLUMN_NAME = "subcategory";
 
-	
-	//table
-	public static final String  WAREHOUSE_TABLE_IMAGE_COLUMN_NAME = "รูป";
-	public static final String	WAREHOUSE_TABLE_ITEM_ID_COLUMN_NAME = "รหัสสินค้า";
-	public static final String	WAREHOUSE_TABLE_ITEM_SERIAL_NUMBER_COLUMN_NAME = "serial number"; 
-	public static final String	WAREHIUSE_TABLE_ITEM_NAME_COLUMN_NAME = "ชื่อสินค้า";
-	public static final String	WAREHOUSE_TABLE_UNIT_COLUMN_NAME = "หน่วย";
-	public static final String	WAREHOUSE_TABLE_AMOUNT_COLUMN_NAME = "จำนวน";
-	public static final String 	WAREHOUSE_TABLE_BUY_PRICE_COLUMN_NAME = "ราคาซื้อ";
-	public static final String	WAREHOUSE_TABLE_SELL_PRICE_COLUMN_NAME = "ราคาขาย";
-	public static final String	WAREHOUSE_TABLE_CATEGORY_COLUMN_NAME = "หมวดหมู่";
-	public static final String	WAREHOUSE_TABLE_SUB_CATEGORY_COLUMN_NAME = "หมวดหมู่ย่อย";
-	public static final String	WAREHOUSE_TABLE_NOTE_COLUMN_NAME = "หมายเหตุ";
-
 	//item out
 	public static final String DEFAULT_BILL_DIRECTORY_NAME = "bills";
 	public static final String CUSTOMER_DATABASE_NAME = "customers";
