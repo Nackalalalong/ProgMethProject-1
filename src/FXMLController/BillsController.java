@@ -118,7 +118,7 @@ public class BillsController implements Initializable{
 		viewBill.setOnAction((ActionEvent event) -> {
 			BillModel model = (BillModel) table.getSelectionModel().getSelectedItem();
 			String billId = model.getBillId();
-			BillPDF.readPDF("./bills/" + billId);
+			BillPDF.readPDF("./bills/" + billId + ".pdf");
 		});
 		
 		ContextMenu menu = new ContextMenu();

@@ -18,12 +18,12 @@
       </Pane>
       <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1200.0">
          <children>
-            <Label fx:id="headerText" alignment="CENTER" layoutX="510.0" layoutY="113.0" style="-fx-background-color: #ffffff;" text="ส่ง email เพื่อขอความช่วยเหลือ" />
+            <Label fx:id="headerText" alignment="CENTER" layoutX="510.0" layoutY="88.0" style="-fx-background-color: #ffffff;" text="ส่ง email เพื่อขอความช่วยเหลือ" />
             <Label fx:id="text1" layoutX="314.0" layoutY="220.0" text="นาย ต่อลาภ  สาธุรัมย์       6030221021 " />
             <Label fx:id="email1" layoutX="670.0" layoutY="220.0" text="capoo-chino@hotmail.com" />
             <Label fx:id="text2" layoutX="320.0" layoutY="298.0" text="นาย พงศ์ศิริ งามบุญแถม 6030385221" />
             <Label fx:id="email2" layoutX="651.0" layoutY="298.0" text="p_ngamboontham@hotmail.com" />
-            <Button fx:id="viewManualBtn" layoutX="400.0" layoutY="465.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="400.0" style="-fx-font-size: 50px;" text="ดูคู่มือ" />
+            <Button fx:id="viewManualBtn" layoutX="400.0" layoutY="465.0" mnemonicParsing="false" onAction="#viewManual" prefHeight="100.0" prefWidth="400.0" style="-fx-font-size: 50px;" text="ดูคู่มือ" />
          </children>
       </Pane>
    </children>

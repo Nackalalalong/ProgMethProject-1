@@ -1,5 +1,6 @@
 package FXMLController;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -130,6 +131,15 @@ public class HelpController implements Initializable {
 		
 		t.start();
 		
+	}
+	
+	public void viewManual() {
+		try {
+			String path = ClassLoader.getSystemResources("manual.pdf").toString();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public boolean isPlay() {

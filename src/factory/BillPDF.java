@@ -90,7 +90,7 @@ public class BillPDF {
 	public static void readPDF(String fileName) {
 		if(Desktop.isDesktopSupported()){
 			try {
-				File myFile = new File(fileName + ".pdf");
+				File myFile = new File(fileName);
 				Desktop.getDesktop().open(myFile);
 			
 			}catch(Exception e) {
