@@ -10,11 +10,11 @@ import java.sql.Statement;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import application.BillPDF;
 import dataModel.BillModel;
 import dataModel.CustomerTableModel;
 import dataModel.DataSet;
 import factory.ApplicationFactory;
+import factory.BillPDF;
 import factory.DatabaseCenter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

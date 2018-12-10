@@ -1,4 +1,4 @@
-package application;
+package factory;
 
 import java.awt.Desktop;
 import java.io.ByteArrayOutputStream;

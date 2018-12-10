@@ -4,8 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import application.DateThai;
-
 public final class BillsIdGenerator {
 	
 	public static String getBillId() {

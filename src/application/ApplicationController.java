@@ -20,7 +20,7 @@ public class ApplicationController {
 	private NavigationButtonPane statBtnPane;
 	private NavigationButtonPane customerBtnPane;
 	private NavigationButtonPane listBtnPane;
-	private NavigationButtonPane helpBtnPane;
+	//private NavigationButtonPane helpBtnPane;
 	
 	private Pane warehousePane;
 	private Pane itemInPane;
@@ -37,7 +37,7 @@ public class ApplicationController {
 		NavigationButton statBtn = new NavigationButton("สถิติ", "icons/graph.png");
 		NavigationButton customerBtn = new NavigationButton("ลูกค้า", "icons/feedback.png");
 		NavigationButton listBtn = new NavigationButton("รายการบิล", "icons/list.png");
-		NavigationButton helpBtn = new NavigationButton("ช่วยเหลือ", "icons/question.png");
+		//NavigationButton helpBtn = new NavigationButton("ช่วยเหลือ", "icons/question.png");
 		
 		ToggleGroup navGroup = new ToggleGroup();
 		warehouseBtn.setToggleGroup(navGroup);
@@ -46,7 +46,7 @@ public class ApplicationController {
 		statBtn.setToggleGroup(navGroup);
 		customerBtn.setToggleGroup(navGroup);
 		listBtn.setToggleGroup(navGroup);
-		helpBtn.setToggleGroup(navGroup);
+		//helpBtn.setToggleGroup(navGroup);
 		
 		navGroup.selectedToggleProperty().addListener((obsVal, oldVal, newVal) -> {		// prevent navigation bar from not being selected at least one
 		    if (newVal == null)
@@ -59,7 +59,7 @@ public class ApplicationController {
 		statBtnPane = new NavigationButtonPane(statBtn);
 		customerBtnPane = new NavigationButtonPane(customerBtn);
 		listBtnPane = new NavigationButtonPane(listBtn);
-		helpBtnPane = new NavigationButtonPane(helpBtn);
+		//helpBtnPane = new NavigationButtonPane(helpBtn);
 		
 		ArrayList<NavigationButtonPane> navBtnPanes = new ArrayList<NavigationButtonPane>() {{
 			add(warehouseBtnPane);
@@ -68,7 +68,7 @@ public class ApplicationController {
 			add(statBtnPane);
 			add(customerBtnPane);
 			add(listBtnPane);
-			add(helpBtnPane);
+			//add(helpBtnPane);
 		}};
 		
 		navBar = new NavigationBar(navBtnPanes);
@@ -160,13 +160,13 @@ public class ApplicationController {
 			}
 		});
 		
-		helpBtnPane.getNavigationButton().setOnAction(new NavigationButtonEventHandler() {
+		/*helpBtnPane.getNavigationButton().setOnAction(new NavigationButtonEventHandler() {
 			
 			@Override
 			public void showContentPane() {
 				//System.out.println("help");
 			}
-		});
+		});*/
 	}
 
 	public static ApplicationController getInstance() {

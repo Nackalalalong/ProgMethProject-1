@@ -24,6 +24,7 @@ public abstract class NavigationButtonEventHandler implements EventHandler<Actio
 				//navBtnPane.getNavigationButton().unHighlightBackground();
 			}
 		}
+		new ClickSound();
 		showContentPane();
 	
 		}
