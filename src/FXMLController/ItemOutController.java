@@ -303,14 +303,19 @@ public class ItemOutController implements Initializable {
 	public void updateFinancialTextField() {
 		
 		if ( itemOutDataSets.size() <= 0 ) {
+			priceTf.setText("");
+			discountByPercentBahtTf.setText("");
+			vatBahtTf.setText("");
+			netPriceTf.setText("");
+			profitTf.setText("");
 			return ;
 		}
 		
-		double price = 0.0;
-		double allBuyPrice = 0.0;
-		double discount = 0.0;
-		double netPrice = 0.0;
-		double profit = 0.0;
+		double price = 0.00;
+		double allBuyPrice = 0.00;
+		double discount = 0.00;
+		double netPrice = 0.00;
+		double profit = 0.00;
 		
 		for( ItemOutDataSet data : itemOutDataSets ) {
 			price += Double.parseDouble(data.getTotalPrice());
@@ -329,6 +334,9 @@ public class ItemOutController implements Initializable {
 					discount = percent * price / 100.0;
 					discountByPercentBahtTf.setText(decimalFormatter.format(discount));
 				}
+				else {
+					discountByPercentBahtTf.setText("0.00");
+				}
 			}
 		}catch(NumberFormatException e) {
 			System.out.println(e);
@@ -338,7 +346,7 @@ public class ItemOutController implements Initializable {
 			alert.show();
 		}
 		
-		double taxPercent = 0.0;
+		double taxPercent = 0.00;
 		if ( !vatTf.getText().equals("") ) {
 			taxPercent = Double.parseDouble(vatTf.getText());
 		}
