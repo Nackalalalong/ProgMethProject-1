@@ -3,6 +3,7 @@ package application;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import FXMLController.HelpController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
@@ -20,7 +21,7 @@ public class ApplicationController {
 	private NavigationButtonPane statBtnPane;
 	private NavigationButtonPane customerBtnPane;
 	private NavigationButtonPane listBtnPane;
-	//private NavigationButtonPane helpBtnPane;
+	private NavigationButtonPane helpBtnPane;
 	
 	private Pane warehousePane;
 	private Pane itemInPane;
@@ -29,6 +30,7 @@ public class ApplicationController {
 	private Pane statPane;
 	private Pane alBillPane;
 	private Pane helpPane;
+	private HelpController helpPaneController;
 		
 	private ApplicationController() {
 		NavigationButton warehouseBtn = new NavigationButton("คลัง", "icons/warehouse.png");
@@ -37,7 +39,7 @@ public class ApplicationController {
 		NavigationButton statBtn = new NavigationButton("สถิติ", "icons/graph.png");
 		NavigationButton customerBtn = new NavigationButton("ลูกค้า", "icons/feedback.png");
 		NavigationButton listBtn = new NavigationButton("รายการบิล", "icons/list.png");
-		//NavigationButton helpBtn = new NavigationButton("ช่วยเหลือ", "icons/question.png");
+		NavigationButton helpBtn = new NavigationButton("ช่วยเหลือ", "icons/question.png");
 		
 		ToggleGroup navGroup = new ToggleGroup();
 		warehouseBtn.setToggleGroup(navGroup);
@@ -46,7 +48,7 @@ public class ApplicationController {
 		statBtn.setToggleGroup(navGroup);
 		customerBtn.setToggleGroup(navGroup);
 		listBtn.setToggleGroup(navGroup);
-		//helpBtn.setToggleGroup(navGroup);
+		helpBtn.setToggleGroup(navGroup);
 		
 		navGroup.selectedToggleProperty().addListener((obsVal, oldVal, newVal) -> {		// prevent navigation bar from not being selected at least one
 		    if (newVal == null)
@@ -59,7 +61,7 @@ public class ApplicationController {
 		statBtnPane = new NavigationButtonPane(statBtn);
 		customerBtnPane = new NavigationButtonPane(customerBtn);
 		listBtnPane = new NavigationButtonPane(listBtn);
-		//helpBtnPane = new NavigationButtonPane(helpBtn);
+		helpBtnPane = new NavigationButtonPane(helpBtn);
 		
 		ArrayList<NavigationButtonPane> navBtnPanes = new ArrayList<NavigationButtonPane>() {{
 			add(warehouseBtnPane);
@@ -68,7 +70,7 @@ public class ApplicationController {
 			add(statBtnPane);
 			add(customerBtnPane);
 			add(listBtnPane);
-			//add(helpBtnPane);
+			add(helpBtnPane);
 		}};
 		
 		navBar = new NavigationBar(navBtnPanes);
@@ -81,7 +83,10 @@ public class ApplicationController {
 			statPane = FXMLLoader.load(ClassLoader.getSystemResource("stat.fxml"));
 			customerPane = FXMLLoader.load(ClassLoader.getSystemResource("customer.fxml"));
 			alBillPane = FXMLLoader.load(ClassLoader.getSystemResource("alBill.fxml"));
-			
+			//helpPane = FXMLLoader.load(ClassLoader.getSystemResource("help.fxml"));
+			FXMLLoader hpLoader = new FXMLLoader(ClassLoader.getSystemResource("help.fxml"));
+			helpPane = hpLoader.load();
+			helpPaneController = hpLoader.getController();
 			FXMLLoader whLoader = new FXMLLoader(ClassLoader.getSystemResource("warehouse.fxml"));
 			FXMLLoader iiLoader = new FXMLLoader(ClassLoader.getSystemResource("itemIn.fxml"));
 			FXMLLoader ioLoader = new FXMLLoader(ClassLoader.getSystemResource("itemOut.fxml"));
@@ -98,6 +103,7 @@ public class ApplicationController {
 			contentPanes.add(statPane);
 			contentPanes.add(customerPane);
 			contentPanes.add(alBillPane);
+			contentPanes.add(helpPane);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -117,6 +123,7 @@ public class ApplicationController {
 			@Override
 			public void showContentPane() {
 				warehousePane.toFront();
+				helpPaneController.setPlay(false);
 			}
 		});
 		
@@ -125,6 +132,7 @@ public class ApplicationController {
 			@Override
 			public void showContentPane() {
 				itemInPane.toFront();
+				helpPaneController.setPlay(false);
 			}
 		});
 		
@@ -133,6 +141,7 @@ public class ApplicationController {
 			@Override
 			public void showContentPane() {
 				itemOutPane.toFront();
+				helpPaneController.setPlay(false);
 			}
 		});
 		
@@ -141,6 +150,7 @@ public class ApplicationController {
 			@Override
 			public void showContentPane() {
 				statPane.toFront();
+				helpPaneController.setPlay(false);
 			}
 		});
 		
@@ -149,6 +159,7 @@ public class ApplicationController {
 			@Override
 			public void showContentPane() {
 				customerPane.toFront();
+				helpPaneController.setPlay(false);
 			}
 		});
 		
@@ -157,16 +168,18 @@ public class ApplicationController {
 			@Override
 			public void showContentPane() {
 				alBillPane.toFront();
+				helpPaneController.setPlay(false);
 			}
 		});
 		
-		/*helpBtnPane.getNavigationButton().setOnAction(new NavigationButtonEventHandler() {
+		helpBtnPane.getNavigationButton().setOnAction(new NavigationButtonEventHandler() {
 			
 			@Override
 			public void showContentPane() {
-				//System.out.println("help");
+				helpPane.toFront();
+				helpPaneController.setPlay(true);
 			}
-		});*/
+		});
 	}
 
 	public static ApplicationController getInstance() {

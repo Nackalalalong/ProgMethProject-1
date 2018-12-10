@@ -1,10 +1,13 @@
 package application;
 	
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 
 public class Main extends Application {
@@ -29,6 +32,13 @@ public class Main extends Application {
 		primaryStage.setTitle("‚§µ√æËÕ‚§µ√·¡Ë‚ª√·°√¡‰Õ —  ‡µÁ¡ 15 ‰¥È 50 ");
 		//primaryStage.setMaximized(true);
 		primaryStage.setResizable(false);
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		       @Override
+		       public void handle(WindowEvent e) {
+		          Platform.exit();
+		          System.exit(0);
+		       }
+		    });
 		primaryStage.show();
 	}
 
