@@ -5,12 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
-
-import javax.xml.soap.Detail;
-import javax.xml.ws.spi.http.HttpContext;
-import javax.xml.soap.Detail;
-
-
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfReader;
@@ -36,7 +30,7 @@ public class BillPDF {
 		try {
 
 			PdfReader pdfTemplate = new PdfReader(ClassLoader.getSystemResource("Draft.pdf"));
-			FileOutputStream fileOutputStream = new FileOutputStream(path);   // ใช้ path แทน รวม .pdf ไวเในชื่อแล้ว
+			FileOutputStream fileOutputStream = new FileOutputStream(path);   // เน�เธ�เน� path เน�เธ—เธ� เธฃเธงเธก .pdf เน�เธงเน€เน�เธ�เธ�เธทเน�เธญเน�เธฅเน�เธง
 
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			//BaseFont bf = BaseFont.createFont("C:/Windows/Fonts/Angsana New.ttf",BaseFont.IDENTITY_H,BaseFont.EMBEDDED);

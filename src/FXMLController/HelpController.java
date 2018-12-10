@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import factory.BillPDF;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -136,6 +137,7 @@ public class HelpController implements Initializable {
 	public void viewManual() {
 		try {
 			String path = ClassLoader.getSystemResources("manual.pdf").toString();
+			BillPDF.readPDF(path);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

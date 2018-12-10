@@ -29,7 +29,7 @@ public class Main extends Application {
 
 		
 		primaryStage.setScene(scene);
-		primaryStage.setTitle("โคตรพ่อโคตรแม่โปรแกรมไอสัส เต็ม 15 ได้ 50 ");
+		primaryStage.setTitle("โปรแกรมคลังสินค้า");
 		//primaryStage.setMaximized(true);
 		primaryStage.setResizable(false);
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
