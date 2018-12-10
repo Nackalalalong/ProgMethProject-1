@@ -6,19 +6,22 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 import javax.xml.soap.Detail;
+import javax.xml.ws.spi.http.HttpContext;
 
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 
 import dataModel.ItemOutDataSet;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.text.Font;
 
 
 public class BillPDF {
 	private ObservableList<ItemOutDataSet> items = FXCollections.observableArrayList();
 	private int billNum ;
-	private boolean isFirst;
 	private double totalAmount;
 		
 
@@ -33,6 +36,7 @@ public class BillPDF {
 			FileOutputStream fileOutputStream = new FileOutputStream(path);   // ใช้ path แทน รวม .pdf ไวเในชื่อแล้ว
 
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			BaseFont bf = BaseFont.createFont("C:/Windows/Fonts/Angsana New.ttf",BaseFont.IDENTITY_H,BaseFont.EMBEDDED);
 			PdfStamper stamper = new PdfStamper(pdfTemplate, fileOutputStream);
 			stamper.setFormFlattening(true);
 			/////////////////////////////////////////////////////////////////////
