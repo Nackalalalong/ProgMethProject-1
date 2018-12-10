@@ -68,9 +68,7 @@ public class StatController implements Initializable{
 	
 	public void reloadData() {
 		try {
-			yCb.getItems().clear();
-			xCb.getItems().clear();
-			itemNameCb.getItems().clear();
+			setupSeries();
 			initializeAxisComboBox();
 			initializeItemNameComboBox();
 			createChart();

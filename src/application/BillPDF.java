@@ -5,7 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
-import javax.xml.soap.Detail;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
@@ -45,7 +44,7 @@ public class BillPDF {
 				String detail = "ID:" + e.getItemId() + " S/N:" + e.getItemSn() + " " + e.getItemName();
 				if(isFirst) {
 					stamper.getAcroFields().setField("order", order + "");
-					stamper.getAcroFields().setField("name", detail.substring(0,40));
+					stamper.getAcroFields().setField("name", detail);
 					stamper.getAcroFields().setField("amount", e.getSellAmount());
 					stamper.getAcroFields().setField("pricePer", e.getSellPrice());
 					stamper.getAcroFields().setField("sum", e.getTotalPrice());
@@ -53,7 +52,7 @@ public class BillPDF {
 				}
 				else {
 					stamper.getAcroFields().setField("order", "\n" + order + "");
-					stamper.getAcroFields().setField("name", detail.substring(0,40));
+					stamper.getAcroFields().setField("name", detail);
 					stamper.getAcroFields().setField("amount", "\n" + e.getSellAmount());
 					stamper.getAcroFields().setField("pricePer", "\n" + e.getSellPrice());
 					stamper.getAcroFields().setField("sum", "\n" + e.getTotalPrice());
@@ -74,6 +73,7 @@ public class BillPDF {
 			stamper.close();
 			out.close();
 		}catch (Exception e) {
+			e.printStackTrace();
 			System.out.println(e);
 		}
 		System.out.println("Print bill done");

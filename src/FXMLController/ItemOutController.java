@@ -373,7 +373,12 @@ public class ItemOutController implements Initializable {
 					updateCustomerDatabase(customerName, netPrice, profit, lastestBuyDate);
 					updateBillsDatabase(billId, billDate, customerName, note);
 					updateData();
-					BillPDF.printPDF(itemOutDataSets, customerName, lastestBuyDate,  billId+"", destinationDirectory.getAbsolutePath(), discount, taxBaht, price, netPrice);
+					File billsDir = new File("./bills/");
+					if ( !billsDir.exists() ) {
+						billsDir.mkdirs();
+					}
+					BillPDF.printPDF(itemOutDataSets, customerName, DateThai.getCurrentThaiDate(),  billId+"", "./bills/"+billId+".pdf", discount, taxBaht, price, netPrice);
+					BillPDF.printPDF(itemOutDataSets, customerName, DateThai.getCurrentThaiDate(),  billId+"", destinationDirectory.getAbsolutePath(), discount, taxBaht, price, netPrice);
 					showInfomationDialog("คำสั่งสำเร็จ", "คำสั่งขายเสร็จสิ้น", "");
 					warehouseController.searchData();
 				}
