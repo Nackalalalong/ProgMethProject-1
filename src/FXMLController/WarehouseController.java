@@ -22,6 +22,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -164,7 +165,15 @@ public class WarehouseController implements Initializable {
 					showErrorDialog("กรุณาใส่จำนวนสินค้าให้ถูกต้อง", "");
 				}
 				else {
-					updateExistsStockItem(dataSet, addAmount);
+					Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+					confirm.setTitle("ยืนยัน");;
+					confirm.setHeaderText("เพิ่มสินค้า " + dataSet.getItemName() + " จำนวน " + addAmount + " " + dataSet.getUnit());
+					confirm.setContentText("ยืนยันการเพิ่มสินค้าเข้าคลังสินค้า?");
+					Optional<ButtonType> confirmResult = confirm.showAndWait();
+					if (confirmResult.get() == ButtonType.OK){
+					    updateExistsStockItem(dataSet, addAmount);
+					} 
+					
 				}
 				
 			}

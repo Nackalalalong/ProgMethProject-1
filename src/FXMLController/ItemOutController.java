@@ -14,6 +14,7 @@ import application.BillPDF;
 import application.DateThai;
 import dataModel.ItemOutDataSet;
 import factory.ApplicationFactory;
+import factory.BillsIdGenerator;
 import factory.DatabaseCenter;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -77,6 +78,7 @@ public class ItemOutController implements Initializable {
 		initializeFinancialTextFieldBinding();
 		
 		billDateTf.setText(DateThai.getCurrentThaiDate());
+		billIdTf.setText(BillsIdGenerator.getBillId());
 		discountByBahtRb.fire();
 		
 		customersStatement = DatabaseCenter.getCustomerStatement();
@@ -321,7 +323,7 @@ public class ItemOutController implements Initializable {
 
 	public void validateInput() {
 		String customerName = customerNameTf.getText().trim();
-		String billId = billIdTf.getText().trim();
+		String billId = BillsIdGenerator.getBillId();
 		String billDate = billDateTf.getText().trim();
 		String note = noteTf.getText().trim();
 		String discount;
@@ -439,8 +441,10 @@ public class ItemOutController implements Initializable {
 	}
 	
 	public void clearInput() {
+		itemOutDataSets.clear();
 		customerNameTf.setText("");
-		billIdTf.setText("");
+		billIdTf.setText(BillsIdGenerator.getBillId());
+		billDateTf.setText(DateThai.getCurrentThaiDate());
 		noteTf.setText("");
 		saveBillDestinationTf.setText("");
 		destinationDirectory = null;
@@ -453,7 +457,7 @@ public class ItemOutController implements Initializable {
 		netPriceTf.setText("");
 		profitTf.setText("");
 		
-		itemOutDataSets.clear();
+		
 	}
 	
 	public void setDiscountByBath() {
