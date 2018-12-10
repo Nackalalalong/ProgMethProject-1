@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
+import dataModel.DataSet;
 import dataModel.ItemOutDataSet;
 import factory.ApplicationFactory;
 import factory.BillPDF;
@@ -20,12 +21,16 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -229,6 +234,33 @@ public class ItemOutController implements Initializable {
 		itemTotalPriceTc.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
 		
 		table.setItems(itemOutDataSets);
+		
+		MenuItem delItem = new MenuItem("เอาออก");
+		delItem.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				
+				Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+				confirm.setTitle("ยืนยัน");
+				confirm.setHeaderText(null);
+				confirm.setContentText("เอาสินค้านี้ออกจากรายการขาย");
+				
+				Optional<ButtonType> result = confirm.showAndWait();
+				if ( result.get() == ButtonType.OK ) {
+					int index = table.getSelectionModel().getSelectedIndex();
+					table.getItems().remove(index);
+					updateFinancialTextField();
+				}
+				
+			}
+			
+		});
+		
+		ContextMenu menu = new ContextMenu();
+		menu.getItems().add(delItem);
+		table.setContextMenu(menu);
+		
 	}
 	
 	private void initializeFinancialTextFieldBinding() {

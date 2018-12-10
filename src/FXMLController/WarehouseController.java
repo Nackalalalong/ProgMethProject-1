@@ -194,6 +194,7 @@ public class WarehouseController implements Initializable {
 		
 		mainStatement.executeUpdate(cmd);
 		Alert info =  new Alert(Alert.AlertType.INFORMATION, "เพิ่มสินค้าในคลังเสร็จสิ้น", ButtonType.OK);
+		info.setHeaderText(null);
 		searchData();
 		info.show();
 		
