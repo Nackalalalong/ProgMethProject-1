@@ -5,13 +5,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
-<<<<<<< HEAD
+
 import javax.xml.soap.Detail;
 import javax.xml.ws.spi.http.HttpContext;
-||||||| merged common ancestors
 import javax.xml.soap.Detail;
-=======
->>>>>>> b975ecfd7bf865f2458f11ba43e86e608215690d
+
 
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.pdf.BaseFont;
@@ -41,7 +39,7 @@ public class BillPDF {
 			FileOutputStream fileOutputStream = new FileOutputStream(path);   // ใช้ path แทน รวม .pdf ไวเในชื่อแล้ว
 
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			BaseFont bf = BaseFont.createFont("C:/Windows/Fonts/Angsana New.ttf",BaseFont.IDENTITY_H,BaseFont.EMBEDDED);
+			//BaseFont bf = BaseFont.createFont("C:/Windows/Fonts/Angsana New.ttf",BaseFont.IDENTITY_H,BaseFont.EMBEDDED);
 			PdfStamper stamper = new PdfStamper(pdfTemplate, fileOutputStream);
 			stamper.setFormFlattening(true);
 			/////////////////////////////////////////////////////////////////////
