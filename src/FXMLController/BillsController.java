@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import application.BillPDF;
 import dataModel.BillModel;
 import dataModel.CustomerTableModel;
 import dataModel.DataSet;
@@ -45,7 +46,7 @@ public class BillsController implements Initializable{
 	private TableView table;
 	
 	@FXML
-	private TableColumn billIdTc, billDateTc, customerNameTc, noteTc, printTc;
+	private TableColumn billIdTc, billDateTc, customerNameTc, noteTc;
 	
 	private Statement billStatement;
 	
@@ -113,8 +114,16 @@ public class BillsController implements Initializable{
 		    showEditNoteDialog(model);
 		});
 
+		MenuItem viewBill =  new MenuItem("´ÙãºàÊÃç¨");
+		viewBill.setOnAction((ActionEvent event) -> {
+			BillModel model = (BillModel) table.getSelectionModel().getSelectedItem();
+			String billId = model.getBillId();
+			BillPDF.readPDF("./bills/" + billId);
+		});
+		
 		ContextMenu menu = new ContextMenu();
 		menu.getItems().add(menuItem);
+		menu.getItems().addAll(viewBill);
 		table.setContextMenu(menu);
 		
 	}

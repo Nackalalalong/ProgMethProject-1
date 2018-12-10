@@ -5,8 +5,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
+<<<<<<< HEAD
 import javax.xml.soap.Detail;
 import javax.xml.ws.spi.http.HttpContext;
+||||||| merged common ancestors
+import javax.xml.soap.Detail;
+=======
+>>>>>>> b975ecfd7bf865f2458f11ba43e86e608215690d
 
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.pdf.BaseFont;
@@ -49,7 +54,7 @@ public class BillPDF {
 				String detail = "ID:" + e.getItemId() + " S/N:" + e.getItemSn() + " " + e.getItemName();
 				if(isFirst) {
 					stamper.getAcroFields().setField("order", order + "");
-					stamper.getAcroFields().setField("name", detail.substring(0,40));
+					stamper.getAcroFields().setField("name", detail);
 					stamper.getAcroFields().setField("amount", e.getSellAmount());
 					stamper.getAcroFields().setField("pricePer", e.getSellPrice());
 					stamper.getAcroFields().setField("sum", e.getTotalPrice());
@@ -57,7 +62,7 @@ public class BillPDF {
 				}
 				else {
 					stamper.getAcroFields().setField("order", "\n" + order + "");
-					stamper.getAcroFields().setField("name", detail.substring(0,40));
+					stamper.getAcroFields().setField("name", detail);
 					stamper.getAcroFields().setField("amount", "\n" + e.getSellAmount());
 					stamper.getAcroFields().setField("pricePer", "\n" + e.getSellPrice());
 					stamper.getAcroFields().setField("sum", "\n" + e.getTotalPrice());
@@ -78,6 +83,7 @@ public class BillPDF {
 			stamper.close();
 			out.close();
 		}catch (Exception e) {
+			e.printStackTrace();
 			System.out.println(e);
 		}
 		System.out.println("Print bill done");

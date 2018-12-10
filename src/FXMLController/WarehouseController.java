@@ -18,6 +18,7 @@ import factory.DatabaseCenter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -131,12 +132,64 @@ public class WarehouseController implements Initializable {
 			    showSellDialog(dataSet);
 			}
 		});
+		
+		MenuItem addItem = new MenuItem("เพิ่มสินค้าเข้าคลัง");
+		addItem.setOnAction(new EventHandler<ActionEvent>() {
 
+			@Override
+			public void handle(ActionEvent arg0) {
+				DataSet dataSet = (DataSet) table.getSelectionModel().getSelectedItem();
+				showAddItemDialog(dataSet);
+			}
+			
+		});
+		
 		ContextMenu menu = new ContextMenu();
 		menu.getItems().add(menuItem);
+		menu.getItems().add(addItem);
 		table.setContextMenu(menu);
 	}
 	
+	private void showAddItemDialog(DataSet dataSet) {
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.setTitle("เลือกจำนวนสินค้าที่จะเพิ่ม");;
+		dialog.setHeaderText("จำนวนสินค้าในคลัง : " + dataSet.getAmount());
+		dialog.setContentText("จำนวนสินค้าที่จะเพิ่ม ");;
+		
+		Optional<String> result = dialog.showAndWait();
+		if ( result.isPresent() ) {
+			try {
+				int addAmount = Integer.parseInt(result.get().trim());
+				if ( addAmount <= 0 ){
+					showErrorDialog("กรุณาใส่จำนวนสินค้าให้ถูกต้อง", "");
+				}
+				else {
+					updateExistsStockItem(dataSet, addAmount);
+				}
+				
+			}
+			catch(SQLException e) {
+				showErrorDialog("เกิดปัญหาในการเชื่อมต่อกับฐานข้อมูล", "กรุณาลองใหม่ภายหลัง");
+			}
+			catch(Exception e) {
+				showErrorDialog("กรุณาใส่จำนวนสินค้าเป็นตัวเลข", "");
+			}
+		}
+		
+	}
+	
+	private void updateExistsStockItem(DataSet dataSet, int addAmount) throws SQLException {
+		String cmd = "UPDATE " + ApplicationFactory.MAIN_DATEBASE_NAME + " SET " +
+				ApplicationFactory.MAIN_DATABASE_ITEM_AMOUNT + " = " + (Integer.parseInt(dataSet.getAmount()) + addAmount ) + " WHERE " +
+				ApplicationFactory.MAIN_DATABASE_ITEM_SERIAL_NUNBER + " = '" + dataSet.getItemSn() + "'";
+		
+		mainStatement.executeUpdate(cmd);
+		Alert info =  new Alert(Alert.AlertType.INFORMATION, "เพิ่มสินค้าในคลังเสร็จสิ้น", ButtonType.OK);
+		searchData();
+		info.show();
+		
+	}
+
 	private void showSellDialog(DataSet dataSet) {
 		TextInputDialog dialog = new TextInputDialog();
 		dialog.setTitle("เลือกจำนวนสินค้าที่จะขาย");

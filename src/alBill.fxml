@@ -57,8 +57,7 @@
           <TableColumn id="taxidTc" fx:id="billIdTc" prefWidth="174.0" text="เลขที่เอกสาร" />
           <TableColumn id="dateTc" fx:id="billDateTc" prefWidth="196.0" text="วันที่ออกเอกสาร" />
             <TableColumn id="customerTc" fx:id="customerNameTc" prefWidth="368.0" text="ลูกค้า" />
-            <TableColumn id="infoCm" fx:id="noteTc" prefWidth="372.0" text="หมายเหตุ" />
-            <TableColumn id="printTc" fx:id="printTc" prefWidth="89.0" text="Print" />
+            <TableColumn id="infoCm" fx:id="noteTc" prefWidth="461.0" text="หมายเหตุ" />
         </columns>
       </TableView>
    </children>
